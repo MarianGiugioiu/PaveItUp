@@ -1,0 +1,61 @@
+.page-container {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.surface-edit-container {
+    width: 600px;
+    height: 500px;
+}
+
+.surface-container {
+    width: 500px;
+    height: 100%;
+}
+
+.shape-list-container {
+    margin-left: auto;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.part-list-container {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.shape-container {
+    margin-bottom: 10px;
+    margin-left: auto;
+}
+
+.open-edit-surface-button {
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+.add-shape-button {
+    width: 100px;
+    margin-bottom: 10px;
+    margin-left: auto
+}
+
+.shape-usage {
+    justify-content: center;
+}
+
+.save-worksace-container {
+    width: 450px;
+    justify-content: center;
+}

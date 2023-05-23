@@ -1,0 +1,80 @@
+<div class="col page-container">
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <canvas #canvas id="canvas" class="cube"></canvas>
+            </div>
+            <div *ngIf="!isCanvasMinimized" >
+                <div class="row action-container">
+                    <button (click)="refreshShape()">Refresh shape</button>
+                </div>
+                <div class="row action-container">
+                    <input class="point-pos-input" [(ngModel)]="regularPolygonEdgesNumber" type="number">
+                    <button (click)="createRegularPolygon()">Create regular polygon</button>
+                </div>
+                <div class="row action-container">
+                    <button (click)="toggleVerticesVisibility()">Hide vertices</button>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="row action-container">
+                            <button (click)="addVertex()">Add vertex</button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row action-container">
+                            <button (click)="addVertex('curve')">Add curve point</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row action-container">
+                    <button (click)="removeVertex()">Remove vertex</button>
+                </div>
+                <div class="row action-container">
+                    <button (click)="save()">Save</button>
+                    <button *ngIf="previousIterations && previousIterations.length" (click)="undoAction()">Undo</button>
+                    <button *ngIf="changesExist()" (click)="revertShape()">Revert shape</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col options-container" *ngIf="!isCanvasMinimized">
+            <div class="row">
+                <div class="col  bonus-line-container">
+                    <div class="point-container" *ngFor="let item of shape.points; let i = index;" >
+                        <button [ngClass]="item.object?.name === selectedObject?.name ? 'button-red' : ''" (click)="selectVertex(i)">{{item.object?.name.replace('Point_', 'P')}}</button>
+                        <div class="col point-details-container">
+                            <input class="point-pos-input" [ngModel]="item.point.x.toFixed(2)" type="number" (keyup.enter)="updatePoint($event, 'x', item)">
+                            
+                            <input class="point-pos-input" [ngModel]="item.point.y.toFixed(2)" type="number" (keyup.enter)="updatePoint($event, 'y', item)">
+                            <label>{{getAngle(i)}}</label>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col">
+                    <div *ngIf="displayLine(-1)" class="line-container">
+                        <button [ngClass]="isEdgeSelected(-1) ? 'button-red' : ''" (click)="selectEdge(-1)">L{{shape.points.length - 1}}-0</button>
+                        <div class="col">
+                            <input class="line-length-input" [disabled]="!(selectedObject && selectedAdjacentObject && isEdgeSelected(-1))" [ngModel]="getEdgeLength(-1).toFixed(3)" type="number" (keyup.enter)="updateLength($event)">
+                        </div>
+                    </div>
+                    <div *ngIf="!displayLine(-1)"  class="line-container">
+                        <label>nimic</label>
+                    </div>
+                    <div *ngFor="let item of shape.points; let i = index;" >
+                        <div *ngIf="displayLine(i)"  class="line-container">
+                            <button [ngClass]="isEdgeSelected(i) ? 'button-red' : ''" (click)="selectEdge(i)">L{{i}}-{{i + 1 === shape.points.length ? 0 : i + 1}}</button>
+                            <div class="col">
+                                <input class="line-length-input" [disabled]="!(selectedObject && selectedAdjacentObject && isEdgeSelected(i))" [ngModel]="getEdgeLength(i).toFixed(3)" type="number" (keyup.enter)="updateLength($event)">
+                            </div>
+                        </div>
+                        <div *ngIf="!displayLine(i)"  class="line-container">
+                            <label>nimic</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

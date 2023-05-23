@@ -1,0 +1,79 @@
+// .cube {
+//     width: 50vw;
+//     height: 50vh;
+// }
+
+.page-container {
+    // width: 550px;
+    // height: 450px;
+}
+
+.row {
+    display: flex;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.options-container {
+    padding-bottom: 30px;
+    width: 250px;
+    height: 400px;
+    overflow-y: auto;
+}
+
+.action-container {
+    margin: 5px;
+}
+
+.point-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    height: 100px;
+}
+
+.line-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    height: 100px;
+}
+
+.point-details-container {
+    width: 60px;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+}
+
+.point-pos-input {
+    width: 30px
+}
+
+.line-length-input {
+    width: 40px
+}
+
+.button-red {
+    background-color: red;
+}
+
+.bonus-line-container {
+    margin-top: 50px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

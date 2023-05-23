@@ -1,0 +1,5 @@
+<p>home works!</p>
+<div *ngFor="let workspace of workspaces" >
+    <button (click)="edit(workspace)">{{workspace.name}}</button>
+</div>
+<button (click)="create()">Create</button>
