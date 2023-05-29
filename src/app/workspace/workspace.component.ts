@@ -329,6 +329,7 @@ export class WorkspaceComponent implements OnInit {
       id: shape.id,
       name: shape.name,
       textureType: shape.textureType,
+      color: shape.color,
       points
     }
     return part;
@@ -410,6 +411,7 @@ export class WorkspaceComponent implements OnInit {
         id: part.id,
         name: part.name,
         textureType: part.textureType,
+        color: part.color,
         points: cloneDeep(part.points),
         position: positions[part.name],
         rotation: part.rotation

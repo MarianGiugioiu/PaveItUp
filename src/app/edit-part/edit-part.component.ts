@@ -7,26 +7,7 @@ import { GeometryService } from '../common/services/geometry.service';
 import { cloneDeep, isEqual } from 'lodash';
 import { EventsService } from '../common/services/events.service';
 import { EventsEnum } from '../common/enums/events.enum';
-
-export interface IPoint {
-  name?: string;
-  point?: THREE.Vector2;
-  type?: string;
-  object?: THREE.Mesh;
-  text?: THREE.Mesh;
-}
-
-export interface IShape {
-  partId?: number;
-  id?: number;
-  name?: string;
-  textureType?: number;
-  points?: IPoint[];
-  wasInitialized?: boolean;
-  position?: THREE.Vector3;
-  rotation?: number;
-  image?: string;
-}
+import { IPoint, IShape } from '../generate-line/generate-line.component';
 
 @Component({
   selector: 'app-edit-part',
@@ -215,9 +196,14 @@ export class EditPartComponent implements OnInit {
     });
   }
 
+  changeColor() {
+    const newColor = new THREE.Color(this.shape.color);
+    this.mainObject.material.color = newColor;
+  }
+
   createPrimaryShape() {
     this.drawMainObject();
-    
+    this.changeColor();
     
     if (this.selectedObject) {
       this.selectedObject = this.shape.points.find(item => item.object.name === this.selectedObject.name)?.object;

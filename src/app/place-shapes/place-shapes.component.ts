@@ -243,8 +243,6 @@ export class PlaceShapesComponent implements OnInit {
     });
   }
 
-  
-
   createShape(shape: IShape) {
     const shapeGeometry = new THREE.Shape();
     const lastPos = shape.points.length - 1;
@@ -324,11 +322,10 @@ export class PlaceShapesComponent implements OnInit {
     if (isSurface) {
       mesh.position.z = 2;
       bevelMesh.position.z = 0;
-    } else {
-      if (this.updateFromShape) {
-        
-      }
     }
+    
+    const newColor = new THREE.Color(shape.color);
+    mesh.material.color = newColor;
     this.scene.add(mesh);
   }
 

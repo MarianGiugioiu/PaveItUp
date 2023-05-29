@@ -31,6 +31,13 @@
                     <button (click)="removeVertex()">Remove vertex</button>
                 </div>
                 <div class="row action-container">
+                    <input [value]="shape.color"
+                        [style.background]="shape.color"
+                        [cpOutputFormat]="'rgba'"
+                        [(colorPicker)]="shape.color"
+                        (colorPickerChange)="changeColor()"/>
+                </div>
+                <div class="row action-container">
                     <button (click)="save()">Save</button>
                     <button *ngIf="previousIterations && previousIterations.length" (click)="undoAction()">Undo</button>
                     <button *ngIf="changesExist()" (click)="revertShape()">Revert shape</button>

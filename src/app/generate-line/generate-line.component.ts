@@ -26,6 +26,7 @@ export interface IShape {
   position?: THREE.Vector3;
   rotation?: number;
   image?: string;
+  color?: string;
 }
 
 @Component({
@@ -112,8 +113,8 @@ export class GenerateLineComponent implements OnInit {
   }
 
   ngOnDistroy() {
-    this.renderer.dispose()
-    this.renderer.forceContextLoss()
+    this.renderer.dispose();
+    this.renderer.forceContextLoss();
   }
 
   async ngAfterViewInit() {
@@ -149,6 +150,9 @@ export class GenerateLineComponent implements OnInit {
     this.scene.add(this.ambientLight);
 
     this.font = await this.fontLoader.loadAsync("assets/fonts/Roboto Medium_Regular.json");
+    if (this.shape.color === undefined) {
+      this.shape.color = 'rgba(255, 255, 255, 1)';
+    }
     
     this.previousIterations = [];
     this.createPrimaryShape();
@@ -321,8 +325,14 @@ export class GenerateLineComponent implements OnInit {
     this.scene.remove(this.mainObject);
   }
 
+  changeColor() {
+    const newColor = new THREE.Color(this.shape.color);
+    this.mainObject.material.color = newColor;
+  }
+
   createPrimaryShape() {
     this.drawMainObject();
+    this.changeColor();
     
     this.shape.points.map((item, index) => {
       item.object = this.addPoint(item.point, `Point_${index.toString()}`);

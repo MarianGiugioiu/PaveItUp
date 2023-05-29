@@ -9,6 +9,7 @@ import { WorkspaceComponent } from './workspace/workspace.component';
 import { PlaceShapesComponent } from './place-shapes/place-shapes.component';
 import { EditPartComponent } from './edit-part/edit-part.component';
 import { HomeComponent } from './home/home.component';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { HomeComponent } from './home/home.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    ColorPickerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
