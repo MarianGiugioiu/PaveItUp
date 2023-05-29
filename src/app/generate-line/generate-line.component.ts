@@ -63,7 +63,7 @@ export class GenerateLineComponent implements OnInit {
   private mouse: THREE.Vector2;
   private raycaster: THREE.Raycaster;
   private font;
-  private textOffset = new THREE.Vector2(-0.05, -0.05);
+  private textOffset = new THREE.Vector2(-0.045, -0.05);
   public pressedKeys = [];
   public vertexVisibility = true;
   public mainObjectRotation = Math.PI / 45;
@@ -301,7 +301,8 @@ export class GenerateLineComponent implements OnInit {
     this.shape.points.map((item, index) => {
       item.object.position.applyMatrix4(rotationMatrix);
       this.shape.points[index].point = new THREE.Vector2(item.object.position.x, item.object.position.y);
-      item.text.position.set(item.object.position.x + this.textOffset.x, item.object.position.y + this.textOffset.y, 0);
+      const textOffsetMultiplier = index > 9 ? 2 : 1;
+      item.text.position.set(item.object.position.x + this.textOffset.x * textOffsetMultiplier, item.object.position.y + this.textOffset.y, 0);
     });
   }
 
@@ -312,7 +313,8 @@ export class GenerateLineComponent implements OnInit {
     this.shape.points.map((item, index) => {
       item.object.position.applyMatrix4(rotationMatrix);
       this.shape.points[index].point = new THREE.Vector2(item.object.position.x, item.object.position.y);
-      item.text.position.set(item.object.position.x + this.textOffset.x, item.object.position.y + this.textOffset.y, 0);
+      const textOffsetMultiplier = index > 9 ? 2 : 1;
+      item.text.position.set(item.object.position.x + this.textOffset.x * textOffsetMultiplier, item.object.position.y + this.textOffset.y, 0);
     });
   }
 
@@ -578,7 +580,7 @@ export class GenerateLineComponent implements OnInit {
 
   changeShapeDimension() {
     this.addIteration();
-    this.shape.points.forEach(elem => {
+    this.shape.points.forEach((elem, index) => {
       let value = 1.01
       if (this.sign < 0) {
         value = 1 / value;
@@ -586,7 +588,8 @@ export class GenerateLineComponent implements OnInit {
       elem.point.x *= value;
       elem.point.y *= value;
       elem.object.position.copy(new THREE.Vector3(elem.point.x, elem.point.y, 0));
-      elem.text.position.set(elem.point.x + this.textOffset.x, elem.point.y + this.textOffset.y, 0);
+      const textOffsetMultiplier = index > 9 ? 2 : 1;
+      elem.text.position.set(elem.point.x + this.textOffset.x * textOffsetMultiplier, elem.point.y + this.textOffset.y, 0);
       this.mainObject.geometry = this.createShape();
     });
   }
@@ -603,7 +606,8 @@ export class GenerateLineComponent implements OnInit {
     const textMaterial = new THREE.MeshPhongMaterial({emissive:0x0000ff, emissiveIntensity: 1});
     
     const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-    textMesh.position.set(position.x + this.textOffset.x, position.y + this.textOffset.y, 0);
+    const textOffsetMultiplier = (+text) > 9 ? 2 : 1;
+    textMesh.position.set(position.x + this.textOffset.x * textOffsetMultiplier, position.y + this.textOffset.y, 0);
     this.scene.add(textMesh);
     
     return textMesh;
@@ -683,16 +687,22 @@ export class GenerateLineComponent implements OnInit {
         
       this.shape.points[j].point = newPoint;
       this.selectedAdjacentObject.position.copy(new THREE.Vector3(newPoint.x, newPoint.y, 0));
-      this.shape.points[j].text.position.set(newPoint.x + this.textOffset.x, newPoint.y + this.textOffset.y, 0);
+      const textOffsetMultiplier = j > 9 ? 2 : 1;
+      this.shape.points[j].text.position.set(newPoint.x + this.textOffset.x * textOffsetMultiplier, newPoint.y + this.textOffset.y, 0);
       
       this.mainObject.geometry = this.createShape();
     }
   }
 
+  getIndexFromName(obj: IPoint) {
+    return +obj.object.name.replace('Point_', '');
+  }
+
   movePoint(position, obj: IPoint) {
     obj.object.position.copy(position);
     
-    obj.text.position.set(position.x + this.textOffset.x, position.y + this.textOffset.y, 0);
+    const textOffsetMultiplier = this.getIndexFromName(obj) > 9 ? 2 : 1;
+    obj.text.position.set(position.x + this.textOffset.x * textOffsetMultiplier, position.y + this.textOffset.y, 0);
     obj.point = new THREE.Vector2(position.x, position.y);
     
     const isVAlidShape = this.geometryService.doesPolygonHaveIntersectingEdges(this.shape.points.map(item => item.point));
@@ -759,7 +769,9 @@ export class GenerateLineComponent implements OnInit {
   };
 
   onKeyUp(event: KeyboardEvent) {
-    if (event.key === '+' || event.key === '-' || event.key === '/') {
+    const addKey = '1';
+    const subtractKey = '2';
+    if (event.key === addKey || event.key === subtractKey  || event.key === '/') {
       this.isKeyPressed = false;
     }
     const index = this.pressedKeys.indexOf(event.key);
@@ -770,82 +782,102 @@ export class GenerateLineComponent implements OnInit {
     if (!this.pressedKeys.includes(event.key) && this.canDoActions) {
       this.pressedKeys.push(event.key);
     }
+    
+    const addKey = '1';
+    const subtractKey = '2';
 
     if (this.canDoActions) {
-      if (this.pressedKeys.includes('\\') && !this.pressedKeys.includes('=') && this.pressedKeys.includes('+')) {
+      //Rotate anticlockwise
+      if (this.pressedKeys.includes('\\') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(addKey)) {
         this.isKeyPressed = true;
         this.rotateMainObject(1);
       }
-  
-      if (this.pressedKeys.includes('\\') && !this.pressedKeys.includes('=') && this.pressedKeys.includes('-')) {
+
+      //Rotate clockwise
+      if (this.pressedKeys.includes('\\') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(subtractKey)) {
         this.isKeyPressed = true;
         this.rotateMainObject(-1);
       }
 
-      if (this.pressedKeys.includes('\\') && this.pressedKeys.includes('=') && this.pressedKeys.includes('+')) {
+      //Increase size
+      if (this.pressedKeys.includes('\\') && this.pressedKeys.includes('=') && this.pressedKeys.includes(addKey)) {
         this.isKeyPressed = true;
         this.sign = 1;
         this.changeShapeDimension()
       }
   
-      if (this.pressedKeys.includes('\\') && this.pressedKeys.includes('=') && this.pressedKeys.includes('-')) {
+      //Decrease size
+      if (this.pressedKeys.includes('\\') && this.pressedKeys.includes('=') && this.pressedKeys.includes(subtractKey)) {
         this.isKeyPressed = true;
         this.sign = -1;
         this.changeShapeDimension()
       }
       
-      if (this.pressedKeys.includes('[') && !this.pressedKeys.includes('=') && this.pressedKeys.includes('+')) {
+      //Increase angle for one edge
+      if (this.pressedKeys.includes('[') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(addKey)) {
         this.isKeyPressed = true;
         this.sign = -1;
         this.value = 0;
         this.changeAngle();
       }
-      if (this.pressedKeys.includes('[') && !this.pressedKeys.includes('=') && this.pressedKeys.includes('-')) {
+
+      //Decrease angle for one edge
+      if (this.pressedKeys.includes('[') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(subtractKey)) {
         this.isKeyPressed = true;
         this.sign = 1;
         this.value = 0;
         this.changeAngle();
       }
   
-      if (this.pressedKeys.includes('[') && this.pressedKeys.includes('=') && this.pressedKeys.includes('+')) {
+      //Increase angle for both edges
+      if (this.pressedKeys.includes('[') && this.pressedKeys.includes('=') && this.pressedKeys.includes(addKey)) {
         this.isKeyPressed = true;
         this.sign = -1;
         this.value = 0;
         this.doubleChangeAngle();
       }
-      if (this.pressedKeys.includes('[') && this.pressedKeys.includes('=') && this.pressedKeys.includes('-')) {
+
+      //Decrease angle for both edges
+      if (this.pressedKeys.includes('[') && this.pressedKeys.includes('=') && this.pressedKeys.includes(subtractKey)) {
         this.isKeyPressed = true;
         this.sign = 1;
         this.value = 0;
         this.doubleChangeAngle();
       }
   
-      if (this.pressedKeys.includes(']') && !this.pressedKeys.includes('=') && this.pressedKeys.includes('+')) {
+      //Increase length for one edge
+      if (this.pressedKeys.includes(']') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(addKey)) {
         this.isKeyPressed = true;
         this.sign = 1;
         this.value = 0;
         this.changeLength();
       }
-      if (this.pressedKeys.includes(']') && !this.pressedKeys.includes('=') && this.pressedKeys.includes('-')) {
+
+      //Decrease length for one edge
+      if (this.pressedKeys.includes(']') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(subtractKey)) {
         this.isKeyPressed = true;
         this.sign = -1;
         this.value = 0;
         this.changeLength();
       }
   
-      if (this.pressedKeys.includes(']') && this.pressedKeys.includes('=') && this.pressedKeys.includes('+')) {
+      //Increase length for both edges
+      if (this.pressedKeys.includes(']') && this.pressedKeys.includes('=') && this.pressedKeys.includes(addKey)) {
         this.isKeyPressed = true;
         this.sign = 1;
         this.value = 0;
         this.doubleChangeLength();
       }
-      if (this.pressedKeys.includes(']') && this.pressedKeys.includes('=') && this.pressedKeys.includes('-')) {
+
+      //Decrease length for both edges
+      if (this.pressedKeys.includes(']') && this.pressedKeys.includes('=') && this.pressedKeys.includes(subtractKey)) {
         this.isKeyPressed = true;
         this.sign = -1;
         this.value = 0;
         this.doubleChangeLength();
       }
   
+      //Put point on mediating line
       if(this.pressedKeys.includes('[') && this.pressedKeys.includes('/')) {
         if (this.selectedObject) {
           let [i,j,k] = this.getAdjacentPoints();
@@ -856,13 +888,15 @@ export class GenerateLineComponent implements OnInit {
             
             this.shape.points[i].point = newPoint;
             this.selectedObject.position.copy(new THREE.Vector3(newPoint.x, newPoint.y, 0));
-            this.shape.points[i].text.position.set(newPoint.x + this.textOffset.x, newPoint.y + this.textOffset.y, 0);
+            const textOffsetMultiplier = i > 9 ? 2 : 1;
+            this.shape.points[i].text.position.set(newPoint.x + this.textOffset.x * textOffsetMultiplier, newPoint.y + this.textOffset.y, 0);
             
             this.mainObject.geometry = this.createShape();
           }
         }
       }
   
+      //Make selected edge equal to the other edge
       if (this.pressedKeys.includes(']') && this.pressedKeys.includes('/')) {
         if (this.selectedObject && this.selectedAdjacentObject) {
           let [i,j,k] = this.getAdjacentPoint();
@@ -873,7 +907,8 @@ export class GenerateLineComponent implements OnInit {
             
             this.shape.points[j].point = newPoint;
             this.selectedAdjacentObject.position.copy(new THREE.Vector3(newPoint.x, newPoint.y, 0));
-            this.shape.points[j].text.position.set(newPoint.x + this.textOffset.x, newPoint.y + this.textOffset.y, 0);
+            const textOffsetMultiplier = j > 9 ? 2 : 1;
+            this.shape.points[j].text.position.set(newPoint.x + this.textOffset.x * textOffsetMultiplier, newPoint.y + this.textOffset.y, 0);
             
             this.mainObject.geometry = this.createShape();
           }
@@ -948,7 +983,8 @@ export class GenerateLineComponent implements OnInit {
           this.addIteration();
           this.shape.points[j].point = newPoint;
           this.shape.points[j].object.position.copy(new THREE.Vector3(newPoint.x, newPoint.y, 0));
-          this.shape.points[j].text.position.set(newPoint.x + this.textOffset.x, newPoint.y + this.textOffset.y, 0);
+          const textOffsetMultiplier = j > 9 ? 2 : 1;
+          this.shape.points[j].text.position.set(newPoint.x + this.textOffset.x * textOffsetMultiplier, newPoint.y + this.textOffset.y, 0);
   
           const isVAlidShape = this.geometryService.doesPolygonHaveIntersectingEdges(this.shape.points.map(item => item.point));
 
@@ -990,11 +1026,13 @@ export class GenerateLineComponent implements OnInit {
           this.addIteration();
           this.shape.points[j].point = newPointJ;
           this.shape.points[j].object.position.copy(new THREE.Vector3(newPointJ.x, newPointJ.y, 0));
-          this.shape.points[j].text.position.set(newPointJ.x + this.textOffset.x, newPointJ.y + this.textOffset.y, 0);
+          let textOffsetMultiplier = j > 9 ? 2 : 1;
+          this.shape.points[j].text.position.set(newPointJ.x + this.textOffset.x * textOffsetMultiplier, newPointJ.y + this.textOffset.y, 0);
   
           this.shape.points[k].point = newPointK
+          textOffsetMultiplier = k > 9 ? 2 : 1;
           this.shape.points[k].object.position.copy(new THREE.Vector3(newPointK.x, newPointK.y, 0));
-          this.shape.points[k].text.position.set(newPointK.x + this.textOffset.x, newPointK.y + this.textOffset.y, 0);
+          this.shape.points[k].text.position.set(newPointK.x + this.textOffset.x * textOffsetMultiplier, newPointK.y + this.textOffset.y, 0);
     
           const isVAlidShape = this.geometryService.doesPolygonHaveIntersectingEdges(this.shape.points.map(item => item.point));
 
@@ -1027,12 +1065,14 @@ export class GenerateLineComponent implements OnInit {
         let newPoint = this.geometryService.addToEdgeLength(this.shape.points[i].point, this.shape.points[j].point, this.value);
         this.shape.points[j].point = newPoint;
         this.shape.points[j].object.position.copy(new THREE.Vector3(newPoint.x, newPoint.y, 0));
-        this.shape.points[j].text.position.set(newPoint.x + this.textOffset.x, newPoint.y + this.textOffset.y, 0);
+        let textOffsetMultiplier = j > 9 ? 2 : 1;
+        this.shape.points[j].text.position.set(newPoint.x + this.textOffset.x * textOffsetMultiplier, newPoint.y + this.textOffset.y, 0);
 
         newPoint = this.geometryService.addToEdgeLength(this.shape.points[i].point, this.shape.points[k].point, this.value);
         this.shape.points[k].point = newPoint;
         this.shape.points[k].object.position.copy(new THREE.Vector3(newPoint.x, newPoint.y, 0));
-        this.shape.points[k].text.position.set(newPoint.x + this.textOffset.x, newPoint.y + this.textOffset.y, 0);
+        textOffsetMultiplier = k > 9 ? 2 : 1;
+        this.shape.points[k].text.position.set(newPoint.x + this.textOffset.x * textOffsetMultiplier, newPoint.y + this.textOffset.y, 0);
         
         this.mainObject.geometry = this.createShape();
       }
@@ -1056,7 +1096,8 @@ export class GenerateLineComponent implements OnInit {
         
         this.shape.points[j].point = newPoint;
         this.selectedAdjacentObject.position.copy(new THREE.Vector3(newPoint.x, newPoint.y, 0));
-        this.shape.points[j].text.position.set(newPoint.x + this.textOffset.x, newPoint.y + this.textOffset.y, 0);
+        const textOffsetMultiplier = j > 9 ? 2 : 1;
+        this.shape.points[j].text.position.set(newPoint.x + this.textOffset.x * textOffsetMultiplier, newPoint.y + this.textOffset.y, 0);
         
         this.mainObject.geometry = this.createShape();
       }
