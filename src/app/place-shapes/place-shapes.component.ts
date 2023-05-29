@@ -22,7 +22,8 @@ export class PlaceShapesComponent implements OnInit {
   @Input() parts: IShape[];
   @Input() selectedPart: IShape;
   @Input() updateFromShape: boolean;
-  @Output() updateMinimizationEvent = new EventEmitter();
+  @Input() getImageData;
+  @Output() updateGetImageDataEvent = new EventEmitter();
   @Output() choosePartEvent = new EventEmitter();
   public bevelMeshes = {};
   public bevelValidColor = 0xf6d7b0;
@@ -156,6 +157,17 @@ export class PlaceShapesComponent implements OnInit {
       if (this.checkIntersectionAfterUpdate) {
         this.checkMeshIntersects();
         this.checkIntersectionAfterUpdate = false;
+      }
+      if (this.getImageData) {
+        this.getImageData = false;
+        const image = this.renderer.domElement.toDataURL("image/png");
+        this.canvas.removeEventListener('mousemove', this.onMouseMoveListener);
+        this.canvas.removeEventListener('mousedown', this.onMouseDownListener);
+        this.canvas.removeEventListener('mouseup', this.onMouseUpListener);
+
+        this.renderer.dispose()
+        this.renderer.forceContextLoss();
+        this.updateGetImageDataEvent.emit(image);
       }
     });
     

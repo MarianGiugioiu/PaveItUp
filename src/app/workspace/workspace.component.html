@@ -10,7 +10,7 @@
     </div>
     <div *ngIf="!isEditingSurface" class="col surface-container">
         <button class="open-edit-surface-button" (click)="openSurfaceEdit()">Open edit</button>
-        <app-place-shapes #editedSurface *ngIf="!isEditingSurface" [surface]="surface" [parts]="surfaceParts" [selectedPart]="selectedPart" [updateFromShape]="updateFromShape" (updateMinimizationEvent)="updateShapeMinimization($event, surface)" (choosePartEvent)="choosePartFromSurface($event)"></app-place-shapes>
+        <app-place-shapes #editedSurface *ngIf="!isEditingSurface" [surface]="surface" [parts]="surfaceParts" [selectedPart]="selectedPart" [updateFromShape]="updateFromShape" (choosePartEvent)="choosePartFromSurface($event)"></app-place-shapes>
         <div class="row save-worksace-container">
             <button *ngIf="!isEditingSurface" (click)="saveWorkspace()">Save</button>
         </div>

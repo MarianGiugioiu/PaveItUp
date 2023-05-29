@@ -20,8 +20,6 @@ export class WorkspaceService {
 
   add(resource: IWorkspace) {
     this.workspaces.push(cloneDeep(resource));
-    console.log(this.workspaces);
-    
   }
 
   update(resource: IWorkspace) {

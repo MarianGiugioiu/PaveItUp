@@ -14,7 +14,8 @@ export interface IWorkspace {
   id?: string;
   surface?: IShape,
   parts?: IShape[],
-  shapes?: IShape[]
+  shapes?: IShape[],
+  image?: string;
 }
 
 @Component({

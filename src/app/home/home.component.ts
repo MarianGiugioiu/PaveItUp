@@ -10,6 +10,9 @@ import { IWorkspace } from '../workspace/workspace.component';
 })
 export class HomeComponent implements OnInit {
   public workspaces: IWorkspace[];
+  public getImageData = {};
+  public selectedWorkspace: IWorkspace;
+  public initOldWorkspaces = -1;
 
   constructor(
     public workspaceService: WorkspaceService,
@@ -18,6 +21,27 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.workspaces = this.workspaceService.getAll();
+    if (this.workspaces.length) {
+      this.initOldWorkspaces = 0;
+      this.selectedWorkspace = this.workspaces[0];
+      this.getImageData[this.selectedWorkspace.id] = true;
+    }
+  }
+
+  updateGetImageData(workspace, image) {
+    if (this.initOldWorkspaces !== -1) {
+      workspace.image = image;
+      this.initOldWorkspaces++;
+      if (this.initOldWorkspaces < this.workspaces.length) {
+        this.selectedWorkspace = this.workspaces[this.initOldWorkspaces];
+        this.getImageData[this.selectedWorkspace.id] = true;
+      } else {
+        this.initOldWorkspaces = -1;
+        this.selectedWorkspace = undefined;
+      }
+    } else {
+      this.selectedWorkspace = undefined;
+    }
   }
 
   create() {

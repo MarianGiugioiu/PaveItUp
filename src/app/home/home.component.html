@@ -1,5 +1,8 @@
-<p>home works!</p>
 <div *ngFor="let workspace of workspaces" >
     <button (click)="edit(workspace)">{{workspace.name}}</button>
+    <app-place-shapes *ngIf="(this.selectedWorkspace?.id === workspace.id)" [surface]="workspace.surface" [parts]="workspace.parts" [getImageData]="getImageData[workspace.id]" (updateGetImageDataEvent)="updateGetImageData(workspace, $event)"></app-place-shapes>
+    <div *ngIf="!(this.selectedWorkspace?.id === workspace.id)" (click)="edit(workspace)">
+        <img width="250px" height="250px" [src]="workspace.image">
+    </div>
 </div>
 <button (click)="create()">Create</button>
