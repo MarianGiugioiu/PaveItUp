@@ -25,6 +25,7 @@ export interface IWorkspace {
 export class WorkspaceComponent implements OnInit {
   @ViewChild('editedSurface') editedSurface: PlaceShapesComponent;
   public workspaceId: string;
+  public newWorkspaceName: string;
   public workspace: IWorkspace;
   public shapes: IShape[] = [];
   public parts: IShape[] = [];
@@ -56,6 +57,7 @@ export class WorkspaceComponent implements OnInit {
   ngOnInit(): void {
     this.workspaceId = this.route.snapshot.paramMap.get('id');
     if (this.workspaceId === 'new') {
+      this.newWorkspaceName = 'New Workspace';
       this.createSurface();
     } else {
       this.workspace = this.workspaceService.get(this.workspaceId);
@@ -424,9 +426,9 @@ export class WorkspaceComponent implements OnInit {
     let newShapes = [];
     this.shapes.forEach(item => {
       newShapes.push(this.mapShapeToPart(item));
-    })
+    });
     const workspace: IWorkspace = {
-      name: this.workspaceId === 'new' ? 'New Workspace' : this.workspace.name,
+      name: this.workspaceId === 'new' ? this.newWorkspaceName : this.workspace.name,
       id: this.workspaceId === 'new' ? uuidv4() : this.workspaceId,
       surface: this.mapShapeToPart(this.surface),
       parts: this.surfaceParts,

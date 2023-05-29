@@ -1,3 +1,9 @@
+<div *ngIf="surface" class="row name-container page-working">
+    <label class="name-label">Name:</label>
+    <input *ngIf="workspaceId === 'new'" [(ngModel)]="newWorkspaceName"/>
+    <input *ngIf="workspaceId !== 'new' && workspace" [(ngModel)]="workspace.name"/>
+</div>
+
 <div *ngIf="surface" class="row page-container page-working">
     <div *ngIf="isEditingSurface" class="row surface-edit-container">
         <app-generate-line  [shape]="surface" [isSurface]=true [canDoActions]="isEditingSurface" (updateMinimizationEvent)="updateShapeMinimization($event, surface)"></app-generate-line>

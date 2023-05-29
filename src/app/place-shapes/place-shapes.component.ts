@@ -2,10 +2,8 @@ import { Component, ElementRef, Input, OnInit, Output, ViewChild, EventEmitter, 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { GeometryService } from '../common/services/geometry.service';
-import { IPoint, IShape } from '../generate-line/generate-line.component';
-import { cloneDeep } from 'lodash';
+import { IShape } from '../generate-line/generate-line.component';
 import { EventsService } from '../common/services/events.service';
 import { TextureService } from '../common/services/texture.service';
 
