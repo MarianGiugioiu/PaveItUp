@@ -25,6 +25,7 @@ export class PlaceShapesComponent implements OnInit {
   @Input() getImageData;
   @Output() updateGetImageDataEvent = new EventEmitter();
   @Output() choosePartEvent = new EventEmitter();
+  @Output() checkIntersectEvent = new EventEmitter();
   public bevelMeshes = {};
   public bevelValidColor = 0xf6d7b0;
   public bevelInvalidColor = 0xff0000;
@@ -214,11 +215,13 @@ export class PlaceShapesComponent implements OnInit {
         }
       }
     }
+    let intersectsExists = false;
     for(let i = 0; i < len; i++) {
       const intLen = intersections[this.partMeshes[i].name].length;
       let intBevelMesh = this.bevelMeshes[this.partMeshes[i].name];
       if (intLen) {
-        (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(this.bevelInvalidColor); 
+        (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(this.bevelInvalidColor);
+        intersectsExists = true;
       } else {
         let vertices = this.getVertices(this.partMeshes[i]);
         const raycasterSurface = new THREE.Raycaster();
@@ -233,11 +236,13 @@ export class PlaceShapesComponent implements OnInit {
         }
         if (existsSurface) {
           (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(this.bevelInvalidColor);  
+          intersectsExists = true;
         } else {
           (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(this.bevelValidColor); 
         }
       }
     }
+    this.checkIntersectEvent.emit(intersectsExists);
   }
 
   rotateObjectWithValue(part: IShape) {

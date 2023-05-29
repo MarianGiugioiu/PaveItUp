@@ -44,6 +44,8 @@ export class WorkspaceComponent implements OnInit {
   public pendingPart;
   public cycleParts = -1;
 
+  public intersectsExist = false;
+
   public initOldShapes = -1;
   public initOldParts = -1;
 
@@ -78,6 +80,10 @@ export class WorkspaceComponent implements OnInit {
         }
       }
     }
+  }
+
+  checkIntersect(event) {
+    this.intersectsExist = event;
   }
 
   updateGetImageData(shape) {
@@ -424,22 +430,24 @@ export class WorkspaceComponent implements OnInit {
   };
   
   saveWorkspace() {
-    let newShapes = [];
-    this.shapes.forEach(item => {
-      newShapes.push(this.mapShapeToPart(item));
-    });
-    const workspace: IWorkspace = {
-      name: this.workspaceId === 'new' ? this.newWorkspaceName : this.workspace.name,
-      id: this.workspaceId === 'new' ? uuidv4() : this.workspaceId,
-      surface: this.mapShapeToPart(this.surface),
-      parts: this.surfaceParts,
-      shapes: newShapes
-    };
-    if (this.workspaceId === 'new') {
-      this.workspaceService.add(workspace);
-    } else {
-      this.workspaceService.update(workspace);
+    if (!this.intersectsExist) {
+      let newShapes = [];
+      this.shapes.forEach(item => {
+        newShapes.push(this.mapShapeToPart(item));
+      });
+      const workspace: IWorkspace = {
+        name: this.workspaceId === 'new' ? this.newWorkspaceName : this.workspace.name,
+        id: this.workspaceId === 'new' ? uuidv4() : this.workspaceId,
+        surface: this.mapShapeToPart(this.surface),
+        parts: this.surfaceParts,
+        shapes: newShapes
+      };
+      if (this.workspaceId === 'new') {
+        this.workspaceService.add(workspace);
+      } else {
+        this.workspaceService.update(workspace);
+      }
+      this.router.navigate(['/']);
     }
-    this.router.navigate(['/']);
   }
 }
