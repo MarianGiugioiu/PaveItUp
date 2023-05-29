@@ -1,4 +1,4 @@
-<div *ngIf="surface"  class="row page-container">
+<div *ngIf="surface" class="row page-container page-working">
     <div *ngIf="isEditingSurface" class="row surface-edit-container">
         <app-generate-line  [shape]="surface" [isSurface]=true [canDoActions]="isEditingSurface" (updateMinimizationEvent)="updateShapeMinimization($event, surface)"></app-generate-line>
     </div>
@@ -41,4 +41,8 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="row page-container page-not-working">
+    <p>This page is not usable with dimensions smaller than 1300 / 600</p>
 </div>

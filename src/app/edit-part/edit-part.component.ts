@@ -8,6 +8,7 @@ import { cloneDeep, isEqual } from 'lodash';
 import { EventsService } from '../common/services/events.service';
 import { EventsEnum } from '../common/enums/events.enum';
 import { IPoint, IShape } from '../generate-line/generate-line.component';
+import { TextureService } from '../common/services/texture.service';
 
 @Component({
   selector: 'app-edit-part',
@@ -45,7 +46,6 @@ export class EditPartComponent implements OnInit {
   public vertexVisibility = true;
   public mainObjectRotation = Math.PI / 45;
   public regularPolygonEdgesNumber: number = 4;
-  public textures = [];
   public cameraRatio = 1;
   initialIteration: IPoint[];
   previousIterations: IPoint[][];
@@ -78,13 +78,13 @@ export class EditPartComponent implements OnInit {
 
   constructor(
     public geometryService: GeometryService,
-    public eventsService: EventsService
+    public eventsService: EventsService,
+    public textureService: TextureService
   ) { }
 
   ngOnInit(): void {
     this.textureLoader = new THREE.TextureLoader();
     this.fontLoader = new FontLoader();
-    this.textures.push(this.textureLoader.load('https://images.unsplash.com/photo-1520699514109-b478c7b48d3b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGF2ZW1lbnQlMjB0ZXh0dXJlfGVufDB8fDB8fA%3D%3D&w=1000&q=80'));
   }
 
   ngOnDistroy() {
@@ -249,7 +249,7 @@ export class EditPartComponent implements OnInit {
 
 
   drawMainObject() {
-    const texture = this.textures[this.shape.textureType];
+    const texture = this.textureService.textures.shape[this.shape.textureType];
     const material = new THREE.MeshBasicMaterial({ map: texture });
     material.map.repeat.set(0.25 / this.cameraRatio, 0.25 / this.cameraRatio);
     material.map.offset.set(0.5, 0.5);

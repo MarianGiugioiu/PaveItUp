@@ -178,6 +178,7 @@ export class WorkspaceComponent implements OnInit {
           id,
           name,
           textureType: 0,
+          color: shape ? shape.color : undefined,
           points: shape ? this.copyPoints(shape) : this.createNewPoints()
         }
       );

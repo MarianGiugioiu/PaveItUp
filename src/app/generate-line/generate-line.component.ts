@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, Output, ViewChild, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
@@ -6,7 +6,7 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { GeometryService } from '../common/services/geometry.service';
 import { cloneDeep, isEqual } from 'lodash';
 import { EventsService } from '../common/services/events.service';
-import { EventsEnum } from '../common/enums/events.enum';
+import { TextureService } from '../common/services/texture.service';
 
 export interface IPoint {
   name?: string;
@@ -63,17 +63,18 @@ export class GenerateLineComponent implements OnInit {
   private mouse: THREE.Vector2;
   private raycaster: THREE.Raycaster;
   private font;
-  private textOffset = new THREE.Vector2(-0.06, -0.07);
+  private textOffset = new THREE.Vector2(-0.05, -0.05);
   public pressedKeys = [];
   public vertexVisibility = true;
   public mainObjectRotation = Math.PI / 45;
   public regularPolygonEdgesNumber: number = 4;
-  public textures = [];
   public cameraRatio = 1;
   initialIteration: IPoint[];
   previousIterations: IPoint[][];
   maxPreviousIterationsNumber = 50;
   currentShapeDuringPointMove: IPoint[];
+  textureOptions: string[];
+  selectedOption;
 
   getImageData1 = false;
 
@@ -89,7 +90,6 @@ export class GenerateLineComponent implements OnInit {
   public isKeyPressed = false;
   sign = -1;
 
-
   textureLoader: THREE.TextureLoader;
   fontLoader: FontLoader
 
@@ -101,15 +101,14 @@ export class GenerateLineComponent implements OnInit {
 
   constructor(
     public geometryService: GeometryService,
-    public eventsService: EventsService
+    public eventsService: EventsService,
+    public textureService: TextureService
   ) { }
 
   ngOnInit(): void {
     this.textureLoader = new THREE.TextureLoader();
     this.fontLoader = new FontLoader();
-    this.textures.push(this.textureLoader.load('https://images.unsplash.com/photo-1520699514109-b478c7b48d3b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGF2ZW1lbnQlMjB0ZXh0dXJlfGVufDB8fDB8fA%3D%3D&w=1000&q=80'));
-    //this.scene.background = textureLoader.load('https://i0.wp.com/eos.org/wp-content/uploads/2022/09/scorpius-centaurus-ob-stellar-association.jpg?fit=1200%2C675&ssl=1');
-
+    this.textureOptions = this.isSurface ? this.textureService.surfaceTextureOptions : this.textureService.shapeTextureOptions;
   }
 
   ngOnDistroy() {
@@ -330,6 +329,21 @@ export class GenerateLineComponent implements OnInit {
     this.mainObject.material.color = newColor;
   }
 
+  changeTexture(value?) {
+    if (value !== undefined) {
+      this.shape.textureType = value;
+    }
+    const type = this.isSurface ? 'surface' : 'shape';
+    const texture = this.textureService.textures[type][this.shape.textureType];
+    const material = new THREE.MeshBasicMaterial({ map: texture });
+    material.map.repeat.set(0.25 / this.cameraRatio, 0.25 / this.cameraRatio);
+    material.map.offset.set(0.5, 0.5);
+    material.map.wrapS = THREE.RepeatWrapping;
+    material.map.wrapT = THREE.RepeatWrapping;
+    this.mainObject.material = material;
+    this.changeColor();
+  }
+
   createPrimaryShape() {
     this.drawMainObject();
     this.changeColor();
@@ -354,10 +368,10 @@ export class GenerateLineComponent implements OnInit {
   }
 
   createRegularPolygon() {
-    if (this.regularPolygonEdgesNumber && !isNaN(this.regularPolygonEdgesNumber) && this.regularPolygonEdgesNumber >= 3) {
+    if (this.regularPolygonEdgesNumber && !isNaN(this.regularPolygonEdgesNumber) && this.regularPolygonEdgesNumber >= 3 && this.regularPolygonEdgesNumber <= 20) {
       let radius = Math.sqrt(2) / 2;
       if (this.isSurface) {
-        radius *= 4;
+        radius *= this.cameraRatio;
       }
       const n = this.regularPolygonEdgesNumber;
       const angle = (2 * Math.PI) / n;
@@ -580,7 +594,7 @@ export class GenerateLineComponent implements OnInit {
   addText(position: THREE.Vector2, text: string) {
     const textGeometry = new TextGeometry(text, {
       font: this.font,
-      size: 0.15 * this.cameraRatio,
+      size: 0.12 * this.cameraRatio,
       height: 2,
       curveSegments: 10,
       bevelEnabled: false
@@ -596,7 +610,8 @@ export class GenerateLineComponent implements OnInit {
   }
 
   drawMainObject() {
-    const texture = this.textures[this.shape.textureType];
+    const type = this.isSurface ? 'surface' : 'shape';
+    const texture = this.textureService.textures[type][this.shape.textureType];
     const material = new THREE.MeshBasicMaterial({ map: texture });
     material.map.repeat.set(0.25 / this.cameraRatio, 0.25 / this.cameraRatio);
     material.map.offset.set(0.5, 0.5);

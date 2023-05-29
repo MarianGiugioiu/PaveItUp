@@ -30,12 +30,34 @@
                 <div class="row action-container">
                     <button (click)="removeVertex()">Remove vertex</button>
                 </div>
+
                 <div class="row action-container">
-                    <input [value]="shape.color"
-                        [style.background]="shape.color"
-                        [cpOutputFormat]="'rgba'"
-                        [(colorPicker)]="shape.color"
-                        (colorPickerChange)="changeColor()"/>
+                    <div class="col texture-picker-container">
+                        <div class="full-center">
+                            <label>Texture</label>
+                        </div>
+                    </div>
+                    <div class="col color-picker-container">
+                        <div class="full-center">
+                            <label>Color</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row action-container">
+                    <div class="col texture-picker-container">
+                        <div *ngFor="let option of textureOptions; let i = index;">
+                            <input type="radio" name="radioGroup" [value]="option" [ngModel]="textureOptions[shape.textureType]" (change)="changeTexture(i)">
+                            <label>{{ option }}</label>
+                        </div>
+                    </div>
+                    <div class="col full-center color-picker-container">
+                        <input [value]="shape.color"
+                            [style.background]="shape.color"
+                            [cpOutputFormat]="'rgba'"
+                            [(colorPicker)]="shape.color"
+                            (colorPickerChange)="changeColor()"/>
+                    </div>
                 </div>
                 <div class="row action-container">
                     <button (click)="save()">Save</button>

@@ -7,6 +7,7 @@ import { GeometryService } from '../common/services/geometry.service';
 import { IPoint, IShape } from '../generate-line/generate-line.component';
 import { cloneDeep } from 'lodash';
 import { EventsService } from '../common/services/events.service';
+import { TextureService } from '../common/services/texture.service';
 
 @Component({
   selector: 'app-place-shapes',
@@ -26,6 +27,8 @@ export class PlaceShapesComponent implements OnInit {
   @Output() updateMinimizationEvent = new EventEmitter();
   @Output() choosePartEvent = new EventEmitter();
   public bevelMeshes = {};
+  public bevelValidColor = 0xf6d7b0;
+  public bevelInvalidColor = 0xff0000;
   public surfaceMesh: THREE.Mesh;
   public partMeshes: THREE.Mesh[] = [];
   private renderer: THREE.WebGLRenderer;
@@ -44,7 +47,6 @@ export class PlaceShapesComponent implements OnInit {
   public vertexVisibility = false;
   public mainObjectRotation = Math.PI / 45;
   public regularPolygonEdgesNumber: number = 4;
-  public textures = [];
   public cameraRatio = 4; //Modificare suprafata
 
   checkIntersectionAfterUpdate = false;
@@ -70,13 +72,13 @@ export class PlaceShapesComponent implements OnInit {
 
   constructor(
     public geometryService: GeometryService,
-    public eventsService: EventsService
+    public eventsService: EventsService,
+    public textureService: TextureService
   ) { }
 
   ngOnInit(): void {
     this.textureLoader = new THREE.TextureLoader();
     this.fontLoader = new FontLoader();
-    this.textures.push(this.textureLoader.load('https://images.unsplash.com/photo-1520699514109-b478c7b48d3b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGF2ZW1lbnQlMjB0ZXh0dXJlfGVufDB8fDB8fA%3D%3D&w=1000&q=80'));
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -206,7 +208,7 @@ export class PlaceShapesComponent implements OnInit {
       const intLen = intersections[this.partMeshes[i].name].length;
       let intBevelMesh = this.bevelMeshes[this.partMeshes[i].name];
       if (intLen) {
-        (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(0xff0000); 
+        (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(this.bevelInvalidColor); 
       } else {
         let vertices = this.getVertices(this.partMeshes[i]);
         const raycasterSurface = new THREE.Raycaster();
@@ -220,9 +222,9 @@ export class PlaceShapesComponent implements OnInit {
           }
         }
         if (existsSurface) {
-          (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(0xff0000);  
+          (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(this.bevelInvalidColor);  
         } else {
-          (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(0xffffff); 
+          (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(this.bevelValidColor); 
         }
       }
     }
@@ -281,7 +283,8 @@ export class PlaceShapesComponent implements OnInit {
     let isSurface = shape.name.includes('Surface');
     
     let localRatio = 4;
-    const texture = this.textures[shape.textureType];
+    const type = isSurface ? 'surface' : 'shape';
+    const texture = this.textureService.textures[type][shape.textureType];
     
     const material = new THREE.MeshBasicMaterial({ map: texture });
     material.map.repeat.set(0.25 / localRatio, 0.25 / localRatio);
@@ -308,7 +311,7 @@ export class PlaceShapesComponent implements OnInit {
       this.partMeshes.push(mesh);
     }
     let bevelGeometry = new THREE.ExtrudeGeometry(shapeGeometry, extrudeSettings);
-    let bevelMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+    let bevelMaterial = new THREE.MeshBasicMaterial( { color: this.bevelValidColor } );
     let bevelMesh = new THREE.Mesh(bevelGeometry, bevelMaterial);
     bevelMesh.position.z = 2;
     bevelMesh.name = shape.name + '_bevel';
@@ -372,7 +375,9 @@ export class PlaceShapesComponent implements OnInit {
 
   onMouseUp(event) {
     this.dragging = false;
-    this.choosePartEvent.emit(this.selectedPart.partId);
+    if (this.selectedPart) {
+      this.choosePartEvent.emit(this.selectedPart.partId);
+    }
     this.selectedObject = undefined;
     this.selectedPart = undefined;
   };
