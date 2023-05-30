@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { WorkspaceService } from '../common/services/api/workspace.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { SVGEnum } from '../common/enums/svg.enum';
 
 export interface IWorkspace {
   name?: string;
@@ -44,11 +45,11 @@ export class WorkspaceComponent implements OnInit {
   public pendingShape;
   public pendingPart;
   public cycleParts = -1;
-
   public intersectsExist = false;
-
   public initOldShapes = -1;
   public initOldParts = -1;
+
+  public SVGEnum = SVGEnum;
 
   constructor(
     public generalService: GeneralService,
@@ -82,6 +83,8 @@ export class WorkspaceComponent implements OnInit {
           this.initOldShapes = 0;
           this.expandedShapeDetails = this.shapes[this.initOldShapes];
           this.getImageData[this.expandedShapeDetails.name] = true;
+        } else {
+          this.spinner.hide();
         }
       }
     }

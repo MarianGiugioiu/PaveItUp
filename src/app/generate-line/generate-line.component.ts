@@ -7,6 +7,7 @@ import { GeometryService } from '../common/services/geometry.service';
 import { cloneDeep, isEqual } from 'lodash';
 import { EventsService } from '../common/services/events.service';
 import { TextureService } from '../common/services/texture.service';
+import { SVGEnum } from '../common/enums/svg.enum';
 
 export interface IPoint {
   name?: string;
@@ -98,6 +99,8 @@ export class GenerateLineComponent implements OnInit {
   onMouseMoveListener: EventListener;
   onKeyDownListener: EventListener;
   onKeyUpListener: EventListener;
+
+  public SVGEnum = SVGEnum;
 
   constructor(
     public geometryService: GeometryService,

@@ -5,3 +5,35 @@ body {
     height: 100vh;
     overflow: hidden;
 }
+
+.row {
+    display: flex;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.full-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.space-between {
+    justify-content: space-between;
+    align-items: center;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+    overflow-y: scroll;
+    background: rgb(208, 208, 208);
+    box-shadow: inset 0 0 4px #9a9a9a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(79, 79, 249);
+    border-radius: 10px;
+}

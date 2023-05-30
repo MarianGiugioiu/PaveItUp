@@ -19,13 +19,15 @@
     <div *ngIf="!isEditingSurface" class="col part-list-container">
         <div class="row" *ngFor="let part of parts; let i = index;">
             <div class="col">
-                <label>{{part?.partId}}. {{part?.name}}</label>
+                <div class="row part-name-container">
+                    <label class="full-center">{{part?.partId}}. {{part?.name}}</label>
+                    <img [src]="SVGEnum.deleteSVG" alt="Remove" (click)="deletePart(i)">
+                </div>
                 <app-edit-part *ngIf="(selectedPart?.partId === part.partId)" (click)="toggleSelectPart(part)" [shape]="part" [getImageData]="getImageData[part.name]" (updateGetImageDataEvent)="updateGetImageData(part)" [isCanvasMinimized]="true" [canDoActions]="false" [canRotate]="selectedPart?.partId === part.partId" (updatePartRotationEvent)="updatePartRotation()"></app-edit-part>
                 <div *ngIf="!(selectedPart?.partId === part.partId)" (click)="toggleSelectPart(part)">
                     <img width="150px" height="150px" [src]="part.image">
                 </div>
             </div>
-            <button (click)="deletePart(i)">Delete</button>
             <label *ngIf="selectedPart?.partId === part.partId" >x</label>
         </div>
     </div>
@@ -33,7 +35,9 @@
         <button class="add-shape-button" (click)="addNewShape()">Add shape</button>
         <div class="row shape-container" *ngFor="let shape of shapes; let i = index;">
             <div class="col">
-                <label>{{shape?.id}}. {{shape?.name}}</label>
+                <div class="row">
+                    <label>{{shape?.id}}. {{shape?.name}}</label>
+                </div>
                 <div class="row">
                     <div class="col shape-usage">
                         <button *ngIf="!(shape.id === expandedShapeDetails?.id)" (click)="useShape(shape)">Use</button>

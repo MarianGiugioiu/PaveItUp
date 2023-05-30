@@ -5,30 +5,28 @@
                 <canvas #canvas id="canvas" class="cube"></canvas>
             </div>
             <div *ngIf="!isCanvasMinimized" >
-                <div class="row action-container">
-                    <button (click)="refreshShape()">Refresh shape</button>
-                </div>
-                <div class="row action-container">
-                    <input class="point-pos-input" [(ngModel)]="regularPolygonEdgesNumber" type="number">
-                    <button (click)="createRegularPolygon()">Create regular polygon</button>
-                </div>
-                <div class="row action-container">
-                    <button (click)="toggleVerticesVisibility()">Hide vertices</button>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="row action-container">
-                            <button (click)="addVertex()">Add vertex</button>
-                        </div>
+                <div class="row space-between action-container">
+                    <div class="row">
+                        <img [src]="SVGEnum.refreshSVG" alt="Refresh" (click)="refreshShape()">
+                        <img *ngIf="previousIterations && previousIterations.length" [src]="SVGEnum.undoSVG" alt="Undo" (click)="undoAction()">
+                        <img *ngIf="changesExist()" [src]="SVGEnum.revertSVG" alt="Revert" (click)="revertShape()">
                     </div>
-                    <div class="col">
-                        <div class="row action-container">
-                            <button (click)="addVertex('curve')">Add curve point</button>
-                        </div>
+                    <div class="row">
+                        <img [src]="SVGEnum.saveSVG" alt="Save" (click)="save()">
                     </div>
                 </div>
-                <div class="row action-container">
-                    <button (click)="removeVertex()">Remove vertex</button>
+                <div class="row space-between action-container">
+                    <div class="row">
+                        <img *ngIf="vertexVisibility" [src]="SVGEnum.hideSVG" alt="Hide" (click)="toggleVerticesVisibility()">
+                        <img *ngIf="!vertexVisibility" [src]="SVGEnum.viewSVG" alt="View" (click)="toggleVerticesVisibility()">
+                        <img [src]="SVGEnum.addSquareSVG" alt="AddVertex" (click)="addVertex()">
+                        <img [src]="SVGEnum.addRoundSVG" alt="AddCurveVertex" (click)="addVertex('curve')">
+                        <img [src]="SVGEnum.removeSVG" alt="RemoveVertex" (click)="removeVertex()">
+                    </div>
+                    <div class="row">
+                        <input class="point-pos-input" [(ngModel)]="regularPolygonEdgesNumber" type="number">
+                        <img [src]="SVGEnum.regularPolygonSVG" alt="RegularPolygon" (click)="createRegularPolygon()">
+                    </div>
                 </div>
 
                 <div class="row action-container">
@@ -58,11 +56,6 @@
                             [(colorPicker)]="shape.color"
                             (colorPickerChange)="changeColor()"/>
                     </div>
-                </div>
-                <div class="row action-container">
-                    <button (click)="save()">Save</button>
-                    <button *ngIf="previousIterations && previousIterations.length" (click)="undoAction()">Undo</button>
-                    <button *ngIf="changesExist()" (click)="revertShape()">Revert shape</button>
                 </div>
             </div>
         </div>

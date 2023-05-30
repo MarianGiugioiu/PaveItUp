@@ -1,0 +1,16 @@
+export enum SVGEnum {
+    deleteSVG = '../../../assets/SVG/delete.svg',
+    addRoundSVG = '../../../assets/SVG/add-round.svg',
+    addSquareSVG = '../../../assets/SVG/add-square.svg',
+    removeSVG = '../../../assets/SVG/remove.svg',
+    hideSVG = '../../../assets/SVG/hide.svg',
+    viewSVG = '../../../assets/SVG/view.svg',
+    refreshSVG = '../../../assets/SVG/refresh.svg',
+    undoSVG = '../../../assets/SVG/undo.svg',
+    revertSVG = '../../../assets/SVG/revert.svg',
+    regularPolygonSVG = '../../../assets/SVG/regular-polygon.svg',
+    saveSVG = '../../../assets/SVG/save.svg',
+    angleSVG = '../../../assets/SVG/angle.svg',
+    lengthSVG = '../../../assets/SVG/length.svg',
+    editSVG = '../../../assets/SVG/edit.svg',
+}
