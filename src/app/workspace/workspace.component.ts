@@ -8,6 +8,7 @@ import { PlaceShapesComponent } from '../place-shapes/place-shapes.component';
 import { v4 as uuidv4 } from 'uuid';
 import { WorkspaceService } from '../common/services/api/workspace.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export interface IWorkspace {
   name?: string;
@@ -54,17 +55,21 @@ export class WorkspaceComponent implements OnInit {
     public evensService: EventsService,
     public workspaceService: WorkspaceService,
     public router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private spinner: NgxSpinnerService
     ) { }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.workspaceId = this.route.snapshot.paramMap.get('id');
     if (this.workspaceId === 'new') {
       this.newWorkspaceName = 'New Workspace';
       this.createSurface();
+      this.spinner.hide();
     } else {
       this.workspace = this.workspaceService.get(this.workspaceId);
       if (!this.workspace) {
+        this.spinner.hide();
         this.router.navigate(['/']);
       } else {
         this.surface = this.workspace.surface;
@@ -120,6 +125,7 @@ export class WorkspaceComponent implements OnInit {
         } else {
           this.initOldParts = -1;
           this.selectedPart = undefined;
+          this.spinner.hide();
         }
       } else {
         this.selectedPart = undefined;

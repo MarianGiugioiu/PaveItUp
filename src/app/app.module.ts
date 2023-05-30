@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -10,6 +10,8 @@ import { PlaceShapesComponent } from './place-shapes/place-shapes.component';
 import { EditPartComponent } from './edit-part/edit-part.component';
 import { HomeComponent } from './home/home.component';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -24,8 +26,11 @@ import { ColorPickerModule } from 'ngx-color-picker';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ColorPickerModule
+    ColorPickerModule,
+    BrowserAnimationsModule,
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
   bootstrap: [AppComponent]
 })
