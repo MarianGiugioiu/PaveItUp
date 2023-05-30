@@ -14,8 +14,8 @@
                                 <input class="point-pos-input" [ngModel]="item.point.y.toFixed(2)" type="number" (keyup.enter)="updatePoint($event, 'y', item)">
                             </div>
                             <div class="row point-property-container space-between">
-                                <img [src]="SVGEnum.angleSVG" alt="ngle">
-                                <label>{{getAngle(i)}}</label>
+                                <img [src]="SVGEnum.angleSVG" alt="Angle">
+                                <label class="angle-label">{{getAngle(i)}}</label>
                             </div>
                         </div>
                         <div class="col connecting-lines-container">

@@ -13,4 +13,8 @@ export enum SVGEnum {
     angleSVG = '../../../assets/SVG/angle.svg',
     lengthSVG = '../../../assets/SVG/length.svg',
     editSVG = '../../../assets/SVG/edit.svg',
+    useSVG = '../../../assets/SVG/use.svg',
+    duplicateSVG = '../../../assets/SVG/duplicate.svg',
+    createShapeSVG = '../../../assets/SVG/create-shape.svg',
+    createSVG = '../../../assets/SVG/create.svg',
 }

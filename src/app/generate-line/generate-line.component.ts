@@ -471,6 +471,9 @@ export class GenerateLineComponent implements OnInit {
     if (point1.type === 'line' && point2.type === 'line' && point3.type === 'line') {
       return this.geometryService.calculateAngle(point1.point, point2.point, point3.point).toFixed(2);
     }
+    else {
+      return 'x';
+    }
   }
 
   getEdgeLength(i) {
