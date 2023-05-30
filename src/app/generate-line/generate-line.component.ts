@@ -6,7 +6,7 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { GeometryService } from '../common/services/geometry.service';
 import { cloneDeep, isEqual } from 'lodash';
 import { EventsService } from '../common/services/events.service';
-import { TextureService } from '../common/services/texture.service';
+import { ISelect, TextureService } from '../common/services/texture.service';
 import { SVGEnum } from '../common/enums/svg.enum';
 
 export interface IPoint {
@@ -74,7 +74,7 @@ export class GenerateLineComponent implements OnInit {
   previousIterations: IPoint[][];
   maxPreviousIterationsNumber = 50;
   currentShapeDuringPointMove: IPoint[];
-  textureOptions: string[];
+  textureOptions: ISelect[];
   selectedOption;
 
   getImageData1 = false;
@@ -541,7 +541,7 @@ export class GenerateLineComponent implements OnInit {
       item.object.name = `Point_${index.toString()}`;
       item.text.geometry = new TextGeometry(index.toString(), {
         font: this.font,
-        size: 0.15 * this.cameraRatio,
+        size: 0.12 * this.cameraRatio,
         height: 2,
         curveSegments: 10,
         bevelEnabled: false

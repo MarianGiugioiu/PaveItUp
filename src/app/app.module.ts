@@ -12,6 +12,7 @@ import { HomeComponent } from './home/home.component';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    NgSelectModule,
     ColorPickerModule,
     BrowserAnimationsModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })

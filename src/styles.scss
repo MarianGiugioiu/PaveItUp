@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@ng-select/ng-select/themes/material.theme.css";
 body {
     margin: 0 !important;
     width:100vw;
@@ -22,7 +23,13 @@ body {
 }
 
 .space-between {
+    display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+
+.flex-end {
+    justify-content: flex-end;
     align-items: center;
 }
 
@@ -36,4 +43,22 @@ body {
 ::-webkit-scrollbar-thumb {
     background: rgb(79, 79, 249);
     border-radius: 10px;
+}
+
+input {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+  }
+  
+input:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
 }
