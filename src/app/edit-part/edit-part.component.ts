@@ -105,7 +105,7 @@ export class EditPartComponent implements OnInit {
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas});
     this.renderer.shadowMap.enabled = true;
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x000000);
+    this.scene.background = new THREE.Color(0xffffff);
     this.camera = new THREE.OrthographicCamera(
       this.canvasWidth / -200 * ratio,
       this.canvasWidth / 200 * ratio,

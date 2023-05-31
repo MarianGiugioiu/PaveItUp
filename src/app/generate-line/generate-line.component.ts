@@ -51,10 +51,10 @@ export class GenerateLineComponent implements OnInit {
   @Output() updateGetImageDataEvent = new EventEmitter();
   private renderer: THREE.WebGLRenderer;
   private scene: THREE.Scene;
-  //private camera: THREE.PerspectiveCamera;
   private camera: THREE.OrthographicCamera;
   private controls: OrbitControls;
   private ambientLight: THREE.AmbientLight;
+  public defaultSquareColor = 0x0069d9;
   private canvasWidth = 300;
   private canvasHeight = 300;
   private dragging = false;
@@ -137,7 +137,7 @@ export class GenerateLineComponent implements OnInit {
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas});
     this.renderer.shadowMap.enabled = true;
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x000000);
+    this.scene.background = new THREE.Color(0xffffff);
     this.camera = new THREE.OrthographicCamera(
       this.canvasWidth / -200 * ratio, // left
       this.canvasWidth / 200 * ratio, // right
@@ -651,11 +651,11 @@ export class GenerateLineComponent implements OnInit {
     let mesh;
     if(type === 'line') {
       const squareGeometry = new THREE.BoxGeometry(0.2 * this.cameraRatio, 0.2 * this.cameraRatio, 1);
-      const squareMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const squareMaterial = new THREE.MeshBasicMaterial({ color: this.defaultSquareColor });
       mesh = new THREE.Mesh(squareGeometry, squareMaterial);
     } else {
       const circleGeometry = new THREE.CircleGeometry(0.1 * this.cameraRatio, 32);
-      const ciclreMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const ciclreMaterial = new THREE.MeshBasicMaterial({ color: this.defaultSquareColor });
       mesh = new THREE.Mesh(circleGeometry, ciclreMaterial);
     }
 
@@ -768,7 +768,7 @@ export class GenerateLineComponent implements OnInit {
 
   onMouseUp(event) {
     if (this.selectedObject && this.selectedObject.name.includes('Point')) {
-      (this.selectedObject.material as THREE.MeshPhongMaterial).color.set(0xffffff);
+      (this.selectedObject.material as THREE.MeshPhongMaterial).color.set(this.defaultSquareColor);
       this.addIteration(this.currentShapeDuringPointMove);
       this.currentShapeDuringPointMove = undefined;
       this.dragging = false;
