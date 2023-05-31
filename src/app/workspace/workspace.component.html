@@ -1,55 +1,51 @@
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
-<div *ngIf="surface" class="row name-container page-working">
-    <input *ngIf="workspaceId === 'new'" [(ngModel)]="newWorkspaceName"/>
-    <input *ngIf="workspaceId !== 'new' && workspace" [(ngModel)]="workspace.name"/>
-</div>
-
 <div *ngIf="surface" class="row page-container page-working" [ngClass]="isEditingSurface ? 'full-center' : 'space-between'">
     <div *ngIf="isEditingSurface" class="row surface-edit-container">
         <app-generate-line  [shape]="surface" [isSurface]=true [canDoActions]="isEditingSurface" (updateMinimizationEvent)="updateShapeMinimization($event, surface)"></app-generate-line>
     </div>
-    <div *ngIf="!isEditingSurface" class="col surface-container">
-        <div class="row space-between surface-options">
-            <img [src]="SVGEnum.editSVG" alt="Edit" (click)="openSurfaceEdit()">
-            <label>{{parts?.length}}</label>
-            <img *ngIf="!isEditingSurface" [src]="SVGEnum.saveSVG" alt="Save" (click)="saveWorkspace()">
+    <div *ngIf="!isEditingSurface" class="row surface-container align-center">
+        <div class="col full-center surface-options-container">
+            <div class="row space-between surface-options">
+                <img [src]="SVGEnum.editSVG" alt="Edit" (click)="openSurfaceEdit()">
+                <input *ngIf="workspaceId === 'new'" [(ngModel)]="newWorkspaceName"/>
+                <input *ngIf="workspaceId !== 'new' && workspace" [(ngModel)]="workspace.name"/>
+                <!-- <label>{{parts?.length}}</label> -->
+                <img *ngIf="!isEditingSurface" [src]="SVGEnum.saveSVG" alt="Save" (click)="saveWorkspace()">
+            </div>
+            <app-place-shapes #editedSurface *ngIf="!isEditingSurface" [surface]="surface" [parts]="surfaceParts" [selectedPart]="selectedPart" [updateFromShape]="updateFromShape" (choosePartEvent)="choosePartFromSurface($event)" (checkIntersectEvent)="checkIntersect($event)"></app-place-shapes>
         </div>
-        <app-place-shapes #editedSurface *ngIf="!isEditingSurface" [surface]="surface" [parts]="surfaceParts" [selectedPart]="selectedPart" [updateFromShape]="updateFromShape" (choosePartEvent)="choosePartFromSurface($event)" (checkIntersectEvent)="checkIntersect($event)"></app-place-shapes>
     </div>
+    <div *ngIf="!isEditingSurface" class="separating-line"></div>
     <div *ngIf="!isEditingSurface" class="col part-list-container">
-        <div class="row" *ngFor="let part of parts; let i = index;">
+        <div class="row part-container full-center" [ngClass]="selectedPart?.partId === part.partId ? 'selected-part-container' : ''" *ngFor="let part of parts; let i = index;">
             <div class="col">
-                <div class="row part-name-container">
+                <div class="row part-name-container space-between">
                     <label class="full-center">{{part?.partId}}. {{part?.name}}</label>
                     <img [src]="SVGEnum.deleteSVG" alt="Remove" (click)="deletePart(i)">
                 </div>
                 <app-edit-part *ngIf="(selectedPart?.partId === part.partId)" (click)="toggleSelectPart(part)" [shape]="part" [getImageData]="getImageData[part.name]" (updateGetImageDataEvent)="updateGetImageData(part)" [isCanvasMinimized]="true" [canDoActions]="false" [canRotate]="selectedPart?.partId === part.partId" (updatePartRotationEvent)="updatePartRotation()"></app-edit-part>
-                <div *ngIf="!(selectedPart?.partId === part.partId)" (click)="toggleSelectPart(part)">
-                    <img width="150px" height="150px" [src]="part.image">
-                </div>
+                <img *ngIf="!(selectedPart?.partId === part.partId)" (click)="toggleSelectPart(part)" width="150px" height="150px" [src]="part.image">
             </div>
-            <label *ngIf="selectedPart?.partId === part.partId" >x</label>
         </div>
     </div>
+    <div *ngIf="!isEditingSurface" class="separating-line"></div>
     <div *ngIf="!isEditingSurface" class="col shape-list-container">
         <div class="row full-center add-shape-button">
             <img [src]="SVGEnum.createShapeSVG" alt="Create" (click)="addNewShape()">
         </div>
-        <div class="row shape-container" *ngFor="let shape of shapes; let i = index;">
+        <div class="row" [ngClass]="!(shape.id === expandedShapeDetails?.id) ? 'shape-minimized-container full-center' : 'shape-container'" *ngFor="let shape of shapes; let i = index;">
             <div class="col">
-                <div class="row space-between">
+                <div *ngIf="!(shape.id === expandedShapeDetails?.id)" class="row space-between shape-options-row">
                     <label>{{shape?.name}}</label>
-                    <img *ngIf="!(shape.id === expandedShapeDetails?.id)" [src]="SVGEnum.deleteSVG" alt="Delete" (click)="!expandedShapeDetails && deleteShape(i)">
+                    <img [src]="SVGEnum.deleteSVG" alt="Delete" (click)="!expandedShapeDetails && deleteShape(i)">
                 </div>
-                <div *ngIf="!(shape.id === expandedShapeDetails?.id)" class="row space-between">
+                <div *ngIf="!(shape.id === expandedShapeDetails?.id)" class="row space-between shape-options-row">
                     <img [src]="SVGEnum.useSVG" alt="Use" (click)="!expandedShapeDetails && useShape(shape)">
                     <img [src]="SVGEnum.duplicateSVG" alt="Duplicate" (click)="!expandedShapeDetails && duplicateShape(shape)">
                     <img [src]="SVGEnum.editSVG" alt="Edit" (click)="!expandedShapeDetails && openShapeDetails(shape)">
                 </div>
                 <div class="row">
-                    <div *ngIf="!(shape.id === expandedShapeDetails?.id)">
-                        <img width="150px" height="150px" [src]="shape.image">
-                    </div>
+                    <img *ngIf="!(shape.id === expandedShapeDetails?.id)" width="150px" height="150px" [src]="shape.image">
                     <app-generate-line *ngIf="(shape.id === expandedShapeDetails?.id)" [shape]="shape" [getImageData]="getImageData[shape.name]" (updateGetImageDataEvent)="updateGetImageData(shape)" [isCanvasMinimized]="!(shape.id === expandedShapeDetails?.id)" [canDoActions]="(shape.id === expandedShapeDetails?.id)" (updateMinimizationEvent)="updateShapeMinimization($event, shape)"></app-generate-line>
                 </div>
             </div>

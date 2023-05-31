@@ -62,6 +62,9 @@ export class EditPartComponent implements OnInit {
   widthRatio: number;
   heightRatio: number;
 
+  addKey = '1';
+  subtractKey = '2';
+
   value: number = 0;
   public isKeyPressed = false;
   sign = -1;
@@ -275,7 +278,7 @@ export class EditPartComponent implements OnInit {
   
 
   onKeyUp(event: KeyboardEvent) {
-    if (event.key === '+' || event.key === '-' || event.key === '/') {
+    if (event.key === this.addKey || event.key === this.subtractKey || event.key === '/') {
       this.isKeyPressed = false;
     }
     const index = this.pressedKeys.indexOf(event.key);
@@ -291,12 +294,12 @@ export class EditPartComponent implements OnInit {
     }
 
     if (this.canDoActions || this.canRotate) {
-      if (this.pressedKeys.includes('\\') && !this.pressedKeys.includes('=') && this.pressedKeys.includes('+')) {
+      if (this.pressedKeys.includes('\\') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.addKey)) {
         this.isKeyPressed = true;
         this.rotateMainObject(1);
       }
   
-      if (this.pressedKeys.includes('\\') && !this.pressedKeys.includes('=') && this.pressedKeys.includes('-')) {
+      if (this.pressedKeys.includes('\\') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.subtractKey)) {
         this.isKeyPressed = true;
         this.rotateMainObject(-1);
       }

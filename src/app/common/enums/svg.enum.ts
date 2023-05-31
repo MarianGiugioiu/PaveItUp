@@ -17,4 +17,9 @@ export enum SVGEnum {
     duplicateSVG = '../../../assets/SVG/duplicate.svg',
     createShapeSVG = '../../../assets/SVG/create-shape.svg',
     createSVG = '../../../assets/SVG/create.svg',
+    signUpSVG = '../../../assets/SVG/sign-up.svg',
+    signInSVG = '../../../assets/SVG/sign-in.svg',
+    signOutSVG = '../../../assets/SVG/sign-out.svg',
+    homeSVG = '../../../assets/SVG/home.svg',
+    infoSVG = '../../../assets/SVG/info.svg',
 }

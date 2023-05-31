@@ -1,17 +1,18 @@
-.name-container {
-    width: 100%;
-    height: 5%;
-    justify-content: center;
-    align-items: center;
-}
 
 .name-label {
     margin-right: 5px;
 }
 
 .page-container {
-    width: 100%;
-    height: 95%;
+    width: calc(100vw - 20px);
+    height: calc(95vh - 20px);
+    padding: 10px;
+    background-color: #EEEEEE;
+}
+
+.separating-line {
+    height: 100%;
+    border-left: 2px solid #c0c0c0;
 }
 
 .surface-edit-container {
@@ -24,6 +25,15 @@
     height: 100%;
 }
 
+.surface-options-container {
+    width: 450px;
+    height: 479px;
+    padding-top: 5px;
+    border: 1px solid #c0c0c0;
+    border-radius: 7px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
 .shape-list-container {
     width: 590px;
     height: 100%;
@@ -34,10 +44,13 @@
     width: 160px;
     height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 30px;
 }
 
 .part-name-container {
-    justify-content: space-between;
+    padding: 0 5px;
+    width: 140;
 }
 
 .shape-container {
@@ -46,9 +59,40 @@
 }
 
 .surface-options {
-    width: 450px;
+    padding: 0 5px;
+    width: 440px;
     height: 24px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+}
+
+.part-container {
+    width: 150px;
+    height: 174px;
+    padding-top: 5px;
+    margin: 5px 0;
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.shape-minimized-container {
+    width: 150px;
+    height: 198px;
+    padding-top: 5px;
+    margin: 10px 0;
+    margin-left: auto;
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.shape-options-row {
+    padding: 0 5px;
+    width: 140;
+}
+
+.selected-part-container {
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.6) 0px 0px 0px 1px;
 }
 
 .add-shape-button {

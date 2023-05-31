@@ -1,11 +1,14 @@
 .page-container {
-    border: 2px solid #e2e2e2;
+    border: 1px solid #c0c0c0;
+    border-radius: 7px;
     height: 450px;
     width: 582px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
 .canvas-container {
-    border-left: 2px solid #e2e2e2;
+    border-left: 1px solid #c0c0c0;
+    border-radius: 5px;
 }
 
 .options-container {
@@ -15,11 +18,20 @@
     overflow-x: hidden;
 }
 
+.actions-lateral-buttons-container {
+    width: 72px;
+}
+
+.actions-center-buttons-container {
+    width: 146px;
+}
+
 .actions-container {
     width: 300px;
     height: 148px;
-    border-bottom: 2px solid #e2e2e2;
-    border-left: 2px solid #e2e2e2;
+    border-bottom: 1px solid #c0c0c0;
+    border-left: 1px solid #c0c0c0;
+    border-radius: 5px;
 }
 
 .action-container {

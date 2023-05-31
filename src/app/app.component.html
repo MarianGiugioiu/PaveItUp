@@ -6,5 +6,14 @@
 <!-- <app-webgl class="main-page"></app-webgl> -->
 <!-- <app-raycasting class="main-page full-center"></app-raycasting> -->
 <!-- <app-generate-line class="main-page"></app-generate-line> -->
-
+<div class="row header-container space-between">
+    <img [src]="SVGEnum.homeSVG" alt="Home">
+    <h2 class="header-title">PaveItUp</h2>
+    <img [src]="SVGEnum.infoSVG" alt="Info">
+    <div class="row">
+        <img [src]="SVGEnum.signUpSVG" alt="SignUp">
+        <img [src]="SVGEnum.signInSVG" alt="SignIn">
+        <!-- <img [src]="SVGEnum.signOutSVG" alt="SignOut"> -->
+    </div>
+</div>
 <router-outlet></router-outlet>

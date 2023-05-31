@@ -7,6 +7,10 @@ body {
     overflow: hidden;
 }
 
+img {
+    border-radius: 5px;
+}
+
 .row {
     display: flex;
 }
@@ -19,6 +23,11 @@ body {
 .full-center {
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.align-center {
+    display: flex;
     align-items: center;
 }
 

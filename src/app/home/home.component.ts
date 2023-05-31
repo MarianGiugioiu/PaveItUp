@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WorkspaceService } from '../common/services/api/workspace.service';
 import { Router } from '@angular/router';
 import { IWorkspace } from '../workspace/workspace.component';
+import { SVGEnum } from '../common/enums/svg.enum';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +14,8 @@ export class HomeComponent implements OnInit {
   public getImageData = {};
   public selectedWorkspace: IWorkspace;
   public initOldWorkspaces = -1;
+
+  public SVGEnum = SVGEnum;
 
   constructor(
     public workspaceService: WorkspaceService,

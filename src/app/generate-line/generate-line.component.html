@@ -62,27 +62,30 @@
 
         <div class="col">
             <div class="actions-container">
-                <div class="row space-between action-container">
-                    <div class="row">
+                <div class="row action-container">
+                    <div class="row actions-lateral-buttons-container">
                         <img [src]="SVGEnum.refreshSVG" alt="Refresh" (click)="refreshShape()">
                         <img *ngIf="previousIterations && previousIterations.length" [src]="SVGEnum.undoSVG" alt="Undo" (click)="undoAction()">
                         <img *ngIf="changesExist()" [src]="SVGEnum.revertSVG" alt="Revert" (click)="revertShape()">
                     </div>
-                    <div class="row">
+                    <div class="row actions-center-buttons-container full-center">
+                        <label *ngIf="!isSurface">{{shape?.name}}</label>
+                    </div>
+                    <div class="row actions-lateral-buttons-container flex-end">
                         <img [src]="SVGEnum.saveSVG" alt="Save" (click)="save()">
                     </div>
                 </div>
                 <div class="row space-between action-container">
-                    <div class="row">
+                    <div class="row actions-lateral-buttons-container">
                         <img *ngIf="vertexVisibility" [src]="SVGEnum.hideSVG" alt="Hide" (click)="toggleVerticesVisibility()">
                         <img *ngIf="!vertexVisibility" [src]="SVGEnum.viewSVG" alt="View" (click)="toggleVerticesVisibility()">
                     </div>
-                    <div class="row"> 
+                    <div class="row full-center actions-center-buttons-container"> 
                         <img [src]="SVGEnum.addSquareSVG" alt="AddVertex" (click)="addVertex()">
                         <img [src]="SVGEnum.removeSVG" alt="RemoveVertex" (click)="removeVertex()">
                         <img [src]="SVGEnum.addRoundSVG" alt="AddCurveVertex" (click)="addVertex('curve')">
                     </div>
-                    <div class="row">
+                    <div class="row actions-lateral-buttons-container flex-end">
                         <input class="polygon-verices-input" [(ngModel)]="regularPolygonEdgesNumber" type="number">
                         <img [src]="SVGEnum.regularPolygonSVG" alt="RegularPolygon" (click)="createRegularPolygon()">
                     </div>
@@ -104,8 +107,8 @@
                 </div>
             </div>
 
-            <div class="row canvas-container">
-                <canvas #canvas id="canvas" class="cube"></canvas>
+            <div class="row">
+                <canvas #canvas id="canvas" class="canvas-container"></canvas>
             </div>
         </div>
     </div>
