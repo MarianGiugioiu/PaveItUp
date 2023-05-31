@@ -131,7 +131,8 @@ input::-webkit-inner-spin-button {
 
 /* Firefox */
 input[type=number] {
-  -moz-appearance: textfield;
+    appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 .property-line-up {
@@ -202,7 +203,7 @@ input[type=number] {
 .line-button {
     display: inline-block;
     padding: 0;
-    width: 30px;
+    width: 45px;
     height: 30px;
     font-size: 1rem;
     text-align: center;

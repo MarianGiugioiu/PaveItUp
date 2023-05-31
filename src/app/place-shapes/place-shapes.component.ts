@@ -27,7 +27,7 @@ export class PlaceShapesComponent implements OnInit {
   @Output() choosePartEvent = new EventEmitter();
   @Output() checkIntersectEvent = new EventEmitter();
   public bevelMeshes = {};
-  public bevelValidColor = 0xf6d7b0;
+  public bevelValidColor = 0x444444;
   public bevelInvalidColor = 0xff0000;
   public surfaceMesh: THREE.Mesh;
   public partMeshes: THREE.Mesh[] = [];
@@ -121,7 +121,7 @@ export class PlaceShapesComponent implements OnInit {
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas});
     this.renderer.shadowMap.enabled = true;
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x000000);
+    this.scene.background = new THREE.Color(0xffffff);
     this.camera = new THREE.OrthographicCamera(
       this.canvasWidth / -200 * this.cameraRatio,
       this.canvasWidth / 200 * this.cameraRatio,
@@ -306,6 +306,11 @@ export class PlaceShapesComponent implements OnInit {
     material.map.offset.set(0.5, 0.5);
     material.map.wrapS = THREE.RepeatWrapping;
     material.map.wrapT = THREE.RepeatWrapping;
+
+    let bevelSize = 0.05;
+    if (isSurface) {
+      bevelSize *= 3;
+    }
     
     let shapeGeometry = this.createShape(shape);
     var extrudeSettings = {
@@ -313,7 +318,7 @@ export class PlaceShapesComponent implements OnInit {
       bevelEnabled: true,
       bevelSegments: 2,
       steps: 1,
-      bevelSize: 0.05,
+      bevelSize,
       bevelThickness: 1
     };
     let geometry = new THREE.ShapeGeometry(shapeGeometry);

@@ -38,7 +38,6 @@
                         <div class="line-container"> 
                             <button class="line-button" [ngClass]="(isEdgeSelected(-1) ? 'button-red' : '') + ' ' + (!displayLine(-1) ? 'round-button' : '')" (click)="displayLine(-1) && selectEdge(-1)">{{shape.points.length - 1}}-0</button>
                             <div *ngIf="!displayLine(-1)" class="empty-line-details-container"></div>
-                            <div *ngIf="displayLine(-1)" class="adjacent-propery-line-horizontal"></div>
                             <div *ngIf="displayLine(-1)" class="row">
                                 <img [src]="SVGEnum.lengthSVG" alt="Lenght">
                                 <input class="line-length-input" [disabled]="!(selectedObject && selectedAdjacentObject && isEdgeSelected(-1))" [ngModel]="getEdgeLength(-1).toFixed(3)" type="number" (keyup.enter)="updateLength($event)">
@@ -49,7 +48,6 @@
                         <div class="line-container"> 
                             <button class="line-button" [ngClass]="(isEdgeSelected(i) ? 'button-red' : '') + ' ' + (!displayLine(i) ? 'round-button' : '')" (click)="displayLine(i) && selectEdge(i)">{{i}}-{{i + 1 === shape.points.length ? 0 : i + 1}}</button>
                             <div *ngIf="!displayLine(i)" class="empty-line-details-container"></div>
-                            <div *ngIf="displayLine(i)" class="adjacent-propery-line-horizontal"></div>
                             <div *ngIf="displayLine(i)" class="row">
                                 <img [src]="SVGEnum.lengthSVG" alt="Lenght">
                                 <input class="line-length-input" [disabled]="!(selectedObject && selectedAdjacentObject && isEdgeSelected(i))" [ngModel]="getEdgeLength(i).toFixed(3)" type="number" (keyup.enter)="updateLength($event)">
