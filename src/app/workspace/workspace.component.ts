@@ -82,7 +82,7 @@ export class WorkspaceComponent implements OnInit {
         if (this.shapes.length) {
           this.initOldShapes = 0;
           this.expandedShapeDetails = this.shapes[this.initOldShapes];
-          this.getImageData[this.expandedShapeDetails.name] = true;
+          this.getImageData[this.expandedShapeDetails.id] = true;
         } else {
           this.spinner.hide();
         }
@@ -95,8 +95,7 @@ export class WorkspaceComponent implements OnInit {
   }
 
   updateGetImageData(shape) {
-    // Go to edit surface
-    this.getImageData[shape.name] = false;
+    this.getImageData[shape.partId ? shape.partId : shape.id] = false;
     if (this.isGoingToEditSurface) {
       this.selectedPart = undefined;
       this.isGoingToEditSurface = false;
@@ -114,7 +113,7 @@ export class WorkspaceComponent implements OnInit {
         const index = this.findNextPartIndexInList(shape.id, this.cycleParts);
         if (index !== -1) {
           this.selectedPart = this.parts[index];
-          this.getImageData[this.parts[index].name] = true;
+          this.getImageData[this.parts[index].partId] = true;
         } else {
           this.cycleParts = -1;
           this.selectedPart = undefined;
@@ -124,7 +123,7 @@ export class WorkspaceComponent implements OnInit {
         this.initOldParts++;
         if (this.initOldParts < this.parts.length) {
           this.selectedPart = this.parts[this.initOldParts];
-          this.getImageData[this.selectedPart.name] = true;
+          this.getImageData[this.selectedPart.partId] = true;
         } else {
           this.initOldParts = -1;
           this.selectedPart = undefined;
@@ -139,14 +138,14 @@ export class WorkspaceComponent implements OnInit {
         this.initOldShapes++;
         if (this.initOldShapes < this.shapes.length) {
           this.expandedShapeDetails = this.shapes[this.initOldShapes];
-          this.getImageData[this.expandedShapeDetails.name] = true;
+          this.getImageData[this.expandedShapeDetails.id] = true;
         } else {
           this.initOldShapes = -1;
           this.expandedShapeDetails = undefined;
           if (this.parts.length) {
             this.initOldParts = 0;
             this.selectedPart = this.parts[this.initOldParts];
-            this.getImageData[this.selectedPart.name] = true;
+            this.getImageData[this.selectedPart.partId] = true;
           }
         }
       } else {
@@ -189,8 +188,9 @@ export class WorkspaceComponent implements OnInit {
 
   addNewShape(shape: IShape = undefined) {
     if (!this.expandedShapeDetails) {
-      const id = this.createNewId('Shape');
-      const name = this.createNewName('Shape', id);
+      const id = uuidv4();
+      const nameId = this.createNewId('Shape');
+      const name = this.createNewName('Shape', nameId);
       this.shapes.unshift(
         {
           id,
@@ -204,7 +204,7 @@ export class WorkspaceComponent implements OnInit {
       this.expandedShapeDetails = this.shapes[0];
 
       if (this.selectedPart) {
-        this.getImageData[this.selectedPart.name] = true;
+        this.getImageData[this.selectedPart.partId] = true;
       }
     } 
   }
@@ -243,19 +243,19 @@ export class WorkspaceComponent implements OnInit {
     if (!this.expandedShapeDetails) {
       this.expandedShapeDetails = shape;
       if (this.selectedPart) {
-        this.getImageData[this.selectedPart.name] = true;
+        this.getImageData[this.selectedPart.partId] = true;
       }
     }
   }
 
   toggleSelectPart(part: IShape) {
     if (this.selectedPart?.partId === part.partId) {
-      this.getImageData[this.selectedPart.name] = true;
+      this.getImageData[this.selectedPart.partId] = true;
     } else {
       if (!this.expandedShapeDetails) {
         if (this.selectedPart) {
           this.pendingPart = part;
-          this.getImageData[this.selectedPart.name] = true;
+          this.getImageData[this.selectedPart.partId] = true;
         } else {
           this.selectedPart = part;
         }
@@ -289,7 +289,7 @@ export class WorkspaceComponent implements OnInit {
           const index = this.findNextPartIndexInList(shape.id, this.cycleParts);
           if (index !== -1) {
             this.selectedPart = this.parts[index];
-            this.getImageData[this.parts[index].name] = true;
+            this.getImageData[this.parts[index].partId] = true;
           }
         }
         this.updateFromShape = true;
@@ -328,7 +328,7 @@ export class WorkspaceComponent implements OnInit {
       this.editedSurface.ngOnDistroy();
       if (this.selectedPart) {
         this.isGoingToEditSurface = true;
-        this.getImageData[this.selectedPart.name] = true;
+        this.getImageData[this.selectedPart.partId] = true;
       }
       if (!this.selectedPart) {
         this.isEditingSurface = true;
@@ -357,14 +357,16 @@ export class WorkspaceComponent implements OnInit {
   useShape(shape: IShape) {
     let part = this.mapShapeToPart(shape);
     part.rotation = 0;
-    part.partId = this.createNewId('Part');
-    part.name = this.createNewName('Part', part.partId);
+    part.partId = uuidv4();
+    const nameId = this.createNewId('Part');
+    part.name = this.createNewName('Part', nameId);
+    
     this.parts.unshift(part);
     this.updateFromShape = false;
     this.generateSurfaceParts();
     if (this.selectedPart) {
       this.pendingPart = part;
-      this.getImageData[this.selectedPart.name] = true;
+      this.getImageData[this.selectedPart.partId] = true;
     } else {
       this.selectedPart = part;
     }
@@ -377,7 +379,7 @@ export class WorkspaceComponent implements OnInit {
   }
 
   deletePart(i: number) {
-    if (this.selectedPart?.name === this.parts[i].name) {
+    if (this.selectedPart?.partId === this.parts[i].partId) {
       this.selectedPart = undefined;
     }
     this.parts.splice(i, 1);
@@ -387,9 +389,9 @@ export class WorkspaceComponent implements OnInit {
   choosePartFromSurface(event: number) {
     let part = this.parts.find(item => item.partId === event);
     if (this.selectedPart) {
-      if (part.name !== this.selectedPart.name) {
+      if (part.partId !== this.selectedPart.partId) {
         this.pendingPart = part;
-        this.getImageData[this.selectedPart.name] = true;
+        this.getImageData[this.selectedPart.partId] = true;
       }
     } else {
       this.selectedPart = part;
@@ -400,11 +402,11 @@ export class WorkspaceComponent implements OnInit {
     let id = 1;
     if (type === 'Part') {
       if (this.parts.length) {
-        id = this.parts[0].partId + 1;
+        id = +this.parts[0].name.replace('Part_', '') + 1;
       }
     } else {
       if (this.shapes.length) {
-        id = this.shapes[0].id + 1;
+        id = +this.shapes[0].name.replace('Shape_', '') + 1;
       }
     }
     return id;
@@ -421,7 +423,7 @@ export class WorkspaceComponent implements OnInit {
 
   generateSurfaceParts() {
     let positions = {};
-    this.surfaceParts.forEach(item => positions[item.name] = item.position);
+    this.surfaceParts.forEach(item => positions[item.partId] = item.position);
     
     this.surfaceParts = [];
     this.parts.forEach(part => {
@@ -432,7 +434,7 @@ export class WorkspaceComponent implements OnInit {
         textureType: part.textureType,
         color: part.color,
         points: cloneDeep(part.points),
-        position: positions[part.name],
+        position: positions[part.partId],
         rotation: part.rotation
       });
     })
@@ -448,7 +450,7 @@ export class WorkspaceComponent implements OnInit {
         name: this.workspaceId === 'new' ? this.newWorkspaceName : this.workspace.name,
         id: this.workspaceId === 'new' ? uuidv4() : this.workspaceId,
         surface: this.mapShapeToPart(this.surface),
-        parts: this.surfaceParts,
+        parts: this.surfaceParts.reverse(),
         shapes: newShapes
       };
       if (this.workspaceId === 'new') {

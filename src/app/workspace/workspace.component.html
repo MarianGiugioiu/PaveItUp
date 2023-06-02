@@ -20,10 +20,10 @@
         <div class="row part-container full-center" [ngClass]="selectedPart?.partId === part.partId ? 'selected-part-container' : ''" *ngFor="let part of parts; let i = index;">
             <div class="col">
                 <div class="row part-name-container space-between">
-                    <label class="full-center">{{part?.partId}}. {{part?.name}}</label>
+                    <label class="full-center">{{part?.name}}</label>
                     <img [src]="SVGEnum.deleteSVG" alt="Remove" (click)="deletePart(i)">
                 </div>
-                <app-edit-part *ngIf="(selectedPart?.partId === part.partId)" (click)="toggleSelectPart(part)" [shape]="part" [getImageData]="getImageData[part.name]" (updateGetImageDataEvent)="updateGetImageData(part)" [isCanvasMinimized]="true" [canDoActions]="false" [canRotate]="selectedPart?.partId === part.partId" (updatePartRotationEvent)="updatePartRotation()"></app-edit-part>
+                <app-edit-part *ngIf="(selectedPart?.partId === part.partId)" (click)="toggleSelectPart(part)" [shape]="part" [getImageData]="getImageData[part.partId]" (updateGetImageDataEvent)="updateGetImageData(part)" [isCanvasMinimized]="true" [canDoActions]="false" [canRotate]="selectedPart?.partId === part.partId" (updatePartRotationEvent)="updatePartRotation()"></app-edit-part>
                 <img *ngIf="!(selectedPart?.partId === part.partId)" (click)="toggleSelectPart(part)" width="150px" height="150px" [src]="part.image">
             </div>
         </div>
@@ -46,7 +46,7 @@
                 </div>
                 <div class="row">
                     <img *ngIf="!(shape.id === expandedShapeDetails?.id)" width="150px" height="150px" [src]="shape.image">
-                    <app-generate-line *ngIf="(shape.id === expandedShapeDetails?.id)" [shape]="shape" [getImageData]="getImageData[shape.name]" (updateGetImageDataEvent)="updateGetImageData(shape)" [isCanvasMinimized]="!(shape.id === expandedShapeDetails?.id)" [canDoActions]="(shape.id === expandedShapeDetails?.id)" (updateMinimizationEvent)="updateShapeMinimization($event, shape)"></app-generate-line>
+                    <app-generate-line *ngIf="(shape.id === expandedShapeDetails?.id)" [shape]="shape" [getImageData]="getImageData[shape.id]" (updateGetImageDataEvent)="updateGetImageData(shape)" [isCanvasMinimized]="!(shape.id === expandedShapeDetails?.id)" [canDoActions]="(shape.id === expandedShapeDetails?.id)" (updateMinimizationEvent)="updateShapeMinimization($event, shape)"></app-generate-line>
                 </div>
             </div>
         </div>

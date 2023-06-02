@@ -37,20 +37,11 @@ export class EditPartComponent implements OnInit {
   private ambientLight: THREE.AmbientLight;
   private canvasWidth = 300;
   private canvasHeight = 300;
-  private dragging = false;
-  public selectedObject: THREE.Mesh;
-  public selectedAdjacentObject: THREE.Mesh;
-  private font;
-  private textOffset = new THREE.Vector2(-0.06, -0.07);
   public pressedKeys = [];
   public vertexVisibility = true;
   public mainObjectRotation = Math.PI / 45;
   public regularPolygonEdgesNumber: number = 4;
   public cameraRatio = 1;
-  initialIteration: IPoint[];
-  previousIterations: IPoint[][];
-  maxPreviousIterationsNumber = 50;
-  currentShapeDuringPointMove: IPoint[];
 
   getImageData1 = false;
 
@@ -121,14 +112,9 @@ export class EditPartComponent implements OnInit {
 
     this.ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     this.scene.add(this.ambientLight);
-
-    this.font = await this.fontLoader.loadAsync("assets/fonts/Roboto Medium_Regular.json");
     
-    this.previousIterations = [];
     this.createPrimaryShape();
     
-
-    this.initialIteration = cloneDeep(this.shape.points);
 
     if (!this.shape.wasInitialized) {
       this.shape.rotation = 0;
@@ -195,7 +181,6 @@ export class EditPartComponent implements OnInit {
     this.shape.points.map((item, index) => {
       item.object.position.applyMatrix4(rotationMatrix);
       this.shape.points[index].point = new THREE.Vector2(item.object.position.x, item.object.position.y);
-      item.text.position.set(item.object.position.x + this.textOffset.x, item.object.position.y + this.textOffset.y, 0);
     });
   }
 
@@ -207,13 +192,6 @@ export class EditPartComponent implements OnInit {
   createPrimaryShape() {
     this.drawMainObject();
     this.changeColor();
-    
-    if (this.selectedObject) {
-      this.selectedObject = this.shape.points.find(item => item.object.name === this.selectedObject.name)?.object;
-    }
-    if (this.selectedAdjacentObject) {
-      this.selectedAdjacentObject = this.shape.points.find(item => item.object.name === this.selectedAdjacentObject.name)?.object;
-    }
   }
 
   createShape() {
@@ -248,9 +226,6 @@ export class EditPartComponent implements OnInit {
     return new THREE.ShapeGeometry(shapeGeometry);
   }
 
-
-
-
   drawMainObject() {
     const texture = this.textureService.textures.shape[this.shape.textureType];
     const material = new THREE.MeshBasicMaterial({ map: texture });
@@ -259,7 +234,6 @@ export class EditPartComponent implements OnInit {
     material.map.wrapS = THREE.RepeatWrapping;
     material.map.wrapT = THREE.RepeatWrapping;
     this.mainObject = new THREE.Mesh(this.createShape(), material);
-    this.mainObject.name = this.shape.name;
     const isValidShape = this.geometryService.doesPolygonHaveIntersectingEdges(this.shape.points.map(item => item.point));
 
     if (!isValidShape) {
