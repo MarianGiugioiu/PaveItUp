@@ -778,7 +778,7 @@ export class GenerateLineComponent implements OnInit {
   };
 
   onKeyUp(event: KeyboardEvent) {
-    if (event.key === this.addKey || event.key === this.subtractKey  || event.key === '/') {
+    if (event.key === this.addKey || event.key === this.subtractKey) {
       this.isKeyPressed = false;
     }
     const index = this.pressedKeys.indexOf(event.key);
@@ -792,33 +792,33 @@ export class GenerateLineComponent implements OnInit {
 
     if (this.canDoActions) {
       //Rotate anticlockwise
-      if (this.pressedKeys.includes('\\') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.addKey)) {
+      if (this.pressedKeys.includes('r') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.addKey)) {
         this.isKeyPressed = true;
         this.rotateMainObject(1);
       }
 
       //Rotate clockwise
-      if (this.pressedKeys.includes('\\') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.subtractKey)) {
+      if (this.pressedKeys.includes('r') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.subtractKey)) {
         this.isKeyPressed = true;
         this.rotateMainObject(-1);
       }
 
       //Increase size
-      if (this.pressedKeys.includes('\\') && this.pressedKeys.includes('=') && this.pressedKeys.includes(this.addKey)) {
+      if (this.pressedKeys.includes('s') && this.pressedKeys.includes(this.addKey)) {
         this.isKeyPressed = true;
         this.sign = 1;
         this.changeShapeDimension()
       }
   
       //Decrease size
-      if (this.pressedKeys.includes('\\') && this.pressedKeys.includes('=') && this.pressedKeys.includes(this.subtractKey)) {
+      if (this.pressedKeys.includes('s') && this.pressedKeys.includes(this.subtractKey)) {
         this.isKeyPressed = true;
         this.sign = -1;
         this.changeShapeDimension()
       }
       
       //Increase angle for one edge
-      if (this.pressedKeys.includes('[') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.addKey)) {
+      if (this.pressedKeys.includes('a') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.addKey)) {
         this.isKeyPressed = true;
         this.sign = -1;
         this.value = 0;
@@ -826,7 +826,7 @@ export class GenerateLineComponent implements OnInit {
       }
 
       //Decrease angle for one edge
-      if (this.pressedKeys.includes('[') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.subtractKey)) {
+      if (this.pressedKeys.includes('a') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.subtractKey)) {
         this.isKeyPressed = true;
         this.sign = 1;
         this.value = 0;
@@ -834,7 +834,7 @@ export class GenerateLineComponent implements OnInit {
       }
   
       //Increase angle for both edges
-      if (this.pressedKeys.includes('[') && this.pressedKeys.includes('=') && this.pressedKeys.includes(this.addKey)) {
+      if (this.pressedKeys.includes('a') && this.pressedKeys.includes('=') && this.pressedKeys.includes(this.addKey)) {
         this.isKeyPressed = true;
         this.sign = -1;
         this.value = 0;
@@ -842,7 +842,7 @@ export class GenerateLineComponent implements OnInit {
       }
 
       //Decrease angle for both edges
-      if (this.pressedKeys.includes('[') && this.pressedKeys.includes('=') && this.pressedKeys.includes(this.subtractKey)) {
+      if (this.pressedKeys.includes('a') && this.pressedKeys.includes('=') && this.pressedKeys.includes(this.subtractKey)) {
         this.isKeyPressed = true;
         this.sign = 1;
         this.value = 0;
@@ -850,7 +850,7 @@ export class GenerateLineComponent implements OnInit {
       }
   
       //Increase length for one edge
-      if (this.pressedKeys.includes(']') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.addKey)) {
+      if (this.pressedKeys.includes('l') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.addKey)) {
         this.isKeyPressed = true;
         this.sign = 1;
         this.value = 0;
@@ -858,7 +858,7 @@ export class GenerateLineComponent implements OnInit {
       }
 
       //Decrease length for one edge
-      if (this.pressedKeys.includes(']') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.subtractKey)) {
+      if (this.pressedKeys.includes('l') && !this.pressedKeys.includes('=') && this.pressedKeys.includes(this.subtractKey)) {
         this.isKeyPressed = true;
         this.sign = -1;
         this.value = 0;
@@ -866,7 +866,7 @@ export class GenerateLineComponent implements OnInit {
       }
   
       //Increase length for both edges
-      if (this.pressedKeys.includes(']') && this.pressedKeys.includes('=') && this.pressedKeys.includes(this.addKey)) {
+      if (this.pressedKeys.includes('l') && this.pressedKeys.includes('=') && this.pressedKeys.includes(this.addKey)) {
         this.isKeyPressed = true;
         this.sign = 1;
         this.value = 0;
@@ -874,7 +874,7 @@ export class GenerateLineComponent implements OnInit {
       }
 
       //Decrease length for both edges
-      if (this.pressedKeys.includes(']') && this.pressedKeys.includes('=') && this.pressedKeys.includes(this.subtractKey)) {
+      if (this.pressedKeys.includes('l') && this.pressedKeys.includes('=') && this.pressedKeys.includes(this.subtractKey)) {
         this.isKeyPressed = true;
         this.sign = -1;
         this.value = 0;
@@ -882,7 +882,7 @@ export class GenerateLineComponent implements OnInit {
       }
   
       //Put point on mediating line
-      if(this.pressedKeys.includes('[') && this.pressedKeys.includes('/')) {
+      if(this.pressedKeys.includes('x') && this.pressedKeys.includes(this.subtractKey)) {
         if (this.selectedObject) {
           let [i,j,k] = this.getAdjacentPoints();
     
@@ -901,7 +901,7 @@ export class GenerateLineComponent implements OnInit {
       }
   
       //Make selected edge equal to the other edge
-      if (this.pressedKeys.includes(']') && this.pressedKeys.includes('/')) {
+      if (this.pressedKeys.includes('x') && this.pressedKeys.includes(this.addKey)) {
         if (this.selectedObject && this.selectedAdjacentObject) {
           let [i,j,k] = this.getAdjacentPoint();
           

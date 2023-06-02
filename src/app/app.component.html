@@ -1,15 +1,8 @@
-<!-- <app-cube class="main-page"></app-cube> -->
-<!-- <app-procmap class="main-page"></app-procmap> -->
-<!-- <app-physics class="main-page"></app-physics> -->
-<!-- <app-mandelbulb class="main-page"></app-mandelbulb> -->
-<!-- <app-shaders class="main-page"></app-shaders> -->
-<!-- <app-webgl class="main-page"></app-webgl> -->
-<!-- <app-raycasting class="main-page full-center"></app-raycasting> -->
-<!-- <app-generate-line class="main-page"></app-generate-line> -->
+<app-info-popup *ngIf="showPopup" [showPopup]="showPopup" (closePopupEvent)="closePopup()"></app-info-popup>
 <div class="row header-container space-between">
     <img [src]="SVGEnum.homeSVG" alt="Home">
     <h2 class="header-title">PaveItUp</h2>
-    <img [src]="SVGEnum.infoSVG" alt="Info">
+    <img [src]="SVGEnum.infoSVG" alt="Info" (click)="openPopup()">
     <div class="row">
         <img [src]="SVGEnum.signUpSVG" alt="SignUp">
         <img [src]="SVGEnum.signInSVG" alt="SignIn">

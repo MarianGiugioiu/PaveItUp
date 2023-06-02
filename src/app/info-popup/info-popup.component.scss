@@ -1,0 +1,89 @@
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+  
+.popup-container {
+  background-color: #EEEEEE;
+  width: 500px;
+  height: 600px;
+  padding: 5px;
+  border-radius: 4px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.header-container {
+  width: calc(100% - 10px);
+  height: 7%;
+  padding: 0 5px;
+  border-radius: 5px;
+  background-color: #537188;
+}
+
+.header-title {
+  color: white;
+}
+
+.options-container {
+  height: calc(90% - 10px);
+  padding: 5px;
+  background-color: #EEEEEE;
+  border-radius: 5px;
+}
+
+.option-container {
+  width: 70px;
+  height: 25px;
+  padding: 0 5px;
+  font-size: 16px;
+}
+
+.option-container:hover {
+  color: #0069d9;
+  font-size: 18px;
+}
+
+.selected-option {
+  color: #0069d9;
+  font-size: 18px;
+}
+
+.first-option-container {
+  border-right: 2px solid #c0c0c0;
+}
+
+.content-container {
+  margin-top: 5px;
+  width: 100%;
+  height: calc(93% - 5px);
+  overflow-y: auto;
+}
+
+.info-line-container {
+  margin-left: 15px;
+  padding: 5px 0;
+  height: 24px;
+}
+
+.info-line-label {
+  margin-left: 10px;
+}
+
+.control-info-label {
+  width: 70px;
+}
+
+.bold {
+  margin: 0 3px;
+}

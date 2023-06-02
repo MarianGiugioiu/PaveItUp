@@ -1,0 +1,150 @@
+<div class="popup-overlay">
+    <div class="popup-container">
+        <div class="row header-container space-between">
+            <h2 class="header-title">Info</h2>
+            <div class="row full-center options-container">
+                <div class="first-option-container full-center option-container" [ngClass]="!page ? 'selected-option' : ''" (click)="changePage(false)">
+                    <label>Buttons</label>
+                </div>
+                <div class="option-container full-center" [ngClass]="page ? 'selected-option' : ''" (click)="changePage(true)">
+                    <label>Controls</label>
+                </div>
+            </div>
+            <img [src]="SVGEnum.exitSVG" alt="Close" (click)="closePopup()">
+        </div>
+        <div class="row content-container">
+            <div *ngIf="!page" class="col">
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.saveSVG" alt="Save">
+                    <label class="full-center info-line-label">Saves the current state of the shape/surface of workspace</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.editSVG" alt="Edit">
+                    <label class="full-center info-line-label">Opens window/section for editing the shape or workspace</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.deleteSVG" alt="Delete">
+                    <label class="full-center info-line-label">Deletes a shape, part or workspace</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.createSVG" alt="Create">
+                    <label class="full-center info-line-label">Creates a new workspace</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.createShapeSVG" alt="createShape">
+                    <label class="full-center info-line-label">Creates a new shape</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.refreshSVG" alt="Refresh">
+                    <label class="full-center info-line-label">Reverts the shape to the default state</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.undoSVG" alt="Undo">
+                    <label class="full-center info-line-label">Undoes the last actions</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.revertSVG" alt="Revert">
+                    <label class="full-center info-line-label">Reverts the shape to the state of the last save</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.hideSVG" alt="Hide">
+                    <label class="full-center info-line-label">Hides the movable objects corresponding to the vertices of the shape</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.viewSVG" alt="View">
+                    <label class="full-center info-line-label">Shows the movable objects corresponding to the vertices of the shape</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.addRoundSVG" alt="AddCurveVertex">
+                    <label class="full-center info-line-label">Adds a control point for a curve between the selected vertices</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.addSquareSVG" alt="AddVertex">
+                    <label class="full-center info-line-label">Adds a new vertex between the selected vertices</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.removeSVG" alt="RemoveVertex">
+                    <label class="full-center info-line-label">Removes the selected vertex or curve control point</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.regularPolygonSVG" alt="RegularPolygon">
+                    <label class="full-center info-line-label">Transforms the shape into a regular polygon with 'n' vertices</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.angleSVG" alt="Angle">
+                    <label class="full-center info-line-label">Indicates the angle of the corresponding vertex</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.lengthSVG" alt="Length">
+                    <label class="full-center info-line-label">Indicates the length of the corresponding edge</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.useSVG" alt="Use">
+                    <label class="full-center info-line-label">Applies the shape on the surface</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.duplicateSVG" alt="Duplicate">
+                    <label class="full-center info-line-label">Duplicates the shape</label>
+                </div>
+            </div>
+            <div *ngIf="page" class="col">
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">r</label> + <label class="bold">1</label> : </label>
+                    <label class="full-center info-line-label">Rotates shape or part anti-clockwise</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">r</label> + <label class="bold">2</label> : </label>
+                    <label class="full-center info-line-label">Rotates shape or part clockwise</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">s</label> + <label class="bold">1</label> : </label>
+                    <label class="full-center info-line-label">Increases the size of the shape</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">s</label> + <label class="bold">2</label> : </label>
+                    <label class="full-center info-line-label">Decreases the size of the shape</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">a</label> + <label class="bold">1</label> : </label>
+                    <label class="full-center info-line-label">Increases the angle by moving the selected edge</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">a</label> + <label class="bold">2</label> : </label>
+                    <label class="full-center info-line-label">Decreases the angle by moving the selected edge</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">a</label> + <label class="bold">=</label> + <label class="bold">1</label> : </label>
+                    <label class="full-center info-line-label">Increases the angle by moving both edges</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">a</label> + <label class="bold">=</label> + <label class="bold">2</label> : </label>
+                    <label class="full-center info-line-label">Decreases the angle by moving both edges</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">l</label> + <label class="bold">1</label> : </label>
+                    <label class="full-center info-line-label">Increases the length of the selected edge</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">l</label> + <label class="bold">2</label> : </label>
+                    <label class="full-center info-line-label">Decreases the length of the selected edge</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">l</label> + <label class="bold">=</label> + <label class="bold">1</label> : </label>
+                    <label class="full-center info-line-label">Increases the length of both edges</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">l</label> + <label class="bold">=</label> + <label class="bold">2</label> : </label>
+                    <label class="full-center info-line-label">Decreases the length of both edges</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">x</label> + <label class="bold">1</label> : </label>
+                    <label class="full-center info-line-label">Makes the length of the selected edge equal to the other edge</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center control-info-label"><label class="bold">x</label> + <label class="bold">2</label> : </label>
+                    <label class="full-center info-line-label">Puts the selected vertex on the mediating line</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

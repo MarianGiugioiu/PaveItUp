@@ -13,6 +13,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgSelectModule } from '@ng-select/ng-select';
+import { InfoPopupComponent } from './info-popup/info-popup.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     PlaceShapesComponent,
     WorkspaceComponent,
     EditPartComponent,
-    HomeComponent
+    HomeComponent,
+    InfoPopupComponent
   ],
   imports: [
     BrowserModule,

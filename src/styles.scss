@@ -7,6 +7,11 @@ body {
     overflow: hidden;
 }
 
+h2 {
+    height: 30px;
+    margin: 0 !important;
+}
+
 img {
     border-radius: 5px;
 }
@@ -70,4 +75,8 @@ input:focus {
     background-color: #fff;
     border-color: #80bdff;
     outline: 0;
+}
+
+.bold {
+    font-weight: bold;
 }

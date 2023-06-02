@@ -9,11 +9,22 @@ import { SVGEnum } from './common/enums/svg.enum';
 })
 export class AppComponent implements OnInit {
   public SVGEnum = SVGEnum;
-  
+  showPopup = false;
+
+
   constructor () {
 
   }
 
   ngOnInit() {
+
+  }
+
+  openPopup() {
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
   }
 }
