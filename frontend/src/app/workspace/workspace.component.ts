@@ -340,23 +340,6 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
-  mapShapeToPart(shape: IShape) {
-    let points: IPoint[] = shape.points.map(item => {
-      return {
-        type: item.type,
-        point: new THREE.Vector2(item.point.x, item.point.y)
-      }
-    });
-    let part: IShape = {
-      id: shape.id,
-      name: shape.name,
-      textureType: shape.textureType,
-      color: shape.color,
-      points
-    }
-    return part;
-  }
-
   useShape(shape: IShape) {
     let part = this.mapShapeToPart(shape);
     part.rotation = 0;
@@ -453,6 +436,23 @@ export class WorkspaceComponent implements OnInit {
       });
     })
   };
+
+  mapShapeToPart(shape: IShape) {
+    let points: IPoint[] = shape.points.map(item => {
+      return {
+        type: item.type,
+        point: new THREE.Vector2(item.point.x, item.point.y)
+      }
+    });
+    let part: IShape = {
+      id: shape.id,
+      name: shape.name,
+      textureType: shape.textureType,
+      color: shape.color,
+      points
+    }
+    return part;
+  }
   
   saveWorkspace() {
     if (!this.intersectsExist) {
