@@ -67,7 +67,7 @@
                         <img *ngIf="changesExist()" [src]="SVGEnum.revertSVG" alt="Revert" (click)="revertShape()">
                     </div>
                     <div class="row actions-center-buttons-container full-center">
-                        <input *ngIf="!isSurface" [(ngModel)]="shape.name"/>
+                        <input class="name-input" *ngIf="!isSurface" [(ngModel)]="shape.name"/>
                     </div>
                     <div class="row actions-lateral-buttons-container flex-end">
                         <img [src]="SVGEnum.saveSVG" alt="Save" (click)="save()">

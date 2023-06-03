@@ -195,7 +195,6 @@ export class WorkspaceComponent implements OnInit {
         {
           id,
           name,
-          nameId,
           textureType: 0,
           color: shape ? shape.color : undefined,
           points: shape ? this.copyPoints(shape) : this.createNewPoints()
@@ -402,6 +401,17 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
+  getBiggestNameId() {
+    let max = 1;
+    this.shapes.forEach(item => {
+      let name = +item.name.replace('Shape_', '');
+      if (!isNaN(name) && name > max) {
+        max = name;
+      }
+    });
+    return max;
+  }
+
   createNewId(type) {
     let id = 1;
     if (type === 'Part') {
@@ -410,7 +420,7 @@ export class WorkspaceComponent implements OnInit {
       }
     } else {
       if (this.shapes.length) {
-        id = +this.shapes[0].nameId + 1;
+        id = this.getBiggestNameId() + 1;
       }
     }
     return id;
@@ -446,6 +456,8 @@ export class WorkspaceComponent implements OnInit {
   
   saveWorkspace() {
     if (!this.intersectsExist) {
+      console.log(this.surfaceParts.reverse());
+      
       let newShapes = [];
       this.shapes.forEach(item => {
         newShapes.push(this.mapShapeToPart(item));

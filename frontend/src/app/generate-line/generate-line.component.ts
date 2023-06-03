@@ -20,7 +20,6 @@ export interface IPoint {
 export interface IShape {
   partId?: string;
   id?: string;
-  nameId?: number
   name?: string;
   textureType?: number;
   points?: IPoint[];
