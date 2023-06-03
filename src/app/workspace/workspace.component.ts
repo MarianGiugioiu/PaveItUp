@@ -195,6 +195,7 @@ export class WorkspaceComponent implements OnInit {
         {
           id,
           name,
+          nameId,
           textureType: 0,
           color: shape ? shape.color : undefined,
           points: shape ? this.copyPoints(shape) : this.createNewPoints()
@@ -213,9 +214,13 @@ export class WorkspaceComponent implements OnInit {
     this.addNewShape(shape);
   }
 
+  exportShape(shape) {
+    const shapeToExport = this.mapShapeToPart(shape);
+  }
+
   createSurface() {
     this.surface = {
-      id: 0,
+      id: '0',
       name: 'Surface',
       textureType: 0,
       points:[
@@ -266,7 +271,7 @@ export class WorkspaceComponent implements OnInit {
   updateShapeMinimization(event, shape: IShape) {
     this.selectedPart = undefined;
     if (event === true) {
-      if (shape.id === 0) {
+      if (shape.id === '0') {
         this.isEditingSurface = false;
         //todo:Check when shape was rotated but not saved before opening surface edit
       } else {
@@ -339,7 +344,6 @@ export class WorkspaceComponent implements OnInit {
   mapShapeToPart(shape: IShape) {
     let points: IPoint[] = shape.points.map(item => {
       return {
-        name: item.name,
         type: item.type,
         point: new THREE.Vector2(item.point.x, item.point.y)
       }
@@ -386,7 +390,7 @@ export class WorkspaceComponent implements OnInit {
     this.generateSurfaceParts();
   }
 
-  choosePartFromSurface(event: number) {
+  choosePartFromSurface(event: string) {
     let part = this.parts.find(item => item.partId === event);
     if (this.selectedPart) {
       if (part.partId !== this.selectedPart.partId) {
@@ -406,7 +410,7 @@ export class WorkspaceComponent implements OnInit {
       }
     } else {
       if (this.shapes.length) {
-        id = +this.shapes[0].name.replace('Shape_', '') + 1;
+        id = +this.shapes[0].nameId + 1;
       }
     }
     return id;

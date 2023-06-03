@@ -178,7 +178,7 @@ export class PlaceShapesComponent implements OnInit {
   }
 
   getVertices(mesh: THREE.Mesh) {
-    let positionArray = mesh.geometry.attributes.position.array;
+    let positionArray = mesh.geometry.attributes['position'].array;
     
     let vertices: THREE.Vector3[] = [];
     const matrix = mesh.matrixWorld;
@@ -220,7 +220,7 @@ export class PlaceShapesComponent implements OnInit {
       const intLen = intersections[this.partMeshes[i].name].length;
       let intBevelMesh = this.bevelMeshes[this.partMeshes[i].name];
       if (intLen) {
-        (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(this.bevelInvalidColor);
+        (intBevelMesh.material as THREE.MeshBasicMaterial).color.set(this.bevelInvalidColor);
         intersectsExists = true;
       } else {
         let vertices = this.getVertices(this.partMeshes[i]);
@@ -235,10 +235,10 @@ export class PlaceShapesComponent implements OnInit {
           }
         }
         if (existsSurface) {
-          (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(this.bevelInvalidColor);  
+          (intBevelMesh.material as THREE.MeshBasicMaterial).color.set(this.bevelInvalidColor);  
           intersectsExists = true;
         } else {
-          (intBevelMesh.material as THREE.MeshPhongMaterial).color.set(this.bevelValidColor); 
+          (intBevelMesh.material as THREE.MeshBasicMaterial).color.set(this.bevelValidColor); 
         }
       }
     }
@@ -325,7 +325,7 @@ export class PlaceShapesComponent implements OnInit {
     let mesh = new THREE.Mesh(geometry, material);
     mesh.position.z = 4;
     mesh.name = shape.name;
-    if (shape.id === 0) {
+    if (shape.id === '0') {
       this.surfaceMesh = mesh;
     } else {
       this.partMeshes.push(mesh);

@@ -18,8 +18,9 @@ export interface IPoint {
 }
 
 export interface IShape {
-  partId?: number;
-  id?: number;
+  partId?: string;
+  id?: string;
+  nameId?: number
   name?: string;
   textureType?: number;
   points?: IPoint[];
@@ -282,7 +283,7 @@ export class GenerateLineComponent implements OnInit {
 
   toggleMinimize() {
     this.isCanvasMinimized = !this.isCanvasMinimized;
-    if(this.shape.id === 0) {
+    if(this.shape.id === '0') {
       this.canDoActions = !this.canDoActions;
     }
     this.updateMinimizationEvent.emit(this.isCanvasMinimized);
@@ -332,9 +333,20 @@ export class GenerateLineComponent implements OnInit {
     this.scene.remove(this.mainObject);
   }
 
+  rgbaToRgb(rgbaColor) {
+    const rgbValues = rgbaColor.match(/\d+/g);
+    return `rgb(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]})`;
+  }
+
   changeColor() {
-    const newColor = new THREE.Color(this.shape.color);
-    this.mainObject.material.color = newColor;
+    const rgbValues = this.shape.color.match(/\d+/g);
+    const rgb = `rgb(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]})`;
+    const newColor = new THREE.Color(rgb);
+    (this.mainObject.material as THREE.MeshBasicMaterial).color = newColor;
+    if (rgbValues[3] && rgbValues[3] === '0') {
+      (this.mainObject.material as THREE.MeshBasicMaterial).transparent = true;
+      (this.mainObject.material as THREE.MeshBasicMaterial).opacity = +`0.${rgbValues[4]}`;
+    }
   }
 
   changeTexture(value?) {
@@ -757,7 +769,7 @@ export class GenerateLineComponent implements OnInit {
         
         if (this.selectedObject && this.selectedObject.name.includes('Point')) {
           this.currentShapeDuringPointMove = cloneDeep(this.shape.points);
-          (this.selectedObject.material as THREE.MeshPhongMaterial).color.set(0xff0000);
+          (this.selectedObject.material as THREE.MeshBasicMaterial).color.set(0xff0000);
           this.dragging = true;
           this.startPosition = intersects[0].point.sub(this.selectedObject.position);
         }
@@ -768,7 +780,7 @@ export class GenerateLineComponent implements OnInit {
 
   onMouseUp(event) {
     if (this.selectedObject && this.selectedObject.name.includes('Point')) {
-      (this.selectedObject.material as THREE.MeshPhongMaterial).color.set(this.defaultSquareColor);
+      (this.selectedObject.material as THREE.MeshBasicMaterial).color.set(this.defaultSquareColor);
       this.addIteration(this.currentShapeDuringPointMove);
       this.currentShapeDuringPointMove = undefined;
       this.dragging = false;

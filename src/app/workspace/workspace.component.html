@@ -9,7 +9,6 @@
                 <img [src]="SVGEnum.editSVG" alt="Edit" (click)="openSurfaceEdit()">
                 <input *ngIf="workspaceId === 'new'" [(ngModel)]="newWorkspaceName"/>
                 <input *ngIf="workspaceId !== 'new' && workspace" [(ngModel)]="workspace.name"/>
-                <!-- <label>{{parts?.length}}</label> -->
                 <img *ngIf="!isEditingSurface" [src]="SVGEnum.saveSVG" alt="Save" (click)="saveWorkspace()">
             </div>
             <app-place-shapes #editedSurface *ngIf="!isEditingSurface" [surface]="surface" [parts]="surfaceParts" [selectedPart]="selectedPart" [updateFromShape]="updateFromShape" (choosePartEvent)="choosePartFromSurface($event)" (checkIntersectEvent)="checkIntersect($event)"></app-place-shapes>
@@ -37,12 +36,13 @@
             <div class="col">
                 <div *ngIf="!(shape.id === expandedShapeDetails?.id)" class="row space-between shape-options-row">
                     <label>{{shape?.name}}</label>
-                    <img [src]="SVGEnum.deleteSVG" alt="Delete" (click)="!expandedShapeDetails && deleteShape(i)">
+                    <img [src]="SVGEnum.editSVG" alt="Edit" (click)="!expandedShapeDetails && openShapeDetails(shape)">
                 </div>
                 <div *ngIf="!(shape.id === expandedShapeDetails?.id)" class="row space-between shape-options-row">
                     <img [src]="SVGEnum.useSVG" alt="Use" (click)="!expandedShapeDetails && useShape(shape)">
                     <img [src]="SVGEnum.duplicateSVG" alt="Duplicate" (click)="!expandedShapeDetails && duplicateShape(shape)">
-                    <img [src]="SVGEnum.editSVG" alt="Edit" (click)="!expandedShapeDetails && openShapeDetails(shape)">
+                    <img [src]="SVGEnum.exportSVG" alt="Export" (click)="!expandedShapeDetails && exportShape(shape)">
+                    <img [src]="SVGEnum.deleteSVG" alt="Delete" (click)="!expandedShapeDetails && deleteShape(i)">
                 </div>
                 <div class="row">
                     <img *ngIf="!(shape.id === expandedShapeDetails?.id)" width="150px" height="150px" [src]="shape.image">

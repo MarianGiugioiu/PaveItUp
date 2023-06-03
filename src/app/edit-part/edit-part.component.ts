@@ -152,7 +152,7 @@ export class EditPartComponent implements OnInit {
 
   toggleMinimize() {
     this.isCanvasMinimized = !this.isCanvasMinimized;
-    if(this.shape.id === 0) {
+    if(this.shape.id === '0') {
       this.canDoActions = !this.canDoActions;
     }
     this.updateMinimizationEvent.emit(this.isCanvasMinimized);
@@ -185,8 +185,14 @@ export class EditPartComponent implements OnInit {
   }
 
   changeColor() {
-    const newColor = new THREE.Color(this.shape.color);
-    this.mainObject.material.color = newColor;
+    const rgbValues = this.shape.color.match(/\d+/g);
+    const rgb = `rgb(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]})`;
+    const newColor = new THREE.Color(rgb);
+    (this.mainObject.material as THREE.MeshBasicMaterial).color = newColor;
+    if (rgbValues[3] && rgbValues[3] === '0') {
+      (this.mainObject.material as THREE.MeshBasicMaterial).transparent = true;
+      (this.mainObject.material as THREE.MeshBasicMaterial).opacity = +`0.${rgbValues[4]}`;
+    }
   }
 
   createPrimaryShape() {
@@ -263,7 +269,7 @@ export class EditPartComponent implements OnInit {
     if (!this.pressedKeys.includes(event.key) && (this.canDoActions || this.canRotate)) {
       this.pressedKeys.push(event.key);
     }
-    if(this.shape.id !== 0) {
+    if(this.shape.id !== '0') {
 
     }
 
