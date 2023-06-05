@@ -1,5 +1,11 @@
 import { DataTypes, Model } from "sequelize";
 import { SequelizeService } from "../config/db.js";
+import { getEnvironmentVariable } from "../utils/environment.util.js";
+import crypto from 'crypto'
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+
+const key = getEnvironmentVariable('ENCRYPTION_KEY');
 
 export class Account extends Model {
   id;
@@ -49,12 +55,12 @@ Account.init(
       field: "validated",
     },
     validationCode: {
-      type: DataTypes.STRING(320),
+      type: DataTypes.UUID,
       allowNull: true,
       field: "validation_code",
     },
     resetPasswordCode: {
-      type: DataTypes.STRING(320),
+      type: DataTypes.UUID,
       allowNull: true,
       field: "reset_password_code",
     },
@@ -72,6 +78,23 @@ Account.init(
     updatedAt: false
   }
 );
+
+export function encryptUsername(username) {
+  const secret = username;
+  const cipher = crypto.createCipher('aes-256-cbc', key);
+  let encrypted = cipher.update(secret, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  return encrypted;
+}
+
+export async function encryptPassword(password) {
+  return await bcrypt.hash(password, 10);
+}
+
+export async function validPassword(password1, password2) {
+  let result = await bcrypt.compare(password1, password2);
+  return result;
+}
 
 Account.beforeCreate(async (account) => {
   const secret = account.get('username');
@@ -91,11 +114,6 @@ Account.beforeFind((account) => {
     account.where.username = encrypted;
   }
 })
-
-Account.validPassword = async (password1, password2) => {
-  let result = await bcrypt.compare(password1, password2);
-  return result;
-}
 
 Account.afterFind((accounts) => {
   if (accounts) {
@@ -123,9 +141,9 @@ Account.prototype.generateJWT = function () {
     id: this.dataValues.id,
     name: this.dataValues.name,
     username: decrypted,
-    role: this.dataValues.role
+    authority: this.dataValues.authority
   };
-  const secret = process.env.TOKEN_SECRET;
+  const secret = getEnvironmentVariable('TOKEN_SECRET');
 
   const token = jwt.sign(data, secret, {expiresIn: 60 * 300});
   return token;
