@@ -2,6 +2,7 @@ import express from 'express';
 import { SequelizeService } from './config/db.js';
 import { handleError } from './routes/middleware.js';
 import { accountRouter } from './routes/account.js';
+import { workspaceRouter } from './routes/workspace.js';
 
 const app = express();
 app.use(express.json());
@@ -13,7 +14,7 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/accounts', accountRouter);
-
+app.use('/workspaces', workspaceRouter);
 
 app.use(handleError);
 

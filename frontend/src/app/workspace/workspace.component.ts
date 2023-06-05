@@ -14,9 +14,9 @@ import { SVGEnum } from '../common/enums/svg.enum';
 export interface IWorkspace {
   name?: string;
   id?: string;
-  surface?: IShape,
-  parts?: IShape[],
-  shapes?: IShape[],
+  surface?: string,
+  parts?: string,
+  shapes?: string,
   image?: string;
 }
 
@@ -73,10 +73,32 @@ export class WorkspaceComponent implements OnInit {
         this.spinner.hide();
         this.router.navigate(['/']);
       } else {
-        this.surface = this.workspace.surface;
-        this.shapes = this.workspace.shapes;
-        this.parts = this.workspace.parts;
-        this.surfaceParts = this.workspace.parts;
+        const initSurface: IShape = JSON.parse(this.workspace.surface);
+        initSurface.points.map(point => {
+          point.point = new THREE.Vector2(point.point.x, point.point.y);
+          return point;
+        });
+        this.surface = initSurface;
+
+        const initShapes: IShape[] = JSON.parse(this.workspace.shapes);
+        this.shapes = initShapes.map(shape => {
+          shape.points.map(point => {
+            point.point = new THREE.Vector2(point.point.x, point.point.y);
+            return point;
+          });
+          return shape;
+        });
+
+        const initParts: IShape[] = JSON.parse(this.workspace.parts);
+        this.parts = initParts.map(part => {
+          part.points.map(point => {
+            point.point = new THREE.Vector2(point.point.x, point.point.y);
+            return point;
+          });
+          return part;
+        });
+        
+        this.surfaceParts = this.parts;
         this.isEditingSurface = false;
 
         if (this.shapes.length) {
@@ -456,19 +478,19 @@ export class WorkspaceComponent implements OnInit {
   
   saveWorkspace() {
     if (!this.intersectsExist) {
-      console.log(this.surfaceParts.reverse());
-      
       let newShapes = [];
       this.shapes.forEach(item => {
         newShapes.push(this.mapShapeToPart(item));
       });
+      
       const workspace: IWorkspace = {
         name: this.workspaceId === 'new' ? this.newWorkspaceName : this.workspace.name,
         id: this.workspaceId === 'new' ? uuidv4() : this.workspaceId,
-        surface: this.mapShapeToPart(this.surface),
-        parts: this.surfaceParts.reverse(),
-        shapes: newShapes
+        surface: JSON.stringify(this.mapShapeToPart(this.surface)),
+        parts: JSON.stringify(this.surfaceParts.reverse()),
+        shapes: JSON.stringify(newShapes)
       };
+      
       if (this.workspaceId === 'new') {
         this.workspaceService.add(workspace);
       } else {

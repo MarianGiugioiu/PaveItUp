@@ -17,6 +17,8 @@ export class HomeComponent implements OnInit {
 
   public SVGEnum = SVGEnum;
 
+  public JSON = JSON;
+
   constructor(
     public workspaceService: WorkspaceService,
     public router: Router

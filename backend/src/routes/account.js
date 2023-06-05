@@ -129,6 +129,21 @@ router.post('/register', async (req, res, next) => {
     .catch (next);
 });
 
+router.post('/register-manager', async (req, res, next) => { 
+  const { username, password, name } = req.body;
+  Account.create({
+      name,
+      username,
+      password,
+      authority: 'manager',
+      validated: 1,
+  })
+  .then(() => {
+    res.send({message: 'Manager account registered'});
+  })
+  .catch (next);
+});
+
 router.post('/validate-email', async (req, res, next) => { 
   const { validationCode } = req.body;
   try {
