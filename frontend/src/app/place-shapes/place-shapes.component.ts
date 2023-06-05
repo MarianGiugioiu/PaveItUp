@@ -20,6 +20,7 @@ export class PlaceShapesComponent implements OnInit {
 
   @Input() surface: IShape;
   @Input() parts: IShape[];
+  @Input() fromHome: boolean;
   @Input() selectedPart: IShape;
   @Input() updateFromShape: boolean;
   @Input() getImageData;
@@ -140,7 +141,7 @@ export class PlaceShapesComponent implements OnInit {
 
     this.drawMesh(this.surface);
     this.parts.reverse().forEach(item => this.drawMesh(item));
-    if (this.partMeshes.length) {
+    if (this.partMeshes.length && !this.fromHome) {
       this.checkMeshIntersects();
     }
 
@@ -155,7 +156,7 @@ export class PlaceShapesComponent implements OnInit {
     this.renderer.setAnimationLoop(() => {
       this.renderer.render(this.scene, this.camera);
       this.controls.update();
-      if (this.checkIntersectionAfterUpdate) {
+      if (this.checkIntersectionAfterUpdate && !this.fromHome) {
         this.checkMeshIntersects();
         this.checkIntersectionAfterUpdate = false;
       }

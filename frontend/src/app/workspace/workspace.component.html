@@ -1,5 +1,4 @@
-<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
-<div *ngIf="surface" class="row page-container page-working" [ngClass]="isEditingSurface ? 'full-center' : 'space-between'">
+<div *ngIf="surface" class="row page-container page-working" [ngClass]="hideWorkspace ? 'hidden-workspace' : (isEditingSurface ? 'full-center' : 'space-between')">
     <div *ngIf="isEditingSurface" class="row surface-edit-container">
         <app-generate-line  [shape]="surface" [isSurface]=true [canDoActions]="isEditingSurface" (updateMinimizationEvent)="updateShapeMinimization($event, surface)"></app-generate-line>
     </div>

@@ -3,6 +3,10 @@
     margin-right: 5px;
 }
 
+.hidden-workspace {
+    visibility: hidden;
+}
+
 .page-container {
     width: calc(100vw - 20px);
     height: calc(95vh - 20px);

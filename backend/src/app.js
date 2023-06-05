@@ -3,9 +3,11 @@ import { SequelizeService } from './config/db.js';
 import { handleError } from './routes/middleware.js';
 import { accountRouter } from './routes/account.js';
 import { workspaceRouter } from './routes/workspace.js';
+import cors from 'cors'
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.get('/health', (req, res) => {
     res.send({

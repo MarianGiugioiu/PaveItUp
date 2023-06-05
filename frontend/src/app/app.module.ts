@@ -14,6 +14,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgSelectModule } from '@ng-select/ng-select';
 import { InfoPopupComponent } from './info-popup/info-popup.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { InfoPopupComponent } from './info-popup/info-popup.component';
     NgSelectModule,
     ColorPickerModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

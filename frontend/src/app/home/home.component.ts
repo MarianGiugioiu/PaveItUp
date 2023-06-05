@@ -3,6 +3,7 @@ import { WorkspaceService } from '../common/services/api/workspace.service';
 import { Router } from '@angular/router';
 import { IWorkspace } from '../workspace/workspace.component';
 import { SVGEnum } from '../common/enums/svg.enum';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,7 @@ export class HomeComponent implements OnInit {
   public getImageData = {};
   public selectedWorkspace: IWorkspace;
   public initOldWorkspaces = -1;
+  public hideWorkspaces = true;
 
   public SVGEnum = SVGEnum;
 
@@ -21,15 +23,25 @@ export class HomeComponent implements OnInit {
 
   constructor(
     public workspaceService: WorkspaceService,
-    public router: Router
+    public router: Router,
+    private spinner: NgxSpinnerService
   ) { }
 
-  ngOnInit(): void {
-    this.workspaces = this.workspaceService.getAll();
-    if (this.workspaces.length) {
-      this.initOldWorkspaces = 0;
-      this.selectedWorkspace = this.workspaces[0];
-      this.getImageData[this.selectedWorkspace.id] = true;
+  async ngOnInit(): Promise<void> {
+    this.spinner.show();
+    try {
+      this.workspaces = await this.workspaceService.getAll();
+      if (this.workspaces.length) {
+        this.initOldWorkspaces = 0;
+        this.selectedWorkspace = this.workspaces[0];
+        setTimeout(() => {
+          this.getImageData[this.selectedWorkspace.id] = true;
+        }, 100);
+      }
+    } catch (e) {
+      this.workspaces = [];
+      this.hideWorkspaces = false;
+      this.spinner.hide();
     }
   }
 
@@ -39,10 +51,14 @@ export class HomeComponent implements OnInit {
       this.initOldWorkspaces++;
       if (this.initOldWorkspaces < this.workspaces.length) {
         this.selectedWorkspace = this.workspaces[this.initOldWorkspaces];
-        this.getImageData[this.selectedWorkspace.id] = true;
+        setTimeout(() => {
+          this.getImageData[this.selectedWorkspace.id] = true;
+        }, 100);
       } else {
         this.initOldWorkspaces = -1;
         this.selectedWorkspace = undefined;
+        this.hideWorkspaces = false;
+        this.spinner.hide();
       }
     } else {
       this.selectedWorkspace = undefined;

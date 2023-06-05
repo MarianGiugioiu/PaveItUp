@@ -50,6 +50,7 @@ export class WorkspaceComponent implements OnInit {
   public initOldParts = -1;
 
   public SVGEnum = SVGEnum;
+  public hideWorkspace = true;
 
   constructor(
     public generalService: GeneralService,
@@ -60,54 +61,63 @@ export class WorkspaceComponent implements OnInit {
     private spinner: NgxSpinnerService
     ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.spinner.show();
     this.workspaceId = this.route.snapshot.paramMap.get('id');
     if (this.workspaceId === 'new') {
       this.newWorkspaceName = 'New Workspace';
       this.createSurface();
+      this.hideWorkspace = false;
       this.spinner.hide();
     } else {
-      this.workspace = this.workspaceService.get(this.workspaceId);
-      if (!this.workspace) {
+      try {
+        this.workspace = await this.workspaceService.get(this.workspaceId);
+        
+        if (!this.workspace) {
+          this.spinner.hide();
+          this.router.navigate(['/']);
+        } else {
+          const initSurface: IShape = JSON.parse(this.workspace.surface);
+          initSurface.points.map(point => {
+            point.point = new THREE.Vector2(point.point.x, point.point.y);
+            return point;
+          });
+          this.surface = initSurface;
+  
+          const initShapes: IShape[] = JSON.parse(this.workspace.shapes);
+          this.shapes = initShapes.map(shape => {
+            shape.points.map(point => {
+              point.point = new THREE.Vector2(point.point.x, point.point.y);
+              return point;
+            });
+            return shape;
+          });
+  
+          const initParts: IShape[] = JSON.parse(this.workspace.parts);
+          this.parts = initParts.map(part => {
+            part.points.map(point => {
+              point.point = new THREE.Vector2(point.point.x, point.point.y);
+              return point;
+            });
+            return part;
+          });
+          
+          this.surfaceParts = this.parts;
+          this.isEditingSurface = false;
+  
+          if (this.shapes.length) {
+            this.initOldShapes = 0;
+            this.expandedShapeDetails = this.shapes[this.initOldShapes];
+            this.getImageData[this.expandedShapeDetails.id] = true;
+          } else {
+            this.hideWorkspace = false;
+            this.spinner.hide();
+          }
+        }
+      } catch (e) {
+        this.hideWorkspace = false;
         this.spinner.hide();
         this.router.navigate(['/']);
-      } else {
-        const initSurface: IShape = JSON.parse(this.workspace.surface);
-        initSurface.points.map(point => {
-          point.point = new THREE.Vector2(point.point.x, point.point.y);
-          return point;
-        });
-        this.surface = initSurface;
-
-        const initShapes: IShape[] = JSON.parse(this.workspace.shapes);
-        this.shapes = initShapes.map(shape => {
-          shape.points.map(point => {
-            point.point = new THREE.Vector2(point.point.x, point.point.y);
-            return point;
-          });
-          return shape;
-        });
-
-        const initParts: IShape[] = JSON.parse(this.workspace.parts);
-        this.parts = initParts.map(part => {
-          part.points.map(point => {
-            point.point = new THREE.Vector2(point.point.x, point.point.y);
-            return point;
-          });
-          return part;
-        });
-        
-        this.surfaceParts = this.parts;
-        this.isEditingSurface = false;
-
-        if (this.shapes.length) {
-          this.initOldShapes = 0;
-          this.expandedShapeDetails = this.shapes[this.initOldShapes];
-          this.getImageData[this.expandedShapeDetails.id] = true;
-        } else {
-          this.spinner.hide();
-        }
       }
     }
   }
@@ -149,6 +159,7 @@ export class WorkspaceComponent implements OnInit {
         } else {
           this.initOldParts = -1;
           this.selectedPart = undefined;
+          this.hideWorkspace = false;
           this.spinner.hide();
         }
       } else {
@@ -476,7 +487,7 @@ export class WorkspaceComponent implements OnInit {
     return part;
   }
   
-  saveWorkspace() {
+  async saveWorkspace() {
     if (!this.intersectsExist) {
       let newShapes = [];
       this.shapes.forEach(item => {
@@ -492,9 +503,13 @@ export class WorkspaceComponent implements OnInit {
       };
       
       if (this.workspaceId === 'new') {
-        this.workspaceService.add(workspace);
+        this.spinner.show();
+        await this.workspaceService.add(workspace);
+        this.spinner.hide();
       } else {
-        this.workspaceService.update(workspace);
+        this.spinner.show();
+        await this.workspaceService.update(workspace);
+        this.spinner.hide();
       }
       this.router.navigate(['/']);
     }

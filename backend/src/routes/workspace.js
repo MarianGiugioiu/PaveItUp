@@ -14,7 +14,7 @@ router.get('/', checkRole(['user', 'manager']), async (req, res, next) => {
         raw:true
     })
     .then(records => {
-        res.json(records);
+        res.json(records.reverse());
     })
     .catch(next);
 });
@@ -30,7 +30,7 @@ router.get('/:id', checkRole(['user', 'manager']), async (req, res, next) => {
     })
     .then(record => {
         if (record) {
-            res.json(record);
+            res.json(record[0]);
         } else {
             res.status(404).json({ message: 'Record not found' })
         }
