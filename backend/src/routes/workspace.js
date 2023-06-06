@@ -4,6 +4,7 @@ import { checkRole } from "./middleware.js";
 import { Account } from "../models/account.js";
 
 const router = Router();
+const limit = 3
 
 router.get('/', checkRole(['user', 'manager']), async (req, res, next) => {
     const { token } = req.body;
@@ -11,10 +12,13 @@ router.get('/', checkRole(['user', 'manager']), async (req, res, next) => {
         where: {
             accountId: token.id
         },
+        order: [['createdAt', 'DESC']],
+        limit,
+        offset: req.query.page * limit,
         raw:true
     })
     .then(records => {
-        res.json(records.reverse());
+        res.json(records);
     })
     .catch(next);
 });

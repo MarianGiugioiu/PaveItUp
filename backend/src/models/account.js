@@ -74,7 +74,7 @@ Account.init(
     sequelize: SequelizeService.getInstance(),
     modelName: "Account",
     tableName: "accounts",
-    createdAt: false,
+    createdAt: true,
     updatedAt: false
   }
 );

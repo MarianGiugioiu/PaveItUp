@@ -1,19 +1,21 @@
 <div class="col page-container full-center">
-    <div class="col workspace-list-container">
+    <div class="col workspace-list-container" [ngClass]="hideWorkspaces ? 'hidden-workspaces' : ''" lastElementInView (lastElementInView)="onLastElementInView()">
         <div class="create-button-container full-center">
             <img [src]="SVGEnum.createSVG" alt="Create" (click)="create()">
         </div>
-        <div class="row workspace-container" [ngClass]="hideWorkspaces ? 'hidden-workspaces' : ''" *ngFor="let workspace of workspaces">
+        <div class="row workspace-container" *ngFor="let workspace of workspaces">
             <div class="col">
                 <div class="row space-between workspace-name-container">
                     <label>{{workspace.name}}</label>
                     <img [src]="SVGEnum.editSVG" alt="Edit" (click)="edit(workspace)">
                 </div>
-                <app-place-shapes *ngIf="(this.selectedWorkspace?.id === workspace.id)" [fromHome]="true" [surface]="JSON.parse(workspace.surface)" [parts]="JSON.parse(workspace.parts)" [getImageData]="getImageData[workspace.id]" (updateGetImageDataEvent)="updateGetImageData(workspace, $event)"></app-place-shapes>
                 <div *ngIf="!(this.selectedWorkspace?.id === workspace.id)">
                     <img width="250px" height="250px" [src]="workspace.image">
                 </div>
             </div>
+        </div>
+        <div class="row workspace-container hidden-workspaces"  *ngFor="let workspace of workspaces">
+            <app-place-shapes *ngIf="(this.selectedWorkspace?.id === workspace.id)" [fromHome]="true" [surface]="JSON.parse(workspace.surface)" [parts]="JSON.parse(workspace.parts)" [getImageData]="getImageData[workspace.id]" (updateGetImageDataEvent)="updateGetImageData(workspace, $event)"></app-place-shapes>
         </div>
     </div>
 </div>

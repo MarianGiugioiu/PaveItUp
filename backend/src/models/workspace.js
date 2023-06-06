@@ -49,7 +49,7 @@ Workspace.init(
     sequelize: SequelizeService.getInstance(),
     modelName: "Workspace",
     tableName: "workspaces",
-    createdAt: false,
+    createdAt: true,
     updatedAt: false
   }
 );

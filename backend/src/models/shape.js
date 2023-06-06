@@ -55,7 +55,7 @@ Shape.init(
     sequelize: SequelizeService.getInstance(),
     modelName: "Shape",
     tableName: "shapes",
-    createdAt: false,
+    createdAt: true,
     updatedAt: false
   }
 );
