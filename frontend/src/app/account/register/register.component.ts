@@ -4,7 +4,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { AppComponent } from 'src/app/app.component';
 import { SVGEnum } from 'src/app/common/enums/svg.enum';
 import { AccountService } from 'src/app/common/services/api/account.service';
-import { LocalStorageService } from 'src/app/common/services/local-storage.service';
 
 export interface IRegister {
   name: string;
@@ -22,7 +21,7 @@ export class RegisterComponent {
   public registerData: IRegister;
   public errorMessage: string;
   public fieldError: IRegister;
-  public successMesage: string;
+  public successMessage: string;
   public SVGEnum = SVGEnum;
 
   constructor (
@@ -108,7 +107,7 @@ export class RegisterComponent {
     }
     this.accountService.register(this.registerData)
     .then(() => {
-      this.successMesage = 'Account registered. Head to your email to validate it';
+      this.successMessage = 'Account registered. Head to your email to validate it!';
       this.spinner.hide();
     })
     .catch((error) => {
@@ -118,7 +117,7 @@ export class RegisterComponent {
         this.errorMessage = "There was a problem when sending the validation mail";
       }
       this.spinner.hide();
-    })
+    });
   }
 
   clearError(field: string) {

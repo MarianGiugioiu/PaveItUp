@@ -20,4 +20,9 @@ export class AccountService {
     const url = `${this.apiResource}/register`;
     return this.http.post(url, resource).toPromise();
   }
+
+  validateEmail(code: any) {
+    const url = `${this.apiResource}/validate-email`;
+    return this.http.post(url, code).toPromise();
+  }
 }

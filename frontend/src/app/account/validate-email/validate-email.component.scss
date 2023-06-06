@@ -1,0 +1,37 @@
+.page-container {
+    width: calc(100vw - 20px);
+    height: calc(95vh - 20px);
+    padding: 10px;
+    background-color: #EEEEEE;
+}
+
+.content-container {
+    padding: 30px;
+    border-radius: 10px;
+    height: 200px;
+    width: 300px;
+    background-color: white;
+    border: 1px solid #c0c0c0;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.login-button {
+    width: 180px;
+    margin-top: 30px;
+    height: 30px;
+    background: rgb(189,183,250);
+    background: linear-gradient(90deg, rgba(189,183,250,1) 0%, rgba(123,123,215,1) 50%, rgba(77,77,213,1) 100%);
+    color: white;
+    border: 0;
+    border-radius: 50px;
+}
+
+.error-label {
+    color: red;
+    font-size: 18px;
+}
+
+.success-label {
+    color: green;
+    font-size: 18px;
+}

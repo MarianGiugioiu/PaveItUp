@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LastElementInViewDirective } from './common/directives/last-element-in-view.directive';
 import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
+import { ValidateEmailComponent } from './account/validate-email/validate-email.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { RegisterComponent } from './account/register/register.component';
     InfoPopupComponent,
     LastElementInViewDirective,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ValidateEmailComponent
   ],
   imports: [
     BrowserModule,

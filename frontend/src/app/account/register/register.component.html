@@ -49,9 +49,9 @@
                 <input class="input-container" [(ngModel)]="registerData.confirmPassword" (focus)="clearError('confirmPassword')" type="password" placeholder="Enter your password">
             </div>
             <div class="full-center">
-                <label *ngIf="successMesage" class="register-success">{{successMesage}}</label>
+                <label *ngIf="successMessage" class="register-success">{{successMessage}}</label>
                 <label *ngIf="errorMessage" class="register-error">{{errorMessage}}</label>
-                <label *ngIf="!errorMessage && !successMesage" class="register-error">{{errorMessage}}</label>
+                <label *ngIf="!errorMessage && !successMessage" class="register-error">{{errorMessage}}</label>
             </div>
             <div class="full-center">
                 <button class="register-button" (click)="register()">Register</button>

@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
 });
 
 function createValidationMail(username, validationCode) {
-  const validationLink = `https://localhost:4200/account/validate-email/${validationCode}`;
+  const validationLink = `http://localhost:4200/account/validate-email/${validationCode}`;
 
   const emailTemplate = `
     <h1>Account Validation</h1>
@@ -38,7 +38,7 @@ function createValidationMail(username, validationCode) {
 }
 
 function createResetPasswordCodeMail(username, resetPasswordCode) {
-  const validationLink = `https://localhost:4200/account/reset-password/${resetPasswordCode}`;
+  const validationLink = `http://localhost:4200/account/reset-password/${resetPasswordCode}`;
 
   const emailTemplate = `
     <h1>Reset Password Code</h1>
