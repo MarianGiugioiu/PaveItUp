@@ -1,0 +1,61 @@
+<div class="col page-container full-center">
+    <div class="content-container">
+        <!-- <button (click)="showPopup()">info</button> -->
+        <div class="full-center title-container">
+            <label class="title-label bold">Register</label>
+        </div>
+        <div class="col">
+            <div class="row">
+                <label class="field-label-container">Name</label>
+                <div *ngIf="fieldError.name" class="row field-error-label-container flex-end">
+                    <label>{{fieldError.name}}</label>
+                    <img class="field-error-icon" [src]="SVGEnum.infoBlueSVG" alt="Info" (click)="showPopup()">
+                </div>
+            </div>
+            <div class="row field-container">
+                <img class="field-icon" [src]="SVGEnum.nameSVG" alt="Name">
+                <input class="input-container" [(ngModel)]="registerData.name" (focus)="clearError('name')" type="text" placeholder="Enter your name">
+            </div>
+            <div class="row">
+                <label class="field-label-container">Username</label>
+                <div *ngIf="fieldError.username" class="row field-error-label-container flex-end">
+                    <label>{{fieldError.username}}</label>
+                    <img class="field-error-icon" [src]="SVGEnum.infoBlueSVG" alt="Info" (click)="showPopup()">
+                </div>
+            </div>
+            <div class="row field-container" [ngClass]="fieldError.username ? 'field-container-error' : ''">
+                <img class="field-icon" [src]="SVGEnum.usernameSVG" alt="Username">
+                <input class="input-container" [(ngModel)]="registerData.username" (focus)="clearError('username')" type="text" placeholder="Enter your username">
+            </div>
+            <div class="row">
+                <label class="field-label-container">Password</label>
+                <div *ngIf="fieldError.password" class="row field-error-label-container flex-end">
+                    <label>{{fieldError.password}}</label>
+                    <img class="field-error-icon" [src]="SVGEnum.infoBlueSVG" alt="Info" (click)="showPopup()">
+                </div>
+            </div>
+            <div class="row field-container">
+                <img class="field-icon" [src]="SVGEnum.passwordSVG" alt="Password">
+                <input class="input-container" [(ngModel)]="registerData.password" (focus)="clearError('password')" type="password" placeholder="Enter your password">
+            </div>
+            <div class="row">
+                <label class="field-label-container">Confirm Password</label>
+                <div *ngIf="fieldError.confirmPassword" class="row field-error-label-container flex-end">
+                    <label>{{fieldError.confirmPassword}}</label>
+                </div>
+            </div>
+            <div class="row field-container">
+                <img class="field-icon" [src]="SVGEnum.confirmPasswordSVG" alt="ConfirmPassword">
+                <input class="input-container" [(ngModel)]="registerData.confirmPassword" (focus)="clearError('confirmPassword')" type="password" placeholder="Enter your password">
+            </div>
+            <div class="full-center">
+                <label *ngIf="successMesage" class="register-success">{{successMesage}}</label>
+                <label *ngIf="errorMessage" class="register-error">{{errorMessage}}</label>
+                <label *ngIf="!errorMessage && !successMesage" class="register-error">{{errorMessage}}</label>
+            </div>
+            <div class="full-center">
+                <button class="register-button" (click)="register()">Register</button>
+            </div>
+        </div>
+    </div>
+</div>

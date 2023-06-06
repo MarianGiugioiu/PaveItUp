@@ -31,6 +31,10 @@
     border-bottom: 1px solid #c0c0c0;
 }
 
+.field-container-error {
+    border-bottom: 1px solid red;
+}
+
 .input-container {
     border: 0;
     width: 260px;
@@ -51,8 +55,22 @@
 }
 
 .field-label-container {
-    font-size: 14px;
+    width: 100px;
+    font-size: 12px;
     margin-left: 5px;
+}
+
+.field-error-label-container {
+    width: 190px;
+    font-size: 12px;
+    color: red;
+    margin-right: 5px;
+}
+
+.field-error-icon {
+    margin-left: 5px;
+    width: 16px;
+    height: 16px;
 }
 
 .forgot-password-label {
@@ -67,17 +85,23 @@
     color: #0069d9;
 }
 
-.login-error {
+.register-error {
     margin-top: 30px;
     height: 20px;
     color: red;
     font-size: 12px;
 }
 
-.login-button {
+.register-success {
+    margin-top: 30px;
+    height: 20px;
+    color: green;
+    font-size: 12px;
+}
+
+.register-button {
     width: 180px;
     margin-top: 10px;
-    margin-bottom: 150px;
     height: 30px;
     background: rgb(189,183,250);
     background: linear-gradient(90deg, rgba(189,183,250,1) 0%, rgba(123,123,215,1) 50%, rgba(77,77,213,1) 100%);

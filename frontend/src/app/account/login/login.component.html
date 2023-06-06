@@ -1,18 +1,12 @@
 <div class="col page-container full-center">
     <div class="content-container">
-        <!-- <button (click)="showPopup()">info</button> -->
         <div class="full-center title-container">
             <label class="title-label bold">Login</label>
         </div>
         <div class="col">
-            <!-- <label class="field-label-container">Name</label>
-            <div class="row field-container">
-                <img class="field-icon" [src]="SVGEnum.nameSVG" alt="Name">
-                <input class="input-container" type="text" placeholder="Enter your name">
-            </div> -->
             <label class="field-label-container">Username</label>
             <div class="row field-container">
-                <img class="field-icon" [src]="SVGEnum.usernameSVG" alt="Name">
+                <img class="field-icon" [src]="SVGEnum.usernameSVG" alt="username">
                 <input class="input-container" [(ngModel)]="loginData.username" type="text" (focus)="clearError()" placeholder="Enter your username">
             </div>
             <label class="field-label-container">Password</label>
@@ -20,11 +14,6 @@
                 <img class="field-icon" [src]="SVGEnum.passwordSVG" alt="Password">
                 <input class="input-container" [(ngModel)]="loginData.password" type="password" (focus)="clearError()" placeholder="Enter your password">
             </div>
-            <!-- <label class="field-label-container">Confirm Password</label>
-            <div class="row field-container">
-                <img class="field-icon" [src]="SVGEnum.confirmPasswordSVG" alt="Name">
-                <input class="input-container" type="text" placeholder="Enter your password">
-            </div> -->
             <div class="flex-end">
                 <label class="forgot-password-label">Forgot password?</label>
             </div>
@@ -36,7 +25,7 @@
             </div>
             <div class="col full-center">
                 <label class="no-account-label">Don't have an account?</label>
-                <label class="signup-label">Sign Up!</label>
+                <label class="signup-label" (click)="goToRegister()">Sign Up!</label>
             </div>
         </div>
     </div>

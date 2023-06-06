@@ -22,7 +22,6 @@ export class LoginComponent {
   public SVGEnum = SVGEnum;
 
   constructor (
-    private appComponent: AppComponent,
     private accountService: AccountService,
     public router: Router,
     private spinner: NgxSpinnerService,
@@ -34,10 +33,6 @@ export class LoginComponent {
       username: '',
       password: ''
     }
-  }
-
-  showPopup() {
-    this.appComponent.openPopupValidation();
   }
 
   login() {
@@ -60,5 +55,9 @@ export class LoginComponent {
 
   clearError() {
     this.error = undefined;
+  }
+
+  goToRegister() {
+    this.router.navigate(['/account/register']);
   }
 }
