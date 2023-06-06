@@ -1,12 +1,12 @@
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
-<app-info-popup *ngIf="showPopup" [showPopup]="showPopup" (closePopupEvent)="closePopup()"></app-info-popup>
+<app-info-popup *ngIf="showPopup" [showPopup]="showPopup" [popupPage]="popupPage" (closePopupEvent)="closePopup()"></app-info-popup>
 <div class="row header-container space-between">
-    <img [src]="SVGEnum.homeSVG" alt="Home">
+    <img [src]="SVGEnum.homeSVG" alt="Home" (click)="goHome()">
     <h2 class="header-title">PaveItUp</h2>
     <img [src]="SVGEnum.infoSVG" alt="Info" (click)="openPopup()">
     <div class="row">
-        <img [src]="SVGEnum.signUpSVG" alt="SignUp">
-        <img [src]="SVGEnum.signInSVG" alt="SignIn">
+        <img [src]="SVGEnum.signUpSVG" alt="SignUp" (click)="goToRegister()">
+        <img [src]="SVGEnum.signInSVG" alt="SignIn" (click)="goToLogin()">
         <!-- <img [src]="SVGEnum.signOutSVG" alt="SignOut"> -->
     </div>
 </div>

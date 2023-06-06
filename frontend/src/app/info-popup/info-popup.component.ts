@@ -8,13 +8,13 @@ import { SVGEnum } from '../common/enums/svg.enum';
 })
 export class InfoPopupComponent {
   @Input('showPopup') showPopup: boolean;
+  @Input('popupPage') popupPage: number;
   @Output() closePopupEvent = new EventEmitter();
-  public page = false;
 
   public SVGEnum = SVGEnum;
 
   changePage(value) {
-    this.page = value;
+    this.popupPage = value;
   }
   
   closePopup() {

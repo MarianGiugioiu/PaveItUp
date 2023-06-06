@@ -24,4 +24,8 @@ export enum SVGEnum {
     infoSVG = '../../../assets/SVG/info.svg',
     exitSVG = '../../../assets/SVG/exit.svg',
     exportSVG = '../../../assets/SVG/export.svg',
+    nameSVG = '../../../assets/SVG/name.svg',
+    usernameSVG = '../../../assets/SVG/username.svg',
+    passwordSVG = '../../../assets/SVG/password.svg',
+    confirmPasswordSVG = '../../../assets/SVG/confirm-password.svg',
 }

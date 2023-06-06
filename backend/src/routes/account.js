@@ -64,11 +64,15 @@ router.post('/login', (req, res, next) => {
       }
   }).then(async account => {
       if (!account) {
-          return res.status(404).json({ message: 'Account not found' });
+          return res.status(400).json({ message: 'Invalid credentials' });
       }
       
       if (!(await validPassword(password, account.dataValues.password))) {
-          return res.status(403).json({ message: 'Incorrect password' });
+          return res.status(400).json({ message: 'Invalid credentials' });
+      }
+
+      if (!account.dataValues.validated) {
+        return res.status(403).json({ message: 'The account was not validated' });
       }
 
       const token = account.generateJWT();
@@ -77,7 +81,32 @@ router.post('/login', (req, res, next) => {
   .catch (next);
 });
 
-router.post('/change-password', checkRole(['user']), (req, res, next) => {
+router.patch('/change-name', checkRole(['user']), (req, res, next) => {
+  const { newName, token } = req.body;
+  Account.findOne({
+      where: {
+          username: token.username
+      }
+  }).then(async result => {
+      if (!result) {
+          return res.status(404).json({ message: 'Account not found' });
+      }
+      const account = result.dataValues;
+      
+      account.name = newName;
+      Account.update(account, {
+        where: { id: account.id }
+      })
+      .then(() => {
+        return res.send({message: 'Name successfully changed'});
+      })
+      .catch (next);
+      
+  })
+  .catch (next);
+});
+
+router.patch('/change-password', checkRole(['user']), (req, res, next) => {
   const { oldPassword, newPassword, token } = req.body;
   Account.findOne({
       where: {
@@ -211,7 +240,7 @@ router.post('/validate-reset-password-code', async (req, res, next) => {
   }
 });
 
-router.post('/reset-password', async (req, res, next) => { 
+router.patch('/reset-password', async (req, res, next) => { 
   const { resetPasswordCode, newPassword } = req.body;
   try {
     const result = await Account.findAll({

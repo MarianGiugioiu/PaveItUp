@@ -16,6 +16,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { InfoPopupComponent } from './info-popup/info-popup.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LastElementInViewDirective } from './common/directives/last-element-in-view.directive';
+import { LoginComponent } from './account/login/login.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { LastElementInViewDirective } from './common/directives/last-element-in-
     EditPartComponent,
     HomeComponent,
     InfoPopupComponent,
-    LastElementInViewDirective
+    LastElementInViewDirective,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
