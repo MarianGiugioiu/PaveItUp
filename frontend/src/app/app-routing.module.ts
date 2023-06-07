@@ -8,12 +8,14 @@ import { ValidateEmailComponent } from './account/validate-email/validate-email.
 import { ForgotPasswordComponent } from './account/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './account/reset-password/reset-password.component';
 import { HomeComponent } from './home/home.component';
+import { DetailsComponent } from './account/details/details.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'workspaces', component: WorkspacesComponent },
   { path: 'workspace/:id', component: WorkspaceComponent },
   { path: 'account/register', component: RegisterComponent },
+  { path: 'account/details', component: DetailsComponent },
   { path: 'account/login', component: LoginComponent },
   { path: 'account/forgot-password', component: ForgotPasswordComponent },
   { path: 'account/validate-email/:code', component: ValidateEmailComponent },

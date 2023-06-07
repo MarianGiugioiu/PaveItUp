@@ -97,6 +97,8 @@ export class RegisterComponent {
 
   register() {
     this.spinner.show();
+    this.successMessage = '';
+    this.errorMessage = '';
     const validName = this.checkName();
     const validUsername = this.checkUsername();
     const validPassword = this.checkPassword();

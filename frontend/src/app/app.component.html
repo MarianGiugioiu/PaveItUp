@@ -15,8 +15,8 @@
     <div class="row account-container flex-end">
         <img *ngIf="!connected" [src]="SVGEnum.signUpSVG" alt="SignUp" (click)="goToRegister()">
         <img *ngIf="!connected" [src]="SVGEnum.signInSVG" alt="SignIn" (click)="goToLogin()">
-        <img *ngIf="connected" class="field-icon" [src]="SVGEnum.nameSVG" alt="Name">
-        <label *ngIf="connected" class="name-label">{{name}}</label>
+        <img *ngIf="connected" class="field-icon" [src]="SVGEnum.nameSVG" alt="Name" (click)="goToDetails()">
+        <label *ngIf="connected" class="name-label" (click)="goToDetails()">{{name}}</label>
         <img *ngIf="connected" [src]="SVGEnum.signOutSVG" alt="SignOut" (click)="logout()">
     </div>
 </div>

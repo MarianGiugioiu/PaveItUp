@@ -22,6 +22,7 @@ import { ValidateEmailComponent } from './account/validate-email/validate-email.
 import { ForgotPasswordComponent } from './account/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './account/reset-password/reset-password.component';
 import { HomeComponent } from './home/home.component';
+import { DetailsComponent } from './account/details/details.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { HomeComponent } from './home/home.component';
     ValidateEmailComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    HomeComponent
+    HomeComponent,
+    DetailsComponent
   ],
   imports: [
     BrowserModule,

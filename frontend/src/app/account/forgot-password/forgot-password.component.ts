@@ -30,6 +30,8 @@ export class ForgotPasswordComponent {
 
   sendResetPasswordCode() {
     this.spinner.show();
+    this.successMessage = '';
+    this.errorMessage = '';
     if (!this.checkField()) {
       this.spinner.hide();
       return;

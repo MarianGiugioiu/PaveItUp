@@ -6,7 +6,6 @@ import { SVGEnum } from 'src/app/common/enums/svg.enum';
 import { AccountService } from 'src/app/common/services/api/account.service';
 
 export interface IResetPassword {
-  oldPassword: string;
   newPassword: string;
   confirmPassword: string;
   resetPasswordCode?: string;
@@ -36,13 +35,11 @@ export class ResetPasswordComponent {
   ngOnInit() {
     this.spinner.show();
     this.resetPasswordData = {
-      oldPassword: '',
       newPassword: '',
       confirmPassword: '',
     }
 
     this.fieldError = {
-      oldPassword: '',
       newPassword: '',
       confirmPassword: '',
     }
@@ -80,10 +77,7 @@ export class ResetPasswordComponent {
       this.fieldError[field] = 'invalid password';
       return false;
     }
-    if (field === 'newPassword' && this.resetPasswordData.oldPassword === this.resetPasswordData.newPassword) {
-      this.fieldError.newPassword = 'new password must be different';
-      return false;
-    }
+    
     this.fieldError[field] = '';
     return true;
   }
@@ -97,21 +91,13 @@ export class ResetPasswordComponent {
     return true;
   }
 
-  checkIdenticalPasswords() {
-    if (this.resetPasswordData.oldPassword === this.resetPasswordData.newPassword) {
-      this.fieldError.newPassword = 'new password must be different';
-      return false;
-    }
-    this.fieldError.newPassword = '';
-    return true;
-  }
-
   resetPassword() {
     this.spinner.show();
-    const validOldPassword = this.checkPassword('oldPassword');
+    this.successMessage = '';
+    this.errorMessage = '';
     const validNewPassword = this.checkPassword('newPassword');
     const validConfirmPassword = this.checkConfirmPassword();
-    if (!validOldPassword || !validNewPassword || !validConfirmPassword) {
+    if (!validNewPassword || !validConfirmPassword) {
       this.spinner.hide();
       return;
     }
@@ -121,7 +107,7 @@ export class ResetPasswordComponent {
       this.spinner.hide();
     })
     .catch((error) => {
-      if (error.error.message === 'The old password is incorrect') {
+      if (error.error.message === 'The old password is incorrect' || error.error.message === 'The new password is identical to the old one') {
         this.errorMessage = error.error.message;
       }
       this.spinner.hide();

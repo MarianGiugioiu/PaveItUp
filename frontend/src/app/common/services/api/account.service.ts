@@ -1,8 +1,9 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ILogin } from 'src/app/account/login/login.component';
 import { IRegister } from 'src/app/account/register/register.component';
 import { IResetPassword } from 'src/app/account/reset-password/reset-password.component';
+import { LocalStorageService } from '../local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,10 @@ import { IResetPassword } from 'src/app/account/reset-password/reset-password.co
 export class AccountService {
   private apiResource = 'http://localhost:3000/accounts';
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private localStorageService: LocalStorageService
+    ) { }
 
   login(resource: ILogin) {
     const url = `${this.apiResource}/login`;
@@ -40,5 +44,19 @@ export class AccountService {
   resetPassword(resource: IResetPassword) {
     const url = `${this.apiResource}/reset-password`;
     return this.http.patch(url, resource).toPromise();
+  }
+
+  changeName(resource: any) {
+    const token = this.localStorageService.getItem('access_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const url = `${this.apiResource}/change-name`;
+    return this.http.patch(url, resource, { headers }).toPromise();
+  }
+
+  changePassword(resource: any) {
+    const token = this.localStorageService.getItem('access_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const url = `${this.apiResource}/change-password`;
+    return this.http.patch(url, resource, { headers }).toPromise();
   }
 }

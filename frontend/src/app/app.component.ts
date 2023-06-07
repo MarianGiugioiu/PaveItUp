@@ -45,6 +45,10 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/account/register']);
   }
 
+  goToDetails() {
+    this.router.navigate(['/account/details']);
+  }
+
   goHome() {
     this.router.navigate(['/']);
   }
@@ -63,6 +67,11 @@ export class AppComponent implements OnInit {
     this.name = this.localStorageService.getItem('account_name');
     this.authority = this.localStorageService.getItem('account_authority');
     this.connected = true;
+  }
+
+  changeName(name: string) {
+    this.localStorageService.setItem('account_name', name);
+    this.name = name;
   }
 
   logout() {

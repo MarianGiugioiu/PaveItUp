@@ -117,8 +117,12 @@ router.patch('/change-password', checkRole(['user']), (req, res, next) => {
           return res.status(404).json({ message: 'Account not found' });
       }
       const account = result.dataValues;
-      if (!(await validPassword(oldPassword, account.password))) {
-          return res.status(403).json({ message: 'Incorrect password' });
+      const validOldPassword = await validPassword(oldPassword, account.password);
+      const samePassword = await validPassword(newPassword, account.password);
+      if (!validOldPassword) {
+        return res.status(400).send({ status: 'error', message: 'The old password is incorrect'});
+      } else if (samePassword) {
+        return res.status(400).send({ status: 'error', message: 'The new password is identical to the old one'});
       }
       const hashedPassword = await encryptPassword(newPassword);
       account.password = hashedPassword;
@@ -241,18 +245,15 @@ router.post('/validate-reset-password-code', async (req, res, next) => {
 });
 
 router.patch('/reset-password', async (req, res, next) => { 
-  const { resetPasswordCode, oldPassword, newPassword } = req.body;
+  const { resetPasswordCode, newPassword } = req.body;
   try {
     const result = await Account.findAll({
       where: { resetPasswordCode },
     });
     if (result.length) {
       const account = result[0].dataValues;
-      const validOldPassword = await validPassword(oldPassword, account.password);
       const samePassword = await validPassword(newPassword, account.password);
-      if (!validOldPassword) {
-        return res.status(400).send({ status: 'error', message: 'The old password is incorrect'});
-      } else if (samePassword) {
+      if (samePassword) {
         return res.status(400).send({ status: 'error', message: 'The new password is identical to the old one'});
       } else {
         account.resetPasswordCode = null;

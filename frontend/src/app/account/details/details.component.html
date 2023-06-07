@@ -1,0 +1,64 @@
+<div class="col page-container full-center page-working">
+    <div class="content-container">
+        <div class="full-center title-container">
+            <label class="title-label bold">Account Details</label>
+        </div>
+        <div class="col">
+            <div class="row">
+                <label class="field-label-container">Name</label>
+                <div *ngIf="fieldError.name" class="row field-error-label-container flex-end">
+                    <label>{{fieldError.name}}</label>
+                    <img class="field-error-icon" [src]="SVGEnum.infoBlueSVG" alt="Info" (click)="showPopup()">
+                </div>
+            </div>
+            <div class="row field-container">
+                <img class="field-icon" [src]="SVGEnum.nameSVG" alt="Name">
+                <input class="input-container" [(ngModel)]="detailsData.name" (focus)="clearError('name')" type="text" placeholder="Enter your name">
+            </div>
+            <div class="row">
+                <label class="field-label-container">Old Password</label>
+                <div *ngIf="fieldError.oldPassword" class="row field-error-label-container flex-end">
+                    <label>{{fieldError.oldPassword}}</label>
+                    <img class="field-error-icon" [src]="SVGEnum.infoBlueSVG" alt="Info" (click)="showPopup()">
+                </div>
+            </div>
+            <div class="row field-container">
+                <img class="field-icon" [src]="SVGEnum.passwordSVG" alt="Password">
+                <input class="input-container" [(ngModel)]="detailsData.oldPassword" (focus)="clearError('oldPassword')" type="password" placeholder="Enter your old password">
+            </div>
+            <div class="row">
+                <label class="field-label-container">New Password</label>
+                <div *ngIf="fieldError.newPassword" class="row field-error-label-container flex-end">
+                    <label>{{fieldError.newPassword}}</label>
+                    <img class="field-error-icon" [src]="SVGEnum.infoBlueSVG" alt="Info" (click)="showPopup()">
+                </div>
+            </div>
+            <div class="row field-container">
+                <img class="field-icon" [src]="SVGEnum.passwordSVG" alt="Password">
+                <input class="input-container" [(ngModel)]="detailsData.newPassword" (focus)="clearError('newPassword')" type="password" placeholder="Enter your new password">
+            </div>
+            <div class="row">
+                <label class="field-label-container">Confirm Password</label>
+                <div *ngIf="fieldError.confirmPassword" class="row field-error-label-container flex-end">
+                    <label>{{fieldError.confirmPassword}}</label>
+                </div>
+            </div>
+            <div class="row field-container">
+                <img class="field-icon" [src]="SVGEnum.confirmPasswordSVG" alt="ConfirmPassword">
+                <input class="input-container" [(ngModel)]="detailsData.confirmPassword" (focus)="clearError('confirmPassword')" type="password" placeholder="Enter your password">
+            </div>
+            <div class="full-center">
+                <label *ngIf="successMessage" class="details-success">{{successMessage}}</label>
+                <label *ngIf="errorMessage" class="details-error">{{errorMessage}}</label>
+                <label *ngIf="!errorMessage && !successMessage" class="details-error"></label>
+            </div>
+            <div class="full-center">
+                <button class="details-button" (click)="save()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row page-container full-center page-not-working">
+    <p>This page is unavailable with dimensions smaller than 1300 / 600</p>
+</div>

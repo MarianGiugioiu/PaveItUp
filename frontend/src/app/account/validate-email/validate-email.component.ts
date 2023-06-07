@@ -21,6 +21,8 @@ export class ValidateEmailComponent {
 
   ngOnInit() {
     this.spinner.show();
+    this.successMessage = '';
+    this.errorMessage = '';
     const validationCode = this.route.snapshot.paramMap.get('code');
     this.accountService.validateEmail({validationCode})
     .then((result) => {
