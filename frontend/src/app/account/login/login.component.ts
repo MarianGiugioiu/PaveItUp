@@ -22,6 +22,7 @@ export class LoginComponent {
   public SVGEnum = SVGEnum;
 
   constructor (
+    private appComponent: AppComponent,
     private accountService: AccountService,
     public router: Router,
     private spinner: NgxSpinnerService,
@@ -53,6 +54,9 @@ export class LoginComponent {
     this.accountService.login(this.loginData)
     .then((result) => {
       this.localStorageService.setItem('access_token', result['token']);
+      this.localStorageService.setItem('account_name', result['name']);
+      this.localStorageService.setItem('account_authority', result['authority']);
+      this.appComponent.afterLogin();
       this.spinner.hide();
       this.router.navigate(['/']);
     })

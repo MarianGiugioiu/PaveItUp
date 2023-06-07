@@ -5,34 +5,57 @@
     background-color: #EEEEEE;
 }
 
-.workspace-list-container {
-    height: 100%;
-    width: 255px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.create-button-container {
-    height: 24px;
-    margin-bottom: 15px;
-}
-
-.workspace-container {
-    width: 250px;
-    height: 277px;
-    padding-top: 5px;
-    margin: 5px 0;
+.content-container {
+    padding: 30px;
+    border-radius: 10px;
+    height: 300px;
+    width: 300px;
+    background-color: white;
     border: 1px solid #c0c0c0;
-    border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
-.workspace-name-container {
-    padding: 0 5px;
-    margin-bottom: 3px;
-    width: 240px;
+.login-button {
+    width: 180px;
+    margin-top: 30px;
+    height: 30px;
+    background: rgb(189,183,250);
+    background: linear-gradient(90deg, rgba(189,183,250,1) 0%, rgba(123,123,215,1) 50%, rgba(77,77,213,1) 100%);
+    color: white;
+    border: 0;
+    border-radius: 50px;
 }
 
-.hidden-workspaces {
-    visibility: hidden;
+.title-label {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.subtitle-label {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.login-label {
+    text-align: center;
+    font-size: 14px;
+}
+
+.page-working {
+    display: flex
+}
+
+.page-not-working {
+    display: none;
+}
+
+@media (max-width: 1300px) or (max-height: 600px) {
+    .page-working {
+        display: none;
+    }
+    
+    .page-not-working {
+        display: flex;
+    }
 }

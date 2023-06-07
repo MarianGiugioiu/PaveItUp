@@ -1,118 +1,50 @@
-import { Component, OnInit } from '@angular/core';
-import { WorkspaceService } from '../common/services/api/workspace.service';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { IWorkspace } from '../workspace/workspace.component';
-import { SVGEnum } from '../common/enums/svg.enum';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { LocalStorageService } from '../common/services/local-storage.service';
+import { EventsService } from '../common/services/events.service';
+import { EventsEnum } from '../common/enums/events.enum';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
-  public workspaces: IWorkspace[];
-  public getImageData = {};
-  public selectedWorkspace: IWorkspace;
-  public initOldWorkspaces = -1;
-  public hideWorkspaces = true;
+export class HomeComponent {
+  public showLoginButton = false;
+  private eventSubscription;
 
-  public SVGEnum = SVGEnum;
-
-  public JSON = JSON;
-
-  public workspacesPage = 0;
-
-  constructor(
-    public workspaceService: WorkspaceService,
+  constructor (
     public router: Router,
-    private spinner: NgxSpinnerService,
-    private localStorageService: LocalStorageService
-  ) { }
+    private localStorageService: LocalStorageService,
+    private eventsService: EventsService
+  ) {}
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit() {
     const token = this.localStorageService.getItem('access_token');
     if (!token) {
-      this.router.navigate(['/account/login']);
-    }
-    this.spinner.show();
-    this.hideWorkspaces = true;
-    try {
-      this.workspaces = await this.workspaceService.getAll(this.workspacesPage);
-      if (this.workspaces.length) {
-        this.initOldWorkspaces = 0;
-        this.selectedWorkspace = this.workspaces[this.initOldWorkspaces];
-        setTimeout(() => {
-          this.getImageData[this.selectedWorkspace.id] = true;
-        }, 100);
-      } else {
-        this.hideWorkspaces = false;
-        this.spinner.hide();
-      }
-    } catch (error) {
-      if (error.error.message === 'Token is not valid') {
-        this.router.navigate(['/account/login']);
-      }
-      this.workspaces = [];
-      this.hideWorkspaces = false;
-      this.spinner.hide();
-    }
-  }
-
-  async onLastElementInView() {
-    await this.loadMoreData();
-  }
-
-  async loadMoreData() {
-    this.spinner.show();
-    this.workspacesPage++;
-    this.hideWorkspaces = true;
-    try {
-      let newWorkspaces = await this.workspaceService.getAll(this.workspacesPage);
-      if (newWorkspaces.length) {
-        this.initOldWorkspaces = this.workspaces.length;
-        this.workspaces = this.workspaces.concat(newWorkspaces);
-        this.selectedWorkspace = this.workspaces[this.initOldWorkspaces];
-        setTimeout(() => {
-          this.getImageData[this.selectedWorkspace.id] = true;
-        }, 100);
-      } else {
-        this.hideWorkspaces = false;
-        this.spinner.hide();
-      }
-    } catch (e) {
-      this.hideWorkspaces = false;
-      this.spinner.hide();
-    }
-  }
-
-  updateGetImageData(workspace, image) {
-    if (this.initOldWorkspaces !== -1) {
-      workspace.image = image;
-      this.initOldWorkspaces++;
-      if (this.initOldWorkspaces < this.workspaces.length) {
-        this.selectedWorkspace = this.workspaces[this.initOldWorkspaces];
-        setTimeout(() => {
-          this.getImageData[this.selectedWorkspace.id] = true;
-        }, 100);
-      } else {
-        this.initOldWorkspaces = -1;
-        this.selectedWorkspace = undefined;
-        this.hideWorkspaces = false;
-        this.spinner.hide();
-      }
+      this.showLoginButton = true;
     } else {
-      this.selectedWorkspace = undefined;
+      this.showLoginButton = false;
     }
+
+    this.eventSubscription = this.eventsService.subscribe(EventsEnum.logout, () => {
+      this.showLoginButton = true;
+    });
   }
 
-  create() {
-    this.router.navigate(['/workspace/new']);
+  ngOnDestroy() {
+    this.eventSubscription.unsubscribe();
   }
 
-  edit(workspace: IWorkspace) {
-    this.router.navigate([`/workspace/${workspace.id}`]);
+  logout() {
+    this.showLoginButton = true;
   }
 
+  goToLogin() {
+    this.router.navigate(['/account/login']);
+  }
+
+  goToWorkspaces() {
+    this.router.navigate(['/workspaces']);
+  }
 }

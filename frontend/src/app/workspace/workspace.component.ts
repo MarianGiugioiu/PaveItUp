@@ -3,13 +3,15 @@ import { IPoint, IShape } from '../generate-line/generate-line.component';
 import * as THREE from 'three';
 import { cloneDeep, random } from 'lodash';
 import { GeneralService } from '../common/services/general.service';
-import { EventsService } from '../common/services/events.service';
 import { PlaceShapesComponent } from '../place-shapes/place-shapes.component';
 import { v4 as uuidv4 } from 'uuid';
 import { WorkspaceService } from '../common/services/api/workspace.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SVGEnum } from '../common/enums/svg.enum';
+import { LocalStorageService } from '../common/services/local-storage.service';
+import { EventsService } from '../common/services/events.service';
+import { EventsEnum } from '../common/enums/events.enum';
 
 export interface IWorkspace {
   name?: string;
@@ -52,17 +54,30 @@ export class WorkspaceComponent implements OnInit {
   public SVGEnum = SVGEnum;
   public hideWorkspace = true;
 
+  private eventSubscription;
+
   constructor(
     public generalService: GeneralService,
-    public evensService: EventsService,
     public workspaceService: WorkspaceService,
     public router: Router,
     private route: ActivatedRoute,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private localStorageService: LocalStorageService,
+    private eventsService: EventsService,
     ) { }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnInit() {
+    this.eventSubscription = this.eventsService.subscribe(EventsEnum.logout, () => {
+      this.router.navigate(['/']);
+    });
+
+    const token = this.localStorageService.getItem('access_token');
+    if (!token) {
+      this.router.navigate(['/account/login']);
+      return;
+    }
     this.spinner.show();
+    this.hideWorkspace = true;
     this.workspaceId = this.route.snapshot.paramMap.get('id');
     if (this.workspaceId === 'new') {
       this.newWorkspaceName = 'New Workspace';
@@ -72,7 +87,6 @@ export class WorkspaceComponent implements OnInit {
     } else {
       try {
         this.workspace = await this.workspaceService.get(this.workspaceId);
-        
         if (!this.workspace) {
           this.spinner.hide();
           this.router.navigate(['/']);
@@ -114,12 +128,20 @@ export class WorkspaceComponent implements OnInit {
             this.spinner.hide();
           }
         }
-      } catch (e) {
+      } catch (error) {
+        if (error.error.message === 'Token is not valid') {
+          this.spinner.hide();
+          this.router.navigate(['/account/login']);
+        }
         this.hideWorkspace = false;
         this.spinner.hide();
         this.router.navigate(['/']);
       }
     }
+  }
+
+  ngOnDestroy() {
+    this.eventSubscription.unsubscribe();
   }
 
   checkIntersect(event) {
@@ -179,6 +201,9 @@ export class WorkspaceComponent implements OnInit {
             this.initOldParts = 0;
             this.selectedPart = this.parts[this.initOldParts];
             this.getImageData[this.selectedPart.partId] = true;
+          } else {
+            this.hideWorkspace = false;
+            this.spinner.hide();
           }
         }
       } else {
@@ -504,14 +529,30 @@ export class WorkspaceComponent implements OnInit {
       
       if (this.workspaceId === 'new') {
         this.spinner.show();
-        await this.workspaceService.add(workspace);
-        this.spinner.hide();
+        try {
+          await this.workspaceService.add(workspace);
+          this.spinner.hide();
+        } catch (error) {
+          if (error.error.message === 'Token is not valid') {
+            this.spinner.hide();
+            this.router.navigate(['/account/login']);
+          }
+          this.spinner.hide();
+        }
       } else {
         this.spinner.show();
-        await this.workspaceService.update(workspace);
-        this.spinner.hide();
+        try {
+          await this.workspaceService.update(workspace);
+          this.spinner.hide();
+        } catch (error) {
+          if (error.error.message === 'Token is not valid') {
+            this.spinner.hide();
+            this.router.navigate(['/account/login']);
+          }
+          this.spinner.hide();
+        }
       }
-      this.router.navigate(['/']);
+      this.router.navigate(['/workspaces']);
     }
   }
 }

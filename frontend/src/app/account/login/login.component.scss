@@ -101,3 +101,22 @@
     font-size: 18px;
     color: #0069d9;
 }
+
+
+.page-working {
+    display: flex
+}
+
+.page-not-working {
+    display: none;
+}
+
+@media (max-width: 1300px) or (max-height: 600px) {
+    .page-working {
+        display: none;
+    }
+    
+    .page-not-working {
+        display: flex;
+    }
+}

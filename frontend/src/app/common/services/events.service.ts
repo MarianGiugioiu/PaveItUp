@@ -9,7 +9,6 @@ export class EventsService {
 
   subscribe(topic: string, observer: (_: any) => void): Subscription {
     if (!this.channels[topic]) {
-      // You can also use ReplaySubject with one concequence
       this.channels[topic] = new Subject<any>();
     }
 
@@ -19,7 +18,6 @@ export class EventsService {
   publish(topic: string, data?: any): void {
     const subject = this.channels[topic];
     if (!subject) {
-      // Or you can create a new subject for future subscribers
       return;
     }
 

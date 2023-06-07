@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import * as THREE from 'three';
 import { SVGEnum } from './common/enums/svg.enum';
 import { Router } from '@angular/router';
+import { LocalStorageService } from './common/services/local-storage.service';
+import { EventsService } from './common/services/events.service';
+import { EventsEnum } from './common/enums/events.enum';
 
 @Component({
   selector: 'app-root',
@@ -12,13 +14,27 @@ export class AppComponent implements OnInit {
   public SVGEnum = SVGEnum;
   showPopup = false;
   popupPage = 0;
+  connected = false;
+  name: string;
+  authority: string;
 
-  constructor (public router: Router) {
+  constructor (
+    public router: Router,
+    private localStorageService: LocalStorageService,
+    public eventsService: EventsService
+  ) {
 
   }
 
   ngOnInit() {
-
+    const token = this.localStorageService.getItem('access_token');
+    if (!token) {
+      this.connected = false;
+    } else {
+      this.connected = true;
+      this.name = this.localStorageService.getItem('account_name');
+      this.authority = this.localStorageService.getItem('account_authority');
+    }
   }
 
   goToLogin() {
@@ -41,6 +57,25 @@ export class AppComponent implements OnInit {
   openPopupValidation() {
     this.popupPage = 1;
     this.showPopup = true;
+  }
+
+  afterLogin() {
+    this.name = this.localStorageService.getItem('account_name');
+    this.authority = this.localStorageService.getItem('account_authority');
+    this.connected = true;
+  }
+
+  logout() {
+    this.eventsService.publish(EventsEnum.logout);
+    this.localStorageService.removeItem('account_name');
+    this.localStorageService.removeItem('account_authority');
+    this.localStorageService.removeItem('access_token');
+    this.router.navigate(['/']);
+    this.connected = false;
+  }
+
+  goToWorkspaces() {
+    this.router.navigate(['/workspaces']);
   }
 
   closePopup() {

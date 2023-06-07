@@ -19,4 +19,32 @@
 
 .header-title {
     color: white;
+    text-align: center;
+    width: 600px;
+}
+
+.account-container {
+    width: 300px;
+}
+
+.pages-container {
+    width: 250px;
+}
+
+.page-label-container {
+    width: 100px;
+}
+
+.name-label {
+    color: white;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+img:hover {
+    cursor: pointer;
+}
+
+label:hover {
+    cursor: pointer;
 }

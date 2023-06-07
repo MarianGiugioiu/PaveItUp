@@ -2,11 +2,7 @@ import { Component, ElementRef, Input, OnInit, Output, ViewChild, EventEmitter, 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { GeometryService } from '../common/services/geometry.service';
-import { cloneDeep, isEqual } from 'lodash';
-import { EventsService } from '../common/services/events.service';
-import { EventsEnum } from '../common/enums/events.enum';
 import { IPoint, IShape } from '../generate-line/generate-line.component';
 import { TextureService } from '../common/services/texture.service';
 
@@ -72,7 +68,6 @@ export class EditPartComponent implements OnInit {
 
   constructor(
     public geometryService: GeometryService,
-    public eventsService: EventsService,
     public textureService: TextureService
   ) { }
 

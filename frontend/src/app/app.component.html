@@ -1,13 +1,23 @@
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 <app-info-popup *ngIf="showPopup" [showPopup]="showPopup" [popupPage]="popupPage" (closePopupEvent)="closePopup()"></app-info-popup>
 <div class="row header-container space-between">
-    <img [src]="SVGEnum.homeSVG" alt="Home" (click)="goHome()">
+    <div class="row pages-container space-between">
+        <img [src]="SVGEnum.homeSVG" alt="Home" (click)="goHome()">
+        <div class="page-label-container">
+            <label *ngIf="connected" class="name-label" (click)="goToWorkspaces()">Workspaces</label>
+        </div>
+        <div class="page-label-container">
+            <label *ngIf="connected && authority === 'manager'" class="name-label" (click)="goToWorkspaces()">Workspaces</label>
+        </div>
+    </div>
     <h2 class="header-title">PaveItUp</h2>
     <img [src]="SVGEnum.infoSVG" alt="Info" (click)="openPopup()">
-    <div class="row">
-        <img [src]="SVGEnum.signUpSVG" alt="SignUp" (click)="goToRegister()">
-        <img [src]="SVGEnum.signInSVG" alt="SignIn" (click)="goToLogin()">
-        <!-- <img [src]="SVGEnum.signOutSVG" alt="SignOut"> -->
+    <div class="row account-container flex-end">
+        <img *ngIf="!connected" [src]="SVGEnum.signUpSVG" alt="SignUp" (click)="goToRegister()">
+        <img *ngIf="!connected" [src]="SVGEnum.signInSVG" alt="SignIn" (click)="goToLogin()">
+        <img *ngIf="connected" class="field-icon" [src]="SVGEnum.nameSVG" alt="Name">
+        <label *ngIf="connected" class="name-label">{{name}}</label>
+        <img *ngIf="connected" [src]="SVGEnum.signOutSVG" alt="SignOut" (click)="logout()">
     </div>
 </div>
 <router-outlet></router-outlet>

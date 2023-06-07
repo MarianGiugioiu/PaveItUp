@@ -76,7 +76,7 @@ router.post('/login', (req, res, next) => {
       }
 
       const token = account.generateJWT();
-      return res.status(200).json({ token });
+      return res.status(200).json({ token, name: account.dataValues.name, authority: account.dataValues.authority });
   })
   .catch (next);
 });

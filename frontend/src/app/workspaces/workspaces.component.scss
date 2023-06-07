@@ -1,0 +1,56 @@
+.page-container {
+    width: calc(100vw - 20px);
+    height: calc(95vh - 20px);
+    padding: 10px;
+    background-color: #EEEEEE;
+}
+
+.workspace-list-container {
+    height: 100%;
+    width: 255px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.create-button-container {
+    height: 24px;
+    margin-bottom: 15px;
+}
+
+.workspace-container {
+    width: 250px;
+    height: 277px;
+    padding-top: 5px;
+    margin: 5px 0;
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.workspace-name-container {
+    padding: 0 5px;
+    margin-bottom: 3px;
+    width: 240px;
+}
+
+.hidden-workspaces {
+    visibility: hidden;
+}
+
+.page-working {
+    display: flex
+}
+
+.page-not-working {
+    display: none;
+}
+
+@media (max-width: 1300px) or (max-height: 600px) {
+    .page-working {
+        display: none;
+    }
+    
+    .page-not-working {
+        display: flex;
+    }
+}

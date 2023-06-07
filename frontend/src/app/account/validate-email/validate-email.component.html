@@ -1,5 +1,5 @@
 
-<div class="col page-container full-center">
+<div class="col page-container full-center page-working">
     <div class="col content-container full-center">
         <div class="col full-size full-center" *ngIf="successMessage || errorMessage === 'Email was already validated'">
             <label class="success-label">{{successMessage}}</label>
@@ -10,4 +10,8 @@
         </div>
         <label *ngIf="errorMessage === 'Validation code is invalid'" class="error-label">{{errorMessage}}</label>
     </div>
+</div>
+
+<div class="row page-container full-center page-not-working">
+    <p>This page is unavailable with dimensions smaller than 1300 / 600</p>
 </div>

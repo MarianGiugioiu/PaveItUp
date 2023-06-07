@@ -4,7 +4,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { GeometryService } from '../common/services/geometry.service';
 import { IShape } from '../generate-line/generate-line.component';
-import { EventsService } from '../common/services/events.service';
 import { TextureService } from '../common/services/texture.service';
 
 @Component({
@@ -73,7 +72,6 @@ export class PlaceShapesComponent implements OnInit {
 
   constructor(
     public geometryService: GeometryService,
-    public eventsService: EventsService,
     public textureService: TextureService
   ) { }
 
