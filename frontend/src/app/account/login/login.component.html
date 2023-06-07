@@ -15,7 +15,7 @@
                 <input class="input-container" [(ngModel)]="loginData.password" type="password" (focus)="clearError()" placeholder="Enter your password">
             </div>
             <div class="flex-end">
-                <label class="forgot-password-label">Forgot password?</label>
+                <label class="forgot-password-label" (click)="goToForgotPassword()">Forgot password?</label>
             </div>
             <div class="full-center">
                 <label class="login-error">{{error}}</label>

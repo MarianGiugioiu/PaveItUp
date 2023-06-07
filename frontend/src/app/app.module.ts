@@ -19,6 +19,8 @@ import { LastElementInViewDirective } from './common/directives/last-element-in-
 import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
 import { ValidateEmailComponent } from './account/validate-email/validate-email.component';
+import { ForgotPasswordComponent } from './account/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './account/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { ValidateEmailComponent } from './account/validate-email/validate-email.
     LastElementInViewDirective,
     LoginComponent,
     RegisterComponent,
-    ValidateEmailComponent
+    ValidateEmailComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

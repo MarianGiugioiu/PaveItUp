@@ -20,8 +20,8 @@ export interface IRegister {
 export class RegisterComponent {
   public registerData: IRegister;
   public errorMessage: string;
-  public fieldError: IRegister;
   public successMessage: string;
+  public fieldError: IRegister;
   public SVGEnum = SVGEnum;
 
   constructor (

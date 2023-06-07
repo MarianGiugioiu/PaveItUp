@@ -35,8 +35,21 @@ export class LoginComponent {
     }
   }
 
+  checkFields() {
+    if (this.loginData.username.length < 3 || this.loginData.username.length > 100 || this.loginData.password.length < 3 || this.loginData.password.length > 30) {
+      this.error = 'Username or password are incorrect';
+      return false;
+    }
+    this.error = '';
+    return true;
+  }
+
   login() {
     this.spinner.show();
+    if (!this.checkFields()) {
+      this.spinner.hide();
+      return;
+    }
     this.accountService.login(this.loginData)
     .then((result) => {
       this.localStorageService.setItem('access_token', result['token']);
@@ -59,5 +72,9 @@ export class LoginComponent {
 
   goToRegister() {
     this.router.navigate(['/account/register']);
+  }
+
+  goToForgotPassword() {
+    this.router.navigate(['/account/forgot-password']);
   }
 }

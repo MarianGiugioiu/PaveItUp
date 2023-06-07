@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { IWorkspace } from '../workspace/workspace.component';
 import { SVGEnum } from '../common/enums/svg.enum';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { LocalStorageService } from '../common/services/local-storage.service';
 
 @Component({
   selector: 'app-home',
@@ -26,10 +27,15 @@ export class HomeComponent implements OnInit {
   constructor(
     public workspaceService: WorkspaceService,
     public router: Router,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private localStorageService: LocalStorageService
   ) { }
 
   async ngOnInit(): Promise<void> {
+    const token = this.localStorageService.getItem('access_token');
+    if (!token) {
+      this.router.navigate(['/account/login']);
+    }
     this.spinner.show();
     this.hideWorkspaces = true;
     try {
@@ -44,7 +50,10 @@ export class HomeComponent implements OnInit {
         this.hideWorkspaces = false;
         this.spinner.hide();
       }
-    } catch (e) {
+    } catch (error) {
+      if (error.error.message === 'Token is not valid') {
+        this.router.navigate(['/account/login']);
+      }
       this.workspaces = [];
       this.hideWorkspaces = false;
       this.spinner.hide();

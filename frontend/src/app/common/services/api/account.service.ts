@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ILogin } from 'src/app/account/login/login.component';
 import { IRegister } from 'src/app/account/register/register.component';
+import { IResetPassword } from 'src/app/account/reset-password/reset-password.component';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +25,20 @@ export class AccountService {
   validateEmail(code: any) {
     const url = `${this.apiResource}/validate-email`;
     return this.http.post(url, code).toPromise();
+  }
+
+  sendResetPasswordCode(account: any) {
+    const url = `${this.apiResource}/send-reset-password-code`;
+    return this.http.post(url, account).toPromise();
+  }
+
+  validateResetPasswordCode(code: any) {
+    const url = `${this.apiResource}/validate-reset-password-code`;
+    return this.http.post(url, code).toPromise();
+  }
+
+  resetPassword(resource: IResetPassword) {
+    const url = `${this.apiResource}/reset-password`;
+    return this.http.patch(url, resource).toPromise();
   }
 }

@@ -1,6 +1,5 @@
 <div class="col page-container full-center">
     <div class="content-container">
-        <!-- <button (click)="showPopup()">info</button> -->
         <div class="full-center title-container">
             <label class="title-label bold">Register</label>
         </div>
@@ -51,7 +50,7 @@
             <div class="full-center">
                 <label *ngIf="successMessage" class="register-success">{{successMessage}}</label>
                 <label *ngIf="errorMessage" class="register-error">{{errorMessage}}</label>
-                <label *ngIf="!errorMessage && !successMessage" class="register-error">{{errorMessage}}</label>
+                <label *ngIf="!errorMessage && !successMessage" class="register-error"></label>
             </div>
             <div class="full-center">
                 <button class="register-button" (click)="register()">Register</button>
