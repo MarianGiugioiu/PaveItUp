@@ -409,7 +409,6 @@ export class WorkspaceComponent implements OnInit {
     if (event === true) {
       if (shape.id === '0') {
         this.isEditingSurface = false;
-        //todo:Check when shape was rotated but not saved before opening surface edit
       } else {
         this.expandedShapeDetails = undefined;
         this.parts = this.parts.map((item) => {

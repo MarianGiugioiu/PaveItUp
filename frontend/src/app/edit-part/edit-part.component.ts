@@ -109,11 +109,6 @@ export class EditPartComponent implements OnInit {
     this.scene.add(this.ambientLight);
     
     this.createPrimaryShape();
-    
-
-    if (!this.shape.wasInitialized) {
-      this.shape.rotation = 0;
-    }
 
     this.onKeyDownListener = this.onKeyDown.bind(this);
     this.onKeyUpListener = this.onKeyUp.bind(this);
@@ -141,8 +136,6 @@ export class EditPartComponent implements OnInit {
 
     document.addEventListener('keydown', this.onKeyDownListener);
     document.addEventListener('keyup', this.onKeyUpListener);
-
-    this.shape.wasInitialized = true;
   }
 
   toggleMinimize() {
