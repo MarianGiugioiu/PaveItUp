@@ -9,7 +9,10 @@
                 <button class="login-button" (click)="goToLogin()">Go To Login</button>
             </div>
 
-            <label *ngIf="!showLoginButton" class="login-label">You can manage your workspaces here</label>
+            <label class="login-label">You can send custom workspace/shape request or any feedback for the application to our official email address:</label>
+            <label class="email-label bold">paveitup.official@gmail.com</label>
+
+            <label *ngIf="!showLoginButton" class="login-label">You can manage your workspaces here:</label>
             <div *ngIf="!showLoginButton" class="full-center">
                 <button class="login-button" (click)="goToWorkspaces()">Go To Workspaces</button>
             </div>
