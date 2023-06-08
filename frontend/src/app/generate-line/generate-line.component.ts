@@ -704,7 +704,11 @@ export class GenerateLineComponent implements OnInit {
     if (this.isSurface) {
       maxValue = 20000;
     }
-    if (value && !isNaN(value) && value > 0 && value <= maxValue) {
+    let minValue = 5;
+    if (this.isSurface) {
+      minValue = 50;
+    }
+    if (value && !isNaN(value) && value > minValue && value <= maxValue) {
       this.addIteration();
       let i = +(this.selectedObject.name.replace('Point_', ''));
       let j = +(this.selectedAdjacentObject.name.replace('Point_', ''));
