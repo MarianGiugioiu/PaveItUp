@@ -51,6 +51,8 @@ export class PlaceShapesComponent implements OnInit {
 
   checkIntersectionAfterUpdate = false;
 
+  getImageData1 = false;
+
   currentHeight;
   currentBh;
   mainObject: THREE.Mesh;
@@ -159,14 +161,19 @@ export class PlaceShapesComponent implements OnInit {
         this.checkIntersectionAfterUpdate = false;
       }
       if (this.getImageData) {
+        this.getImageData1 = true;
         this.getImageData = false;
+      } else if (this.getImageData1) {
+        this.getImageData1 = false;
         const image = this.renderer.domElement.toDataURL("image/png");
-        this.canvas.removeEventListener('mousemove', this.onMouseMoveListener);
-        this.canvas.removeEventListener('mousedown', this.onMouseDownListener);
-        this.canvas.removeEventListener('mouseup', this.onMouseUpListener);
-
-        this.renderer.dispose()
-        this.renderer.forceContextLoss();
+        if (this.fromHome) {
+          this.canvas.removeEventListener('mousemove', this.onMouseMoveListener);
+          this.canvas.removeEventListener('mousedown', this.onMouseDownListener);
+          this.canvas.removeEventListener('mouseup', this.onMouseUpListener);
+  
+          this.renderer.dispose()
+          this.renderer.forceContextLoss();
+        }
         this.updateGetImageDataEvent.emit(image);
       }
     });

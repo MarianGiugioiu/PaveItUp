@@ -56,7 +56,7 @@ router.post('/', checkRole(['user', 'manager']), async (req, res, next) => {
     .catch (next);
 });
 
-router.put('/export/:id', checkRole(['manager']), (req, res, next) => {
+router.patch('/export/:id', checkRole(['manager']), (req, res, next) => {
     const { username, token } = req.body;
     Account.findOne({
         where: {

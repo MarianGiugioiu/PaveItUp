@@ -1,4 +1,4 @@
-<div *ngIf="surface" class="row page-container page-working" [ngClass]="hideWorkspace ? 'hidden-workspace' : (isEditingSurface ? 'full-center' : 'space-between')">
+<div *ngIf="surface" class="row page-container page-working" [ngClass]="previewActive ? 'preview-mode' : (hideWorkspace ? 'hidden-workspace' : (isEditingSurface ? 'full-center' : 'space-between'))">
     <div *ngIf="isEditingSurface" class="row surface-edit-container">
         <app-generate-line  [shape]="surface" [isSurface]=true [canDoActions]="isEditingSurface" (updateMinimizationEvent)="updateShapeMinimization($event, surface)"></app-generate-line>
     </div>
@@ -8,9 +8,15 @@
                 <img [src]="SVGEnum.editSVG" alt="Edit" (click)="openSurfaceEdit()">
                 <input *ngIf="workspaceId === 'new'" [(ngModel)]="newWorkspaceName"/>
                 <input *ngIf="workspaceId !== 'new' && workspace" [(ngModel)]="workspace.name"/>
-                <img *ngIf="!isEditingSurface" [src]="SVGEnum.saveSVG" alt="Save" (click)="saveWorkspace()">
+                <img [src]="SVGEnum.saveSVG" alt="Save" (click)="saveWorkspace()">
             </div>
-            <app-place-shapes #editedSurface *ngIf="!isEditingSurface" [surface]="surface" [parts]="surfaceParts" [selectedPart]="selectedPart" [updateFromShape]="updateFromShape" (choosePartEvent)="choosePartFromSurface($event)" (checkIntersectEvent)="checkIntersect($event)"></app-place-shapes>
+            <div class="row surface-options" [ngClass]="authority === 'manager' && workspaceId !== 'new' ? 'space-between' : 'full-center'">
+                <img [src]="SVGEnum.previewSVG" alt="Preview" (click)="!expandedShapeDetails && goToPreview()">
+                <input *ngIf="authority === 'manager' && workspaceId !== 'new' && isExporting" [(ngModel)]="exportAddress"/>
+                <img *ngIf="authority === 'manager' && workspaceId !== 'new' && isExporting" [ngClass]="exportError ? 'export-address-error' : ''" [src]="SVGEnum.saveSVG" alt="Save" (click)="export()">
+                <img *ngIf="authority === 'manager' && workspaceId !== 'new' && !isExporting" [src]="SVGEnum.exportSVG" alt="Export" (click)="openExport()">
+            </div>
+            <app-place-shapes #editedSurface *ngIf="!isEditingSurface" [surface]="surface" [parts]="surfaceParts" [selectedPart]="selectedPart" [updateFromShape]="updateFromShape" [getImageData]="getImageData['-1']" (updateGetImageDataEvent)="updateGetImageDataWorkspace($event)" (choosePartEvent)="choosePartFromSurface($event)" (checkIntersectEvent)="checkIntersect($event)"></app-place-shapes>
         </div>
     </div>
     <div *ngIf="!isEditingSurface" class="separating-line"></div>
@@ -46,6 +52,44 @@
                 <div class="row">
                     <img *ngIf="!(shape.id === expandedShapeDetails?.id)" width="150px" height="150px" [src]="shape.image">
                     <app-generate-line *ngIf="(shape.id === expandedShapeDetails?.id)" [shape]="shape" [getImageData]="getImageData[shape.id]" (updateGetImageDataEvent)="updateGetImageData(shape)" [isCanvasMinimized]="!(shape.id === expandedShapeDetails?.id)" [canDoActions]="(shape.id === expandedShapeDetails?.id)" (updateMinimizationEvent)="updateShapeMinimization($event, shape)"></app-generate-line>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div #screen *ngIf="surface" class="col page-container-preview page-working" [ngClass]="!previewActive ? 'preview-mode' : ''">
+    <div class="row preview-header-container full-center">
+        <img *ngIf="!previewDownload" [src]="SVGEnum.editSVG" alt="Edit" (click)="exitPreview()">
+        <label *ngIf="workspaceId === 'new'" class="preview-header-title bold">{{newWorkspaceName}}</label>
+        <label *ngIf="workspaceId !== 'new' && workspace" class="preview-header-title bold">{{workspace.name}}</label>
+        <img *ngIf="!previewDownload" [src]="SVGEnum.downloadSVG" alt="Download" (click)="download()">
+    </div>
+    <div class="row space-between preview-content-container">
+        <div class="col full-center">
+            <img width="400px" height="400px" [src]="workspaceImage">
+        </div>
+        <div class="col preview-shape-col-container space-between">
+            <div class="row preview-shape-row-container" *ngFor="let shape of shapes.slice(0, 7)">
+                <img width="60px" height="60px" [src]="shape.image">
+                <div class="full-center">
+                    <label class="preview-shape-label">X{{calculateNumberOfParts(shape)}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col preview-shape-col-container space-between">
+            <div class="row preview-shape-row-container" *ngFor="let shape of shapes.slice(7, 14)">
+                <img width="60px" height="60px" [src]="shape.image">
+                <div class="full-center">
+                    <label class="preview-shape-label">X{{calculateNumberOfParts(shape)}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col preview-shape-col-container space-between">
+            <div class="row preview-shape-row-container" class="row" *ngFor="let shape of shapes.slice(14, 20)">
+                <img width="60px" height="60px" [src]="shape.image">
+                <div class="full-center">
+                    <label class="preview-shape-label">X{{calculateNumberOfParts(shape)}}</label>
                 </div>
             </div>
         </div>

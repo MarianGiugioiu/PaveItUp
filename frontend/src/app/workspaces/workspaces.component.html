@@ -7,7 +7,10 @@
             <div class="col">
                 <div class="row space-between workspace-name-container">
                     <label>{{workspace.name}}</label>
-                    <img [src]="SVGEnum.editSVG" alt="Edit" (click)="edit(workspace)">
+                    <div class="row">
+                        <img [src]="SVGEnum.editSVG" alt="Edit" (click)="edit(workspace)">
+                        <img [src]="SVGEnum.deleteSVG" alt="Delete" (click)="delete(workspace)">
+                    </div>
                 </div>
                 <div *ngIf="!(this.selectedWorkspace?.id === workspace.id)">
                     <img width="250px" height="250px" [src]="workspace.image">

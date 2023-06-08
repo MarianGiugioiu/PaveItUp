@@ -106,7 +106,7 @@ export class WorkspacesComponent implements OnInit {
       if (this.initOldWorkspaces < this.workspaces.length) {
         this.selectedWorkspace = this.workspaces[this.initOldWorkspaces];
         setTimeout(() => {
-          this.getImageData[this.selectedWorkspace.id] = true;
+          this.getImageData[this.selectedWorkspace?.id] = true;
         }, 100);
       } else {
         this.initOldWorkspaces = -1;
@@ -125,6 +125,26 @@ export class WorkspacesComponent implements OnInit {
 
   edit(workspace: IWorkspace) {
     this.router.navigate([`/workspace/${workspace.id}`]);
+  }
+
+  async delete(workspace: IWorkspace) {
+    this.spinner.show();
+    try {
+      await this.workspaceService.delete(workspace.id);
+      this.workspaces =  this.workspaces.filter(item => item.id !== workspace.id);
+      this.spinner.hide();
+      if (this.workspaces.length < 3) {
+        this.workspaces = [];
+        this.workspacesPage = -1;
+        this.loadMoreData();
+      }
+    } catch (error) {
+      if (error.error.message === 'Token is not valid') {
+        this.spinner.hide();
+        this.router.navigate(['/account/login']);
+      }
+      this.spinner.hide();
+    }
   }
 
 }

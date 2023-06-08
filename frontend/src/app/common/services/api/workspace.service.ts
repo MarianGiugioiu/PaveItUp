@@ -43,4 +43,18 @@ export class WorkspaceService {
     const url = `${this.apiResource}/${resource.id}`;
     return this.http.put(url, resource, { headers }).toPromise();
   }
+
+  export(resource: any, id: string) {
+    const token = this.localStorageService.getItem('access_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const url = `${this.apiResource}/export/${id}`;
+    return this.http.patch(url, resource, { headers }).toPromise();
+  }
+
+  delete(id: string) {
+    const token = this.localStorageService.getItem('access_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const url = `${this.apiResource}/${id}`;
+    return this.http.delete(url, { headers }).toPromise();
+  }
 }

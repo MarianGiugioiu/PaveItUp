@@ -23,6 +23,7 @@ import { ForgotPasswordComponent } from './account/forgot-password/forgot-passwo
 import { ResetPasswordComponent } from './account/reset-password/reset-password.component';
 import { HomeComponent } from './home/home.component';
 import { DetailsComponent } from './account/details/details.component';
+import { NgxCaptureModule } from 'ngx-capture';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { DetailsComponent } from './account/details/details.component';
     ColorPickerModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    NgxCaptureModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

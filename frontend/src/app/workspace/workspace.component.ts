@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IPoint, IShape } from '../generate-line/generate-line.component';
 import * as THREE from 'three';
 import { cloneDeep, random } from 'lodash';
@@ -12,6 +12,8 @@ import { SVGEnum } from '../common/enums/svg.enum';
 import { LocalStorageService } from '../common/services/local-storage.service';
 import { EventsService } from '../common/services/events.service';
 import { EventsEnum } from '../common/enums/events.enum';
+import { NgxCaptureService } from 'ngx-capture';
+import { saveAs} from 'file-saver';
 
 export interface IWorkspace {
   name?: string;
@@ -29,6 +31,7 @@ export interface IWorkspace {
 })
 export class WorkspaceComponent implements OnInit {
   @ViewChild('editedSurface') editedSurface: PlaceShapesComponent;
+  @ViewChild('screen') screen: any;
   public workspaceId: string;
   public newWorkspaceName: string;
   public workspace: IWorkspace;
@@ -52,7 +55,14 @@ export class WorkspaceComponent implements OnInit {
   public initOldParts = -1;
 
   public SVGEnum = SVGEnum;
+  public authority: string;
   public hideWorkspace = true;
+  public workspaceImage: string;
+  public previewActive = false;
+  public previewDownload = false;
+  public isExporting = false;
+  public exportAddress = '';
+  public exportError = '';
 
   private eventSubscription;
 
@@ -64,9 +74,11 @@ export class WorkspaceComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private localStorageService: LocalStorageService,
     private eventsService: EventsService,
+    private captureService: NgxCaptureService
     ) { }
 
   async ngOnInit() {
+    this.authority = this.localStorageService.getItem('account_authority');
     this.eventSubscription = this.eventsService.subscribe(EventsEnum.logout, () => {
       this.router.navigate(['/']);
     });
@@ -148,6 +160,12 @@ export class WorkspaceComponent implements OnInit {
     this.intersectsExist = event;
   }
 
+  updateGetImageDataWorkspace(image) {
+    this.workspaceImage = image;
+    this.getImageData['-1'] = false;
+    this.previewActive = true;
+  }
+
   updateGetImageData(shape) {
     this.getImageData[shape.partId ? shape.partId : shape.id] = false;
     if (this.isGoingToEditSurface) {
@@ -212,6 +230,37 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
+  openExport() {
+    this.isExporting = true;
+  }
+
+  async export() {
+    this.spinner.show();
+    try {
+      await this.workspaceService.export({username: this.exportAddress}, this.workspace.id);
+      this.exportAddress = '';
+      this.isExporting = false;
+      this.spinner.hide();
+      this.router.navigate(['/workspaces']);
+    } catch (error) {
+      if (error.error.message === 'Token is not valid') {
+        this.spinner.hide();
+        this.router.navigate(['/account/login']);
+      } else if (error.status === 404) {
+        this.exportError = 'Account not found';
+      }
+      this.spinner.hide();
+    }
+  }
+
+  goToPreview() {
+    this.getImageData['-1'] = true;
+  }
+
+  exitPreview() {
+    this.previewActive = false;
+  }
+
   createNewPoints() {
     return [
       {
@@ -245,7 +294,7 @@ export class WorkspaceComponent implements OnInit {
   }
 
   addNewShape(shape: IShape = undefined) {
-    if (!this.expandedShapeDetails) {
+    if (!this.expandedShapeDetails && this.shapes.length < 20) {
       const id = uuidv4();
       const nameId = this.createNewId('Shape');
       const name = this.createNewName('Shape', nameId);
@@ -554,5 +603,19 @@ export class WorkspaceComponent implements OnInit {
       }
       this.router.navigate(['/workspaces']);
     }
+  }
+
+  calculateNumberOfParts(shape: IShape) {
+    return this.parts.filter(item => item.id === shape.id).length;
+  }
+
+  download() {
+    this.previewDownload = true;
+    setTimeout(() => {
+      this.captureService.getImage(this.screen.nativeElement, true).subscribe(img=>{
+        saveAs(img, `${this.workspaceId === 'new' ? this.newWorkspaceName : this.workspace.name}.png`)
+        this.previewDownload = false;
+      });
+    }, 100);
   }
 }
