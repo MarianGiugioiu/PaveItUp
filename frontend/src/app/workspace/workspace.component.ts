@@ -235,21 +235,23 @@ export class WorkspaceComponent implements OnInit {
   }
 
   async export() {
-    this.spinner.show();
-    try {
-      await this.workspaceService.export({username: this.exportAddress}, this.workspace.id);
-      this.exportAddress = '';
-      this.isExporting = false;
-      this.spinner.hide();
-      this.router.navigate(['/workspaces']);
-    } catch (error) {
-      if (error.error.message === 'Token is not valid') {
+    if (this.checkWorkspaceName(this.workspace.name)) {
+      this.spinner.show();
+      try {
+        await this.workspaceService.export({username: this.exportAddress}, this.workspace.id);
+        this.exportAddress = '';
+        this.isExporting = false;
         this.spinner.hide();
-        this.router.navigate(['/account/login']);
-      } else if (error.status === 404) {
-        this.exportError = 'Account not found';
+        this.router.navigate(['/workspaces']);
+      } catch (error) {
+        if (error.error.message === 'Token is not valid') {
+          this.spinner.hide();
+          this.router.navigate(['/account/login']);
+        } else if (error.status === 404) {
+          this.exportError = 'Account not found';
+        }
+        this.spinner.hide();
       }
-      this.spinner.hide();
     }
   }
 
@@ -560,6 +562,13 @@ export class WorkspaceComponent implements OnInit {
     }
     return part;
   }
+
+  checkWorkspaceName(name: string) {
+    if (name.length < 3 || name.length > 50) {
+      return false;
+    }
+    return true;
+  }
   
   async saveWorkspace() {
     if (!this.intersectsExist) {
@@ -575,33 +584,37 @@ export class WorkspaceComponent implements OnInit {
         parts: JSON.stringify(this.surfaceParts.reverse()),
         shapes: JSON.stringify(newShapes)
       };
+
+      this.surfaceParts.reverse();
       
-      if (this.workspaceId === 'new') {
-        this.spinner.show();
-        try {
-          await this.workspaceService.add(workspace);
-          this.spinner.hide();
-        } catch (error) {
-          if (error.error.message === 'Token is not valid') {
+      if (this.checkWorkspaceName(workspace.name)) {
+        if (this.workspaceId === 'new') {
+          this.spinner.show();
+          try {
+            await this.workspaceService.add(workspace);
             this.spinner.hide();
-            this.router.navigate(['/account/login']);
-          }
-          this.spinner.hide();
-        }
-      } else {
-        this.spinner.show();
-        try {
-          await this.workspaceService.update(workspace);
-          this.spinner.hide();
-        } catch (error) {
-          if (error.error.message === 'Token is not valid') {
+          } catch (error) {
+            if (error.error.message === 'Token is not valid') {
+              this.spinner.hide();
+              this.router.navigate(['/account/login']);
+            }
             this.spinner.hide();
-            this.router.navigate(['/account/login']);
           }
-          this.spinner.hide();
+        } else {
+          this.spinner.show();
+          try {
+            await this.workspaceService.update(workspace);
+            this.spinner.hide();
+          } catch (error) {
+            if (error.error.message === 'Token is not valid') {
+              this.spinner.hide();
+              this.router.navigate(['/account/login']);
+            }
+            this.spinner.hide();
+          }
         }
+        this.router.navigate(['/workspaces']);
       }
-      this.router.navigate(['/workspaces']);
     }
   }
 

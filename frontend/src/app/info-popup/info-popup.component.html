@@ -3,10 +3,13 @@
         <div class="row header-container space-between">
             <h2 class="header-title">Info</h2>
             <div class="row full-center options-container">
-                <div class="first-option-container full-center option-container" [ngClass]="popupPage === 0 ? 'selected-option' : ''" (click)="changePage(0)">
+                <div class="full-center option-container" [ngClass]="popupPage === 0 ? 'selected-option' : ''" (click)="changePage(0)">
                     <label>Buttons</label>
                 </div>
-                <div class="option-container full-center" [ngClass]="popupPage === 1 ? 'selected-option' : ''" (click)="changePage(1)">
+                <div class="option-container first-option-container full-center" [ngClass]="popupPage === 1 ? 'selected-option' : ''" (click)="changePage(1)">
+                    <label>Values</label>
+                </div>
+                <div class="option-container full-center" [ngClass]="popupPage === 2 ? 'selected-option' : ''" (click)="changePage(2)">
                     <label>Controls</label>
                 </div>
             </div>
@@ -90,8 +93,54 @@
                     <img [src]="SVGEnum.exportSVG" alt="Export">
                     <label class="full-center info-line-label">Exports the shape</label>
                 </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.downloadSVG" alt="Download">
+                    <label class="full-center info-line-label">Downloads the instructions for the workspace</label>
+                </div>
+                <div class="row info-line-container">
+                    <img [src]="SVGEnum.previewSVG" alt="Preview">
+                    <label class="full-center info-line-label">Opens workspace preview window</label>
+                </div>
             </div>
             <div *ngIf="popupPage === 1" class="col">
+                <div class="row info-line-container">
+                    <label class="align-center values-info-label bold">Account name:</label>
+                    <label class="full-center info-line-label">Length between 3 and 50</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center values-info-label bold">Account name:</label>
+                    <label class="full-center info-line-label">Must start with a letter</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center values-info-label bold">Username:</label>
+                    <label class="full-center info-line-label">Length between 3 and 100</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center values-info-label bold">Password:</label>
+                    <label class="full-center info-line-label">Length between 3 and 30</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center values-info-label bold">Password:</label>
+                    <label class="full-center info-line-label">Must contain at least one digit, uppercase letter, lowercase letter and symbol</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center values-info-label bold">Workspace name:</label>
+                    <label class="full-center info-line-label">Length between 3 and 50</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center values-info-label bold">Shape name:</label>
+                    <label class="full-center info-line-label">Length between 3 and 50</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center values-info-label bold">Point coordinates:</label>
+                    <label class="full-center info-line-label">Value between 3 and 50</label>
+                </div>
+                <div class="row info-line-container">
+                    <label class="align-center values-info-label bold">Edge length:</label>
+                    <label class="full-center info-line-label">Value between 3 and 50</label>
+                </div>
+            </div>
+            <div *ngIf="popupPage === 2" class="col">
                 <div class="row info-line-container">
                     <label class="align-center control-info-label"><label class="bold">r</label> + <label class="bold">1</label> : </label>
                     <label class="full-center info-line-label">Rotates shape or part anti-clockwise</label>

@@ -13,7 +13,7 @@
   
 .popup-container {
   background-color: #EEEEEE;
-  width: 600px;
+  width: 750px;
   height: 600px;
   padding: 5px;
   border-radius: 4px;
@@ -60,6 +60,7 @@
 }
 
 .first-option-container {
+  border-left: 2px solid #c0c0c0;
   border-right: 2px solid #c0c0c0;
 }
 
@@ -82,6 +83,10 @@
 
 .control-info-label {
   width: 70px;
+}
+
+.values-info-label {
+  width: 140px;
 }
 
 .bold {
