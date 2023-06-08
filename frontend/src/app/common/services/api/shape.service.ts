@@ -1,53 +1,54 @@
 import { Injectable } from '@angular/core';
-import { IWorkspace } from 'src/app/workspace/workspace.component';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { LocalStorageService } from '../local-storage.service';
+import { IShape } from 'src/app/generate-line/generate-line.component';
+
+export interface IShapeParams {
+  limit: number;
+  page: number;
+  accountName: string;
+  official: number;
+  mine: number;
+  validated: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class WorkspaceService {
-  private apiResource = 'http://localhost:3000/workspaces';
+export class ShapeService {
+  private apiResource = 'http://localhost:3000/shapes';
   
   constructor(
     private http: HttpClient,
     private localStorageService: LocalStorageService
   ) { }
 
-  getAll(page: number): Promise<any> {
+  getAll(queryParams: IShapeParams): Promise<any> {
     const token = this.localStorageService.getItem('access_token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     const url = this.apiResource;
-    const params = new HttpParams().set('page', page);
+    const params = new HttpParams()
+      .set('page', queryParams.page)
+      .set('limit', queryParams.limit)
+      .set('accountName', queryParams.accountName)
+      .set('official', queryParams.official)
+      .set('mine', queryParams.mine)
+      .set('validated', queryParams.validated)
     return this.http.get(url, { headers, params }).toPromise();
   }
 
-  get(id: string) {
-    const token = this.localStorageService.getItem('access_token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    const url = `${this.apiResource}/${id}`;
-    return this.http.get(url, { headers }).toPromise();
-  }
-
-  add(resource: IWorkspace) {
+  add(resource: IShape) {
     const token = this.localStorageService.getItem('access_token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     const url = this.apiResource;
     return this.http.post(url, resource, { headers }).toPromise();
   }
 
-  update(resource: IWorkspace) {
+  validate(id: string) {
     const token = this.localStorageService.getItem('access_token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    const url = `${this.apiResource}/${resource.id}`;
-    return this.http.put(url, resource, { headers }).toPromise();
-  }
-
-  export(resource: any, id: string) {
-    const token = this.localStorageService.getItem('access_token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    const url = `${this.apiResource}/export/${id}`;
-    return this.http.patch(url, resource, { headers }).toPromise();
+    const url = `${this.apiResource}/validate/${id}`;
+    return this.http.patch(url { headers }).toPromise();
   }
 
   delete(id: string) {

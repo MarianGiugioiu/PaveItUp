@@ -4,6 +4,7 @@ import { handleError } from './routes/middleware.js';
 import { accountRouter } from './routes/account.js';
 import { workspaceRouter } from './routes/workspace.js';
 import cors from 'cors'
+import { shapeRouter } from './routes/shape.js';
 
 const app = express();
 app.use(express.json());
@@ -17,6 +18,7 @@ app.get('/health', (req, res) => {
 
 app.use('/accounts', accountRouter);
 app.use('/workspaces', workspaceRouter);
+app.use('/workspaces', shapeRouter);
 
 app.use(handleError);
 

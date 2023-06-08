@@ -4,6 +4,7 @@ import { SequelizeService } from "../config/db.js";
 export class Shape extends Model {
   id;
   accountId;
+  accountName;
   official;
   cameraRatioShape;
   valid;
@@ -23,14 +24,19 @@ Shape.init(
       field: "id",
     },
     accountId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        field: "account_id",
+      type: DataTypes.UUID,
+      allowNull: false,
+      field: "account_id",
     },
     name: {
       type: DataTypes.STRING(50),
       allowNull: false,
       field: "name",
+    },
+    accountName: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      field: "account_name",
     },
     cameraRatioShape: {
       type: DataTypes.INTEGER,
@@ -53,14 +59,14 @@ Shape.init(
       field: "official",
     },
     color: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        field: "color",
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      field: "color",
     },
     points: {
-        type: DataTypes.JSON,
-        allowNull: false,
-        field: "points",
+      type: DataTypes.JSON,
+      allowNull: false,
+      field: "points",
     },
   },
   {
