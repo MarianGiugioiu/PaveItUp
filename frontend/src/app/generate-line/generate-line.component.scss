@@ -89,12 +89,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 130px;
+    width: 135px;
     height: 80px !important;
 }
 
 .point-details-container {
-    width: 65px;
+    width: 70px;
     height: 100px;
     justify-content: center;
     align-items: center;
@@ -109,7 +109,7 @@
 }
 
 .point-pos-input {
-    width: 35px;
+    width: 40px;
 }
 
 .polygon-verices-input {
@@ -119,7 +119,7 @@
 
 .line-length-input {
     margin-left: 3px;
-    width: 45px
+    width: 50px;
 }
 
 .button-red {
@@ -127,55 +127,43 @@
     background-color: red !important;
 }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type=number] {
-    appearance: textfield;
-    -moz-appearance: textfield;
-}
-
 .property-line-up {
     border-bottom: 1px solid black;
-    width: 20px;
+    width: 15px;
     transform: rotate(45deg);
     transform-origin: bottom right;
  }
 
  .property-line-horizontal {
     border-bottom: 1px solid black;
-    width: 20px;
+    width: 15px;
     transform-origin: bottom right;
  }
 
  .property-line-down {
     border-bottom: 1px solid black;
-    width: 20px;
+    width: 15px;
     transform: rotate(-45deg);
     transform-origin: bottom right;
  }
 
  .adjacent-line-up {
     border-bottom: 1px solid black;
-    width: 30px;
+    width: 25px;
     transform: rotate(-45deg);
     transform-origin: top left;
  }
 
  .adjacent-line-down {
     border-bottom: 1px solid black;
-    width: 30px;
+    width: 25px;
     transform: rotate(45deg);
     transform-origin: top left;
  }
 
  .adjacent-propery-line-horizontal {
     border-bottom: 1px solid black;
-    width: 10px;
+    width: 25px;
     transform-origin: top left;
  }
 

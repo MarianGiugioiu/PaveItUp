@@ -40,6 +40,8 @@ export class GenerateLineComponent implements OnInit {
     return this.canvasRef?.nativeElement;
   }
 
+  @Input() cameraRatioSurface: number;
+  @Input() cameraRatioShape: number;
   @Input() shape: IShape;
   @Input() isCanvasMinimized;
   @Input() canDoActions;
@@ -121,13 +123,13 @@ export class GenerateLineComponent implements OnInit {
   }
 
   async ngAfterViewInit() {
-    let ratio = 1;
+    let ratio = this.cameraRatioShape;
     if (this.isSurface) {
-      ratio = 12; //Modificare suprafata
-      this.cameraRatio = ratio;
-      this.textOffset.x = this.textOffset.x * ratio;
-      this.textOffset.y = this.textOffset.y * ratio;
+      ratio = this.cameraRatioSurface;
     }
+    this.textOffset.x = this.textOffset.x * ratio;
+    this.textOffset.y = this.textOffset.y * ratio;
+    this.cameraRatio = ratio;
     this.canvas.width = this.canvasWidth;
     this.canvas.height = this.canvasHeight;
 
@@ -387,9 +389,8 @@ export class GenerateLineComponent implements OnInit {
   createRegularPolygon() {
     if (this.regularPolygonEdgesNumber && !isNaN(this.regularPolygonEdgesNumber) && this.regularPolygonEdgesNumber >= 3 && this.regularPolygonEdgesNumber <= 20) {
       let radius = Math.sqrt(2) / 2;
-      if (this.isSurface) {
-        radius *= this.cameraRatio;
-      }
+      radius *= this.cameraRatio;
+      
       const n = this.regularPolygonEdgesNumber;
       const angle = (2 * Math.PI) / n;
       const vertices = [];
@@ -681,8 +682,11 @@ export class GenerateLineComponent implements OnInit {
 
   updatePoint(event, axis, item: IPoint) {
     const value = event.target.value;
-    
-    if (!isNaN(value)) {
+    let maxValue = 400;
+    if (this.isSurface) {
+      maxValue = 20000;
+    }
+    if (!isNaN(value) && Math.abs(value) <= maxValue) {
       let position = item.object.position;
       if (axis === 'x') {
         position.x = parseFloat(value);
@@ -696,7 +700,11 @@ export class GenerateLineComponent implements OnInit {
 
   updateLength(event) {
     const value = event.target.value;
-    if (value && !isNaN(value) && value > 0) {
+    let maxValue = 400;
+    if (this.isSurface) {
+      maxValue = 20000;
+    }
+    if (value && !isNaN(value) && value > 0 && value <= maxValue) {
       this.addIteration();
       let i = +(this.selectedObject.name.replace('Point_', ''));
       let j = +(this.selectedAdjacentObject.name.replace('Point_', ''));

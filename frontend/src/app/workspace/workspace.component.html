@@ -1,6 +1,37 @@
-<div *ngIf="surface" class="row page-container page-working" [ngClass]="previewActive ? 'preview-mode' : (hideWorkspace ? 'hidden-workspace' : (isEditingSurface ? 'full-center' : 'space-between'))">
-    <div *ngIf="isEditingSurface" class="row surface-edit-container">
-        <app-generate-line  [shape]="surface" [isSurface]=true [canDoActions]="isEditingSurface" (updateMinimizationEvent)="updateShapeMinimization($event, surface)"></app-generate-line>
+<!-- <div *ngIf="isSelectingDimensions" class="row page-container full-center page-working">
+    <div class="row space-between">
+        <input [(ngModel)]="cameraRatioSurface" type="number"/>
+        <input [(ngModel)]="cameraRatioShape" type="number"/>
+        <button (click)="saveDimensions()">Save</button>
+    </div>
+</div> -->
+<div *ngIf="isSelectingDimensions" class="col page-container full-center page-working">
+    <div class="content-container">
+        <div class="col full-center title-container">
+            <label class="title-label bold">Dimensions</label>
+            <label class="subtitle-label">Choose default dimensions for the edges of the surface and shape in cm</label>
+        </div>
+        <div class="col">
+            <label class="field-label-container">Default surface edge length</label>
+            <div class="row field-container">
+                <input class="input-container" [(ngModel)]="cameraRatioSurface" type="number" (focus)="clearError()" placeholder="Enter your value">
+            </div>
+            <label class="field-label-container">Default shape edge length</label>
+            <div class="row field-container">
+                <input class="input-container" [(ngModel)]="cameraRatioShape" type="number" (focus)="clearError()" placeholder="Enter your value">
+            </div>
+            <div class="full-center">
+                <label class="login-error">{{error}}</label>
+            </div>
+            <div class="full-center">
+                <button class="login-button" (click)="saveDimensions()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="surface && !isSelectingDimensions" class="row page-container page-working" [ngClass]="previewActive ? 'preview-mode' : (hideWorkspace ? 'hidden-workspace' : (isEditingSurface ? 'full-center' : 'space-between'))">
+    <div *ngIf="isEditingSurface" class="col surface-edit-container">
+        <app-generate-line [cameraRatioSurface]="cameraRatioSurface" [cameraRatioShape]="cameraRatioShape" [shape]="surface" [isSurface]=true [canDoActions]="isEditingSurface" (updateMinimizationEvent)="updateShapeMinimization($event, surface)"></app-generate-line>
     </div>
     <div *ngIf="!isEditingSurface" class="row surface-container align-center">
         <div class="col full-center surface-options-container">
@@ -16,7 +47,7 @@
                 <img *ngIf="authority === 'manager' && workspaceId !== 'new' && isExporting" [ngClass]="exportError ? 'export-address-error' : ''" [src]="SVGEnum.saveSVG" alt="Save" (click)="export()">
                 <img *ngIf="authority === 'manager' && workspaceId !== 'new' && !isExporting" [src]="SVGEnum.exportSVG" alt="Export" (click)="openExport()">
             </div>
-            <app-place-shapes #editedSurface *ngIf="!isEditingSurface" [surface]="surface" [parts]="surfaceParts" [selectedPart]="selectedPart" [updateFromShape]="updateFromShape" [getImageData]="getImageData['-1']" (updateGetImageDataEvent)="updateGetImageDataWorkspace($event)" (choosePartEvent)="choosePartFromSurface($event)" (checkIntersectEvent)="checkIntersect($event)"></app-place-shapes>
+            <app-place-shapes #editedSurface *ngIf="!isEditingSurface" [cameraRatioSurface]="cameraRatioSurface" [cameraRatioShape]="cameraRatioShape" [surface]="surface" [parts]="surfaceParts" [selectedPart]="selectedPart" [updateFromShape]="updateFromShape" [getImageData]="getImageData['-1']" (updateGetImageDataEvent)="updateGetImageDataWorkspace($event)" (choosePartEvent)="choosePartFromSurface($event)" (checkIntersectEvent)="checkIntersect($event)"></app-place-shapes>
         </div>
     </div>
     <div *ngIf="!isEditingSurface" class="separating-line"></div>
@@ -27,7 +58,7 @@
                     <label class="full-center">{{part?.name}}</label>
                     <img [src]="SVGEnum.deleteSVG" alt="Remove" (click)="deletePart(i)">
                 </div>
-                <app-edit-part *ngIf="(selectedPart?.partId === part.partId)" (click)="toggleSelectPart(part)" [shape]="part" [getImageData]="getImageData[part.partId]" (updateGetImageDataEvent)="updateGetImageData(part)" [isCanvasMinimized]="true" [canDoActions]="false" [canRotate]="selectedPart?.partId === part.partId" (updatePartRotationEvent)="updatePartRotation()"></app-edit-part>
+                <app-edit-part *ngIf="(selectedPart?.partId === part.partId)" [cameraRatioSurface]="cameraRatioSurface" [cameraRatioShape]="cameraRatioShape" (click)="toggleSelectPart(part)" [shape]="part" [getImageData]="getImageData[part.partId]" (updateGetImageDataEvent)="updateGetImageData(part)" [isCanvasMinimized]="true" [canDoActions]="false" [canRotate]="selectedPart?.partId === part.partId" (updatePartRotationEvent)="updatePartRotation()"></app-edit-part>
                 <img *ngIf="!(selectedPart?.partId === part.partId)" (click)="toggleSelectPart(part)" width="150px" height="150px" [src]="part.image">
             </div>
         </div>
@@ -51,7 +82,7 @@
                 </div>
                 <div class="row">
                     <img *ngIf="!(shape.id === expandedShapeDetails?.id)" width="150px" height="150px" [src]="shape.image">
-                    <app-generate-line *ngIf="(shape.id === expandedShapeDetails?.id)" [shape]="shape" [getImageData]="getImageData[shape.id]" (updateGetImageDataEvent)="updateGetImageData(shape)" [isCanvasMinimized]="!(shape.id === expandedShapeDetails?.id)" [canDoActions]="(shape.id === expandedShapeDetails?.id)" (updateMinimizationEvent)="updateShapeMinimization($event, shape)"></app-generate-line>
+                    <app-generate-line *ngIf="(shape.id === expandedShapeDetails?.id)" [cameraRatioSurface]="cameraRatioSurface" [cameraRatioShape]="cameraRatioShape" [shape]="shape" [getImageData]="getImageData[shape.id]" (updateGetImageDataEvent)="updateGetImageData(shape)" [isCanvasMinimized]="!(shape.id === expandedShapeDetails?.id)" [canDoActions]="(shape.id === expandedShapeDetails?.id)" (updateMinimizationEvent)="updateShapeMinimization($event, shape)"></app-generate-line>
                 </div>
             </div>
         </div>

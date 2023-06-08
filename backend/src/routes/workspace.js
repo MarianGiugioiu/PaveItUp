@@ -43,11 +43,13 @@ router.get('/:id', checkRole(['user', 'manager']), async (req, res, next) => {
 });
 
 router.post('/', checkRole(['user', 'manager']), async (req, res, next) => {
-    const { id, name, surface, shapes, parts, token } = req.body;
+    const { id, name, cameraRatioSurface, cameraRatioShape, surface, shapes, parts, token } = req.body;
     Workspace.create({
         id,
         accountId: token.id,
         name,
+        cameraRatioSurface,
+        cameraRatioShape,
         surface,
         shapes,
         parts
@@ -86,9 +88,11 @@ router.patch('/export/:id', checkRole(['manager']), (req, res, next) => {
 });
 
 router.put('/:id', checkRole(['user', 'manager']), (req, res, next) => {
-    const { name, surface, shapes, parts, token } = req.body;
+    const { name, cameraRatioSurface, cameraRatioShape, surface, shapes, parts, token } = req.body;
     Workspace.update({
         name,
+        cameraRatioSurface,
+        cameraRatioShape,
         surface,
         shapes,
         parts

@@ -27,8 +27,8 @@
 }
 
 .surface-edit-container {
-    width: 600px;
-    height: 450px;
+    width: 582px;
+    height: 500px;
 }
 
 .surface-container {
@@ -179,4 +179,75 @@
     .page-not-working {
         display: flex;
     }
+}
+
+
+
+.content-container {
+    padding: 30px;
+    border-radius: 10px;
+    height: 350px;
+    width: 300px;
+    background-color: white;
+    border: 1px solid #c0c0c0;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.title-container {
+    height: 80px;
+    gap: 20px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.title-label {
+    font-size: 20px;
+}
+
+.subtitle-label {
+    font-size: 14px;
+    text-align: center;
+}
+
+.field-container {
+    height: 30px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #c0c0c0;
+}
+
+.input-container {
+    border: 0;
+    margin-left: 10px;
+    width: 250px;
+    font-size: 14px;
+    text-align: start;
+    margin-bottom: 7px;
+}
+
+.input-container:focus {
+    font-size: 16px;
+    margin-bottom: 0;
+}
+
+.field-label-container {
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.login-error {
+    margin-top: 30px;
+    height: 20px;
+    color: red;
+    font-size: 12px;
+}
+
+.login-button {
+    width: 180px;
+    margin-top: 10px;
+    height: 30px;
+    background: rgb(189,183,250);
+    background: linear-gradient(90deg, rgba(189,183,250,1) 0%, rgba(123,123,215,1) 50%, rgba(77,77,213,1) 100%);
+    color: white;
+    border: 0;
+    border-radius: 50px;
 }

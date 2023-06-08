@@ -17,6 +17,8 @@ export class EditPartComponent implements OnInit {
     return this.canvasRef?.nativeElement;
   }
 
+  @Input() cameraRatioSurface: number;
+  @Input() cameraRatioShape: number;
   @Input() shape: IShape;
   @Input() isCanvasMinimized;
   @Input() canDoActions;
@@ -31,8 +33,8 @@ export class EditPartComponent implements OnInit {
   private camera: THREE.OrthographicCamera;
   private controls: OrbitControls;
   private ambientLight: THREE.AmbientLight;
-  private canvasWidth = 300;
-  private canvasHeight = 300;
+  private canvasWidth = 150;
+  private canvasHeight = 150;
   public pressedKeys = [];
   public vertexVisibility = true;
   public mainObjectRotation = Math.PI / 45;
@@ -82,9 +84,7 @@ export class EditPartComponent implements OnInit {
   }
 
   async ngAfterViewInit() {
-    this.canvasWidth = 150;
-    this.canvasHeight = 150;
-    let ratio = 2;
+    let ratio = 2 * this.cameraRatioShape;
     this.canvas.width = this.canvasWidth;
     this.canvas.height = this.canvasHeight;
 
@@ -230,7 +230,7 @@ export class EditPartComponent implements OnInit {
   drawMainObject() {
     const texture = this.textureService.textures.shape[this.shape.textureType];
     const material = new THREE.MeshBasicMaterial({ map: texture });
-    material.map.repeat.set(0.25 / this.cameraRatio, 0.25 / this.cameraRatio);
+    material.map.repeat.set(0.25 / this.cameraRatioShape, 0.25 / this.cameraRatioShape);
     material.map.offset.set(0.5, 0.5);
     material.map.wrapS = THREE.RepeatWrapping;
     material.map.wrapT = THREE.RepeatWrapping;

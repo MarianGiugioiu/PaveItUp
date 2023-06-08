@@ -17,6 +17,9 @@ export class PlaceShapesComponent implements OnInit {
     return this.canvasRef.nativeElement;
   }
 
+  @Input() cameraRatioSurface: number;
+  @Input() cameraRatioShape: number;
+  public cameraRatioWorkspace: number;
   @Input() surface: IShape;
   @Input() parts: IShape[];
   @Input() fromHome: boolean;
@@ -47,7 +50,6 @@ export class PlaceShapesComponent implements OnInit {
   public vertexVisibility = false;
   public mainObjectRotation = Math.PI / 45;
   public regularPolygonEdgesNumber: number = 4;
-  public cameraRatio = 4; //Modificare suprafata
 
   checkIntersectionAfterUpdate = false;
 
@@ -78,6 +80,7 @@ export class PlaceShapesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.cameraRatioWorkspace = this.cameraRatioSurface / 3;
     this.textureLoader = new THREE.TextureLoader();
     this.fontLoader = new FontLoader();
   }
@@ -124,10 +127,10 @@ export class PlaceShapesComponent implements OnInit {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xffffff);
     this.camera = new THREE.OrthographicCamera(
-      this.canvasWidth / -200 * this.cameraRatio,
-      this.canvasWidth / 200 * this.cameraRatio,
-      this.canvasHeight / 200 * this.cameraRatio,
-      this.canvasHeight / -200 * this.cameraRatio,
+      this.canvasWidth / -200 * this.cameraRatioWorkspace,
+      this.canvasWidth / 200 * this.cameraRatioWorkspace,
+      this.canvasHeight / 200 * this.cameraRatioWorkspace,
+      this.canvasHeight / -200 * this.cameraRatioWorkspace,
       1,
       1000
     );
@@ -302,20 +305,18 @@ export class PlaceShapesComponent implements OnInit {
 
   drawMesh(shape: IShape) {
     let isSurface = shape.name.includes('Surface');
-    
-    let localRatio = 4;
     const type = isSurface ? 'surface' : 'shape';
     const texture = this.textureService.textures[type][shape.textureType];
     
     const material = new THREE.MeshBasicMaterial({ map: texture });
-    material.map.repeat.set(0.25 / localRatio, 0.25 / localRatio);
+    material.map.repeat.set(0.25 / this.cameraRatioWorkspace, 0.25 / this.cameraRatioWorkspace);
     material.map.offset.set(0.5, 0.5);
     material.map.wrapS = THREE.RepeatWrapping;
     material.map.wrapT = THREE.RepeatWrapping;
 
-    let bevelSize = 0.05;
+    let bevelSize = 0.05 * this.cameraRatioShape;
     if (isSurface) {
-      bevelSize *= 3;
+      bevelSize = 0.02 * this.cameraRatioSurface;
     }
     
     let shapeGeometry = this.createShape(shape);

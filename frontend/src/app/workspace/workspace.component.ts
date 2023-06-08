@@ -16,6 +16,8 @@ import { NgxCaptureService } from 'ngx-capture';
 import { saveAs} from 'file-saver';
 
 export interface IWorkspace {
+  cameraRatioSurface?: number;
+  cameraRatioShape?: number;
   name?: string;
   id?: string;
   surface?: string,
@@ -44,7 +46,10 @@ export class WorkspaceComponent implements OnInit {
   public selectedPart: IShape;
   public isEditingSurface = true;
   public isGoingToEditSurface = false;
-  public cameraRatio = 12; //Modificare suprafata
+  public isSelectingDimensions = true;
+  public cameraRatioSurface;
+  public cameraRatioShape;
+  public cameraRatioWorkspace;
   public updateFromShape = false;
   public getImageData = {};
   public pendingShape;
@@ -53,6 +58,8 @@ export class WorkspaceComponent implements OnInit {
   public intersectsExist = false;
   public initOldShapes = -1;
   public initOldParts = -1;
+
+  public error: string;
 
   public SVGEnum = SVGEnum;
   public authority: string;
@@ -78,6 +85,7 @@ export class WorkspaceComponent implements OnInit {
     ) { }
 
   async ngOnInit() {
+    this.cameraRatioWorkspace = this.cameraRatioSurface / 3;
     this.authority = this.localStorageService.getItem('account_authority');
     this.eventSubscription = this.eventsService.subscribe(EventsEnum.logout, () => {
       this.router.navigate(['/']);
@@ -93,16 +101,18 @@ export class WorkspaceComponent implements OnInit {
     this.workspaceId = this.route.snapshot.paramMap.get('id');
     if (this.workspaceId === 'new') {
       this.newWorkspaceName = 'New Workspace';
-      this.createSurface();
       this.hideWorkspace = false;
       this.spinner.hide();
     } else {
+      this.isSelectingDimensions = false;
       try {
         this.workspace = await this.workspaceService.get(this.workspaceId);
         if (!this.workspace) {
           this.spinner.hide();
           this.router.navigate(['/']);
         } else {
+          this.cameraRatioSurface = this.workspace.cameraRatioSurface;
+          this.cameraRatioShape = this.workspace.cameraRatioShape;
           const initSurface: IShape = JSON.parse(this.workspace.surface);
           initSurface.points.map(point => {
             point.point = new THREE.Vector2(point.point.x, point.point.y);
@@ -154,6 +164,24 @@ export class WorkspaceComponent implements OnInit {
 
   ngOnDestroy() {
     this.eventSubscription.unsubscribe();
+  }
+
+  saveDimensions() {
+    if (!this.cameraRatioShape || !this.cameraRatioSurface || this.cameraRatioShape < 5 || this.cameraRatioShape > 200 || this.cameraRatioSurface < 50 || this.cameraRatioSurface > 10000) {
+      this.error = 'Dimensions are invalid. Check values info.';
+    } else {
+      this.cameraRatioWorkspace = this.cameraRatioSurface / 3;
+      this.spinner.show();
+      this.hideWorkspace = true;
+      this.isSelectingDimensions = false;
+      this.createSurface();
+      this.hideWorkspace = false;
+      this.spinner.hide();
+    }
+  }
+
+  clearError() {
+    this.error = undefined;
   }
 
   checkIntersect(event) {
@@ -266,22 +294,22 @@ export class WorkspaceComponent implements OnInit {
   createNewPoints() {
     return [
       {
-        point: new THREE.Vector2(-0.5, -0.5),
+        point: new THREE.Vector2(-0.5 * this.cameraRatioShape, -0.5 * this.cameraRatioShape),
         type: 'line'
       },
       {
-        point: new THREE.Vector2(-0.5, 0.5),
+        point: new THREE.Vector2(-0.5 * this.cameraRatioShape, 0.5 * this.cameraRatioShape),
         type: 'line'
       },
       {
-        point: new THREE.Vector2(0.5, 0.5),
+        point: new THREE.Vector2(0.5 * this.cameraRatioShape, 0.5 * this.cameraRatioShape),
         type: 'line'
       },
       {
-        point: new THREE.Vector2(0.5, -0.5),
+        point: new THREE.Vector2(0.5 * this.cameraRatioShape, -0.5 * this.cameraRatioShape),
         type: 'line'
       }
-    ]
+    ];
   }
 
   copyPoints(shape: IShape) {
@@ -333,19 +361,19 @@ export class WorkspaceComponent implements OnInit {
       textureType: 0,
       points:[
         {
-          point: new THREE.Vector2(-0.5 * this.cameraRatio, -0.5 * this.cameraRatio),
+          point: new THREE.Vector2(-0.5 * this.cameraRatioSurface, -0.5 * this.cameraRatioSurface),
           type: 'line'
         },
         {
-          point: new THREE.Vector2(-0.5 * this.cameraRatio, 0.5 * this.cameraRatio),
+          point: new THREE.Vector2(-0.5 * this.cameraRatioSurface, 0.5 * this.cameraRatioSurface),
           type: 'line'
         },
         {
-          point: new THREE.Vector2(0.5 * this.cameraRatio, 0.5 * this.cameraRatio),
+          point: new THREE.Vector2(0.5 * this.cameraRatioSurface, 0.5 * this.cameraRatioSurface),
           type: 'line'
         },
         {
-          point: new THREE.Vector2(0.5 * this.cameraRatio, -0.5 * this.cameraRatio),
+          point: new THREE.Vector2(0.5 * this.cameraRatioSurface, -0.5 * this.cameraRatioSurface),
           type: 'line'
         }
       ]
@@ -579,6 +607,8 @@ export class WorkspaceComponent implements OnInit {
       
       const workspace: IWorkspace = {
         name: this.workspaceId === 'new' ? this.newWorkspaceName : this.workspace.name,
+        cameraRatioSurface: this.cameraRatioSurface,
+        cameraRatioShape: this.cameraRatioShape,
         id: this.workspaceId === 'new' ? uuidv4() : this.workspaceId,
         surface: JSON.stringify(this.mapShapeToPart(this.surface)),
         parts: JSON.stringify(this.surfaceParts.reverse()),

@@ -5,6 +5,8 @@ export class Workspace extends Model {
   id;
   accountId;
   name;
+  cameraRatioSurface;
+  cameraRatioShape;
   surface;
   shapes;
   parts;
@@ -28,6 +30,16 @@ Workspace.init(
       type: DataTypes.STRING(50),
       allowNull: false,
       field: "name",
+    },
+    cameraRatioSurface: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      field: "camera_ratio_surface",
+    },
+    cameraRatioShape: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      field: "camera_ratio_shape",
     },
     surface: {
       type: DataTypes.JSON,

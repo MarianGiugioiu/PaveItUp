@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="row workspace-container hidden-workspaces"  *ngFor="let workspace of workspaces">
-            <app-place-shapes *ngIf="(this.selectedWorkspace?.id === workspace.id)" [fromHome]="true" [surface]="JSON.parse(workspace.surface)" [parts]="JSON.parse(workspace.parts)" [getImageData]="getImageData[workspace.id]" (updateGetImageDataEvent)="updateGetImageData(workspace, $event)"></app-place-shapes>
+            <app-place-shapes *ngIf="(this.selectedWorkspace?.id === workspace.id)" [cameraRatioSurface]="workspace.cameraRatioSurface" [cameraRatioShape]="workspace.cameraRatioShape" [fromHome]="true" [surface]="JSON.parse(workspace.surface)" [parts]="JSON.parse(workspace.parts)" [getImageData]="getImageData[workspace.id]" (updateGetImageDataEvent)="updateGetImageData(workspace, $event)"></app-place-shapes>
         </div>
     </div>
 </div>
