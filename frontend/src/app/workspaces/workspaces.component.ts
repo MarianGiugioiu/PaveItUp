@@ -18,13 +18,13 @@ export class WorkspacesComponent implements OnInit {
   public getImageData = {};
   public selectedWorkspace: IWorkspace;
   public initOldWorkspaces = -1;
+  public workspacesPage = 0;
   public hideWorkspaces = true;
 
   public SVGEnum = SVGEnum;
 
   public JSON = JSON;
 
-  public workspacesPage = 0;
   private eventSubscription;
 
   constructor(
@@ -93,7 +93,10 @@ export class WorkspacesComponent implements OnInit {
         this.hideWorkspaces = false;
         this.spinner.hide();
       }
-    } catch (e) {
+    } catch (error) {
+      if (error.error.message === 'Token is not valid') {
+        this.router.navigate(['/account/login']);
+      }
       this.hideWorkspaces = false;
       this.spinner.hide();
     }

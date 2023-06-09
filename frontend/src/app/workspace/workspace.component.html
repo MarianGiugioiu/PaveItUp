@@ -64,26 +64,66 @@
         </div>
     </div>
     <div *ngIf="!isEditingSurface" class="separating-line"></div>
-    <div *ngIf="!isEditingSurface" class="col shape-list-container">
-        <div class="row full-center add-shape-button">
-            <img [src]="SVGEnum.createShapeSVG" alt="Create" (click)="addNewShape()">
+    <div *ngIf="!isEditingSurface" class="row shape-list-container">
+        <div class="col">
+            <div class="row full-center add-shape-button">
+                <img [src]="SVGEnum.createShapeSVG" alt="Create" (click)="addNewShape()">
+                <img [src]="SVGEnum.downloadSVG" alt="Import" (click)="!expandedShapeDetails && openImportShape()">
+            </div>
+            <div class="row" [ngClass]="!(shape.id === expandedShapeDetails?.id) ? 'shape-minimized-container full-center' : 'shape-container'" *ngFor="let shape of shapes; let i = index;">
+                <div class="col">
+                    <div *ngIf="!(shape.id === expandedShapeDetails?.id)" class="row space-between shape-options-row">
+                        <label>{{shape?.name}}</label>
+                        <img [src]="SVGEnum.editSVG" alt="Edit" (click)="!expandedShapeDetails && !isImportingShape && !shape.imported && openShapeDetails(shape)">
+                    </div>
+                    <div *ngIf="!(shape.id === expandedShapeDetails?.id)" class="row space-between shape-options-row">
+                        <img [src]="SVGEnum.useSVG" alt="Use" (click)="!expandedShapeDetails && useShape(shape)">
+                        <img [src]="SVGEnum.duplicateSVG" alt="Duplicate" (click)="!expandedShapeDetails && !isImportingShape && !shape.imported && duplicateShape(shape)">
+                        <img [src]="SVGEnum.exportSVG" alt="Export" (click)="!expandedShapeDetails && exportShape(shape)">
+                        <img [src]="SVGEnum.deleteSVG" alt="Delete" (click)="!expandedShapeDetails && deleteShape(i)">
+                    </div>
+                    <div class="row">
+                        <img *ngIf="!(shape.id === expandedShapeDetails?.id)" width="150px" height="150px" [src]="shape.image">
+                        <app-generate-line *ngIf="(shape.id === expandedShapeDetails?.id)" [cameraRatioSurface]="cameraRatioSurface" [cameraRatioShape]="cameraRatioShape" [shape]="shape" [getImageData]="getImageData[shape.id]" (updateGetImageDataEvent)="updateGetImageData(shape)" [isCanvasMinimized]="!(shape.id === expandedShapeDetails?.id)" [canDoActions]="(shape.id === expandedShapeDetails?.id)" (updateMinimizationEvent)="updateShapeMinimization($event, shape)"></app-generate-line>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row" [ngClass]="!(shape.id === expandedShapeDetails?.id) ? 'shape-minimized-container full-center' : 'shape-container'" *ngFor="let shape of shapes; let i = index;">
-            <div class="col">
-                <div *ngIf="!(shape.id === expandedShapeDetails?.id)" class="row space-between shape-options-row">
-                    <label>{{shape?.name}}</label>
-                    <img [src]="SVGEnum.editSVG" alt="Edit" (click)="!expandedShapeDetails && openShapeDetails(shape)">
+
+        <div *ngIf="isImportingShape" class="col shape-import-list-container" lastElementInView (lastElementInView)="onLastElementInView()">
+            <div class="filter-options-container full-center col">
+                <div class="row space-between imported-shape-checkbox-container">
+                    <label class="row full-center square-checkbox">
+                        <input type="checkbox" [(ngModel)]="importedShapesMine">
+                        <span class="checkbox-icon"></span>
+                        <label class="imported-shape-checkbox-label-container">mine</label>
+                    </label>
+                    <label class="row square-checkbox">
+                        <input type="checkbox" [(ngModel)]="importedShapesOfficial">
+                        <span class="checkbox-icon"></span>
+                        <label class="imported-shape-checkbox-label-container">official</label>
+                    </label>
                 </div>
-                <div *ngIf="!(shape.id === expandedShapeDetails?.id)" class="row space-between shape-options-row">
-                    <img [src]="SVGEnum.useSVG" alt="Use" (click)="!expandedShapeDetails && useShape(shape)">
-                    <img [src]="SVGEnum.duplicateSVG" alt="Duplicate" (click)="!expandedShapeDetails && duplicateShape(shape)">
-                    <img [src]="SVGEnum.exportSVG" alt="Export" (click)="!expandedShapeDetails && exportShape(shape)">
-                    <img [src]="SVGEnum.deleteSVG" alt="Delete" (click)="!expandedShapeDetails && deleteShape(i)">
+                <div class="row full-center imported-shape-checkbox-container">
+                    <input class="imported-shape-account-name-container" [(ngModel)]="importedShapesAccountName"/>
                 </div>
-                <div class="row">
-                    <img *ngIf="!(shape.id === expandedShapeDetails?.id)" width="150px" height="150px" [src]="shape.image">
-                    <app-generate-line *ngIf="(shape.id === expandedShapeDetails?.id)" [cameraRatioSurface]="cameraRatioSurface" [cameraRatioShape]="cameraRatioShape" [shape]="shape" [getImageData]="getImageData[shape.id]" (updateGetImageDataEvent)="updateGetImageData(shape)" [isCanvasMinimized]="!(shape.id === expandedShapeDetails?.id)" [canDoActions]="(shape.id === expandedShapeDetails?.id)" (updateMinimizationEvent)="updateShapeMinimization($event, shape)"></app-generate-line>
+                <img [src]="SVGEnum.filterSVG" alt="Filter" (click)="filterImportedShapes()">
+            </div>
+            <div class="row imported-shape-container" *ngFor="let importedShape of importedShapes">
+                <div class="col">
+                    <div class="row space-between imported-shape-name-container">
+                        <label>{{importedShape.name}}</label>
+                        <div class="row">
+                            <img [src]="SVGEnum.useSVG" alt="Use" (click)="selectImportedShape(importedShape)">
+                        </div>
+                    </div>
+                    <div *ngIf="!(this.selectedImportedShape?.id === importedShape.id)">
+                        <img width="150px" height="150px" [src]="importedShape.image">
+                    </div>
                 </div>
+            </div>
+            <div class="row imported-shape-container hidden-imported-shapes"  *ngFor="let importedShape of importedShapes">
+                <app-edit-part *ngIf="(this.selectedImportedShape?.id === importedShape.id)" [cameraRatioShape]="importedShape.cameraRatioShape" [shape]="importedShape" [getImageData]="getImageData[importedShape.id]" (updateGetImageDataEvent)="updateGetImageDataImportated(importedShape)" [isCanvasMinimized]="true" [canDoActions]="false" [canRotate]="false"></app-edit-part>
             </div>
         </div>
     </div>

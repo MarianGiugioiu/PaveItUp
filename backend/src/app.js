@@ -18,7 +18,7 @@ app.get('/health', (req, res) => {
 
 app.use('/accounts', accountRouter);
 app.use('/workspaces', workspaceRouter);
-app.use('/workspaces', shapeRouter);
+app.use('/shapes', shapeRouter);
 
 app.use(handleError);
 

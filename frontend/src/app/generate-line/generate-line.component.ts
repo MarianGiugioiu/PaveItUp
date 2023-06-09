@@ -27,6 +27,8 @@ export interface IShape {
   rotation?: number;
   image?: string;
   color?: string;
+  cameraRatioShape?: number;
+  imported?: boolean;
 }
 
 @Component({

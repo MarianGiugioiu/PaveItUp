@@ -14,6 +14,7 @@ import { EventsService } from '../common/services/events.service';
 import { EventsEnum } from '../common/enums/events.enum';
 import { NgxCaptureService } from 'ngx-capture';
 import { saveAs} from 'file-saver';
+import { IShapeParams, ShapeService } from '../common/services/api/shape.service';
 
 export interface IWorkspace {
   cameraRatioSurface?: number;
@@ -70,6 +71,15 @@ export class WorkspaceComponent implements OnInit {
   public isExporting = false;
   public exportAddress = '';
   public exportError = '';
+  
+  public isImportingShape = false;
+  public selectedImportedShape: IShape;
+  public initImportedShapes = -1;
+  public shapesPage = 0;
+  public importedShapes: IShape[];
+  public importedShapesAccountName: string;
+  public importedShapesMine: boolean;
+  public importedShapesOfficial: boolean;
 
   private eventSubscription;
 
@@ -81,7 +91,8 @@ export class WorkspaceComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private localStorageService: LocalStorageService,
     private eventsService: EventsService,
-    private captureService: NgxCaptureService
+    private captureService: NgxCaptureService,
+    private shapeService: ShapeService,
     ) { }
 
   async ngOnInit() {
@@ -130,6 +141,7 @@ export class WorkspaceComponent implements OnInit {
           });
   
           const initParts: IShape[] = JSON.parse(this.workspace.parts);
+          initParts.reverse();
           this.parts = initParts.map(part => {
             part.points.map(point => {
               point.point = new THREE.Vector2(point.point.x, point.point.y);
@@ -192,6 +204,25 @@ export class WorkspaceComponent implements OnInit {
     this.workspaceImage = image;
     this.getImageData['-1'] = false;
     this.previewActive = true;
+  }
+
+  updateGetImageDataImportated(importedShape) {
+    if (this.initImportedShapes !== -1) {
+      this.initImportedShapes++;
+      if (this.initImportedShapes < this.importedShapes.length) {
+        this.selectedImportedShape = this.importedShapes[this.initImportedShapes];
+        setTimeout(() => {
+          this.getImageData[this.selectedImportedShape?.id] = true;
+        }, 100);
+      } else {
+        this.initImportedShapes = -1;
+        this.selectedImportedShape = undefined;
+        this.hideWorkspace = false;
+        this.spinner.hide();
+      }
+    } else {
+      this.selectedImportedShape = undefined;
+    }
   }
 
   updateGetImageData(shape) {
@@ -260,6 +291,118 @@ export class WorkspaceComponent implements OnInit {
 
   openExport() {
     this.isExporting = true;
+  }
+
+  selectImportedShape(importedShape: IShape) {
+    importedShape.imported = true;
+    this.importedShapesAccountName = undefined;
+    this.importedShapesMine = false;
+    this.importedShapesOfficial = false;
+    this.shapes.unshift(importedShape);
+    this.isImportingShape = false;
+  }
+
+  filterImportedShapes() {
+    let params: IShapeParams = {
+      page: 0,
+      limit: 4,
+      accountName: this.importedShapesAccountName,
+      mine: this.importedShapesMine ? 1: 0,
+      official: this.importedShapesOfficial ? 1 : 0
+    };
+    this.openImportShape(params);
+  }
+
+  async openImportShape(withFilters?: IShapeParams) {
+    if (this.isImportingShape && !withFilters) {
+      this.isImportingShape = false;
+      return;
+    }
+    this.isImportingShape = true;
+    this.spinner.show();
+    this.hideWorkspace = true;
+    try {
+      let params: IShapeParams;
+      if (!withFilters) {
+        params = {
+          page: 0,
+          limit: 4
+        };
+      } else {
+        params = withFilters;
+      }
+      
+      let newShapes = await this.shapeService.getAll(params);
+      newShapes = newShapes.map(shape => {
+        shape.points = JSON.parse(shape.points);
+        shape.points.map(point => {
+          point.point = new THREE.Vector2(point.point.x, point.point.y);
+          return point;
+        });
+        return shape;
+      }) as IShape;
+      this.importedShapes = newShapes;
+      
+      if (this.importedShapes.length) {
+        this.initImportedShapes = 0;
+        this.selectedImportedShape = this.importedShapes[this.initImportedShapes];
+        setTimeout(() => {
+          this.getImageData[this.selectedImportedShape.id] = true;
+        }, 100);
+      } else {
+        this.hideWorkspace = false;
+        this.spinner.hide();
+      }
+    } catch (error) {
+      if (error.error.message === 'Token is not valid') {
+        this.router.navigate(['/account/login']);
+      }
+      this.importedShapes = [];
+      this.hideWorkspace = false;
+      this.spinner.hide();
+    }
+  }
+
+  async onLastElementInView() {
+    await this.loadMoreData();
+  }
+
+  async loadMoreData() {
+    this.spinner.show();
+    this.shapesPage++;
+    this.hideWorkspace = true;
+    try {
+      let params: IShapeParams = {
+        page: this.shapesPage,
+        limit: 4
+      };
+      let newShapes = await this.shapeService.getAll(params);
+      newShapes = newShapes.map(shape => {
+        shape.points = JSON.parse(shape.points);
+        shape.points.map(point => {
+          point.point = new THREE.Vector2(point.point.x, point.point.y);
+          return point;
+        });
+        return shape;
+      }) as IShape;
+      if (newShapes.length) {
+        this.initImportedShapes = this.importedShapes.length;
+        this.importedShapes = this.importedShapes.concat(newShapes);
+        this.selectedImportedShape = this.importedShapes[this.initImportedShapes];
+        setTimeout(() => {
+          this.getImageData[this.selectedImportedShape.id] = true;
+        }, 100);
+      } else {
+        this.hideWorkspace = false;
+        this.spinner.hide();
+      }
+    } catch (error) {
+      if (error.error.message === 'Token is not valid') {
+        this.router.navigate(['/account/login']);
+      }
+      this.hideWorkspace = false;
+      this.spinner.hide();
+    }
   }
 
   async export() {
@@ -332,7 +475,7 @@ export class WorkspaceComponent implements OnInit {
         {
           id,
           name,
-          textureType: 0,
+          textureType: shape ? shape.textureType : 0,
           color: shape ? shape.color : undefined,
           points: shape ? this.copyPoints(shape) : this.createNewPoints()
         }
@@ -350,8 +493,23 @@ export class WorkspaceComponent implements OnInit {
     this.addNewShape(shape);
   }
 
-  exportShape(shape) {
-    const shapeToExport = this.mapShapeToPart(shape);
+  async exportShape(shape) {
+    const shapeToExport = this.mapShapeToPart(shape) as any;
+    shapeToExport.cameraRatioShape = this.cameraRatioShape;
+    shapeToExport.points = JSON.stringify(shapeToExport.points);
+    shapeToExport.id = uuidv4();
+
+    this.spinner.show();
+    try {
+      await this.shapeService.add(shapeToExport);
+      this.spinner.hide();
+    } catch (error) {
+      if (error.error.message === 'Token is not valid') {
+        this.spinner.hide();
+        this.router.navigate(['/account/login']);
+      }
+      this.spinner.hide();
+    }
   }
 
   createSurface() {
@@ -585,7 +743,8 @@ export class WorkspaceComponent implements OnInit {
       name: shape.name,
       textureType: shape.textureType,
       color: shape.color,
-      points
+      points,
+      imported: shape.imported
     }
     return part;
   }

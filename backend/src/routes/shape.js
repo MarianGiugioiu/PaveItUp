@@ -1,20 +1,33 @@
 import { Router } from "express";
 import { Shape } from "../models/shape.js";
 import { checkRole } from "./middleware.js";
-import { Account } from "../models/account.js";
+import { Op } from "sequelize";
 
 const router = Router();
 
 router.get('/', checkRole(['user', 'manager']), async (req, res, next) => {
     const { token } = req.body;
     const { limit, page, accountName, official, mine, validated } = req.query;
+    const where = {};
+    if (accountName) {
+        where.accountName = {
+            [Op.like]: `%${accountName}%`,
+        };
+    }
+    if (official !== undefined) {
+        where.official = official;
+    }
+    if (mine !== undefined) {
+        where.accountId = token.id;
+    }
+
+    where.valid = 1;
+    if (validated === '0' && token.authority === 'manager') {
+        where.valid = 0;
+    }
+
     Shape.findAll({
-        where: {
-            accountName,
-            official,
-            accountId: mine ? token.id : null,
-            valid: token.authority === 'user' ? 1 : validated
-        },
+        where,
         order: [['createdAt', 'DESC']],
         limit,
         offset: page * limit,
@@ -54,7 +67,7 @@ router.patch('/validate/:id', checkRole(['manager']), (req, res, next) => {
         returning: true
     })
     .then(([ affectedCount ]) => {
-        if (affectedCount) res.json({ message: 'Record exported' });
+        if (affectedCount) res.json({ message: 'Record validated' });
         else res.status(404).json({ message: 'Record not found' });
     })
     .catch (next);
