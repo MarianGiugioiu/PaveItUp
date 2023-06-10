@@ -15,6 +15,7 @@ import { EventsEnum } from '../common/enums/events.enum';
 import { NgxCaptureService } from 'ngx-capture';
 import { saveAs} from 'file-saver';
 import { IShapeParams, ShapeService } from '../common/services/api/shape.service';
+import { AppComponent } from '../app.component';
 
 export interface IWorkspace {
   cameraRatioSurface?: number;
@@ -84,6 +85,7 @@ export class WorkspaceComponent implements OnInit {
   private eventSubscription;
 
   constructor(
+    private appComponent: AppComponent,
     public generalService: GeneralService,
     public workspaceService: WorkspaceService,
     public router: Router,
@@ -104,7 +106,7 @@ export class WorkspaceComponent implements OnInit {
 
     const token = this.localStorageService.getItem('access_token');
     if (!token) {
-      this.router.navigate(['/account/login']);
+      this.appComponent.logoutToLogin();
       return;
     }
     this.spinner.show();
@@ -165,7 +167,7 @@ export class WorkspaceComponent implements OnInit {
       } catch (error) {
         if (error.error.message === 'Token is not valid') {
           this.spinner.hide();
-          this.router.navigate(['/account/login']);
+          this.appComponent.logoutToLogin();
         }
         this.hideWorkspace = false;
         this.spinner.hide();
@@ -355,7 +357,7 @@ export class WorkspaceComponent implements OnInit {
       }
     } catch (error) {
       if (error.error.message === 'Token is not valid') {
-        this.router.navigate(['/account/login']);
+        this.appComponent.logoutToLogin();
       }
       this.importedShapes = [];
       this.hideWorkspace = false;
@@ -398,7 +400,7 @@ export class WorkspaceComponent implements OnInit {
       }
     } catch (error) {
       if (error.error.message === 'Token is not valid') {
-        this.router.navigate(['/account/login']);
+        this.appComponent.logoutToLogin();
       }
       this.hideWorkspace = false;
       this.spinner.hide();
@@ -417,7 +419,7 @@ export class WorkspaceComponent implements OnInit {
       } catch (error) {
         if (error.error.message === 'Token is not valid') {
           this.spinner.hide();
-          this.router.navigate(['/account/login']);
+          this.appComponent.logoutToLogin();
         } else if (error.status === 404) {
           this.exportError = 'Account not found';
         }
@@ -506,7 +508,7 @@ export class WorkspaceComponent implements OnInit {
     } catch (error) {
       if (error.error.message === 'Token is not valid') {
         this.spinner.hide();
-        this.router.navigate(['/account/login']);
+        this.appComponent.logoutToLogin();
       }
       this.spinner.hide();
     }
@@ -784,7 +786,7 @@ export class WorkspaceComponent implements OnInit {
           } catch (error) {
             if (error.error.message === 'Token is not valid') {
               this.spinner.hide();
-              this.router.navigate(['/account/login']);
+              this.appComponent.logoutToLogin();
             }
             this.spinner.hide();
           }
@@ -796,7 +798,7 @@ export class WorkspaceComponent implements OnInit {
           } catch (error) {
             if (error.error.message === 'Token is not valid') {
               this.spinner.hide();
-              this.router.navigate(['/account/login']);
+              this.appComponent.logoutToLogin();
             }
             this.spinner.hide();
           }

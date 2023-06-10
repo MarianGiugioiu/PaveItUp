@@ -24,9 +24,6 @@ export class ShapeService {
   ) { }
 
   getAll(queryParams: IShapeParams): Promise<any> {
-    const token = this.localStorageService.getItem('access_token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    const url = this.apiResource;
     let params = new HttpParams()
       .set('page', queryParams.page)
       .set('limit', queryParams.limit);
@@ -40,10 +37,12 @@ export class ShapeService {
     if (queryParams.mine) {
       params = params.set('mine', queryParams.mine);
     }
-    if (queryParams.validated) {
+    if (queryParams.validated !== undefined) {
       params = params.set('validated', queryParams.validated);
     }
-    
+    const token = this.localStorageService.getItem('access_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const url = this.apiResource;
     return this.http.get(url, { headers, params }).toPromise();
   }
 
@@ -58,7 +57,7 @@ export class ShapeService {
     const token = this.localStorageService.getItem('access_token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     const url = `${this.apiResource}/validate/${id}`;
-    return this.http.patch(url, { headers }).toPromise();
+    return this.http.patch(url, {}, { headers }).toPromise();
   }
 
   delete(id: string) {

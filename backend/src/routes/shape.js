@@ -71,7 +71,6 @@ router.patch('/validate/:id', checkRole(['manager']), (req, res, next) => {
         else res.status(404).json({ message: 'Record not found' });
     })
     .catch (next);
-       
 });
 
 router.delete('/:id', checkRole(['manager']), (req, res, next) => {

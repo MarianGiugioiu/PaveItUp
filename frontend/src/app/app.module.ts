@@ -24,6 +24,7 @@ import { ResetPasswordComponent } from './account/reset-password/reset-password.
 import { HomeComponent } from './home/home.component';
 import { DetailsComponent } from './account/details/details.component';
 import { NgxCaptureModule } from 'ngx-capture';
+import { ValidateShapesComponent } from './validate-shapes/validate-shapes.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { NgxCaptureModule } from 'ngx-capture';
     ForgotPasswordComponent,
     ResetPasswordComponent,
     HomeComponent,
-    DetailsComponent
+    DetailsComponent,
+    ValidateShapesComponent
   ],
   imports: [
     BrowserModule,

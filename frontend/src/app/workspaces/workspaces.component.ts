@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { LocalStorageService } from '../common/services/local-storage.service';
 import { EventsService } from '../common/services/events.service';
 import { EventsEnum } from '../common/enums/events.enum';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-workspaces',
@@ -28,6 +29,7 @@ export class WorkspacesComponent implements OnInit {
   private eventSubscription;
 
   constructor(
+    private appComponent: AppComponent,
     public workspaceService: WorkspaceService,
     public router: Router,
     private spinner: NgxSpinnerService,
@@ -41,7 +43,7 @@ export class WorkspacesComponent implements OnInit {
     });
     const token = this.localStorageService.getItem('access_token');
     if (!token) {
-      this.router.navigate(['/account/login']);
+      this.appComponent.logoutToLogin();
       return;
     }
     this.spinner.show();
@@ -60,7 +62,7 @@ export class WorkspacesComponent implements OnInit {
       }
     } catch (error) {
       if (error.error.message === 'Token is not valid') {
-        this.router.navigate(['/account/login']);
+        this.appComponent.logoutToLogin();
       }
       this.workspaces = [];
       this.hideWorkspaces = false;
@@ -95,7 +97,7 @@ export class WorkspacesComponent implements OnInit {
       }
     } catch (error) {
       if (error.error.message === 'Token is not valid') {
-        this.router.navigate(['/account/login']);
+        this.appComponent.logoutToLogin();
       }
       this.hideWorkspaces = false;
       this.spinner.hide();
@@ -144,7 +146,7 @@ export class WorkspacesComponent implements OnInit {
     } catch (error) {
       if (error.error.message === 'Token is not valid') {
         this.spinner.hide();
-        this.router.navigate(['/account/login']);
+        this.appComponent.logoutToLogin();
       }
       this.spinner.hide();
     }

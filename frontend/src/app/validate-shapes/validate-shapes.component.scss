@@ -1,0 +1,71 @@
+.page-container {
+    width: calc(100vw - 20px);
+    height: calc(95vh - 20px);
+    padding: 10px;
+    background-color: #EEEEEE;
+}
+
+.shape-import-list-container {
+    width: 160px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 30px;
+}
+
+.hidden-imported-shapes {
+    visibility: hidden;
+}
+
+.imported-shape-container {
+    width: 150px;
+    height: 177px;
+    padding-top: 5px;
+    margin: 5px 0;
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.imported-shape-name-container {
+    padding: 0 5px;
+    margin-bottom: 3px;
+    width: 140px;
+}
+
+.filter-options-container {
+    width: 150px;
+}
+
+.imported-shape-checkbox-container {
+    width: 140px;
+    height: 30px;
+    padding: 0 5px;
+    margin-bottom: 3px;
+}
+
+.imported-shape-checkbox-label-container {
+    padding-bottom: 4px;
+}
+
+.imported-shape-account-name-container {
+    width: 130px;
+}
+
+.page-working {
+    display: flex
+}
+
+.page-not-working {
+    display: none;
+}
+
+@media (max-width: 1300px) or (max-height: 600px) {
+    .page-working {
+        display: none;
+    }
+    
+    .page-not-working {
+        display: flex;
+    }
+}

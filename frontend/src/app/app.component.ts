@@ -83,8 +83,21 @@ export class AppComponent implements OnInit {
     this.connected = false;
   }
 
+  logoutToLogin() {
+    this.eventsService.publish(EventsEnum.logout);
+    this.localStorageService.removeItem('account_name');
+    this.localStorageService.removeItem('account_authority');
+    this.localStorageService.removeItem('access_token');
+    this.router.navigate(['/account/login']);
+    this.connected = false;
+  }
+
   goToWorkspaces() {
     this.router.navigate(['/workspaces']);
+  }
+
+  goToValidation() {
+    this.router.navigate(['/validate-shapes']);
   }
 
   closePopup() {

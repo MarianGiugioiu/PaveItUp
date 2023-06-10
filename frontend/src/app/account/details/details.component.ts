@@ -41,7 +41,7 @@ export class DetailsComponent {
   ngOnInit() {
     const token = this.localStorageService.getItem('access_token');
     if (!token) {
-      this.router.navigate(['/account/login']);
+      this.appComponent.logoutToLogin();
       return;
     }
     const name = this.localStorageService.getItem('account_name');
@@ -126,7 +126,7 @@ export class DetailsComponent {
           this.spinner.hide();
         } catch(error) {
           if (error.error.message === 'Token is not valid') {
-            this.router.navigate(['/account/login']);
+            this.appComponent.logoutToLogin();
           }
           this.successMessage = '';
           this.spinner.hide();
@@ -152,7 +152,7 @@ export class DetailsComponent {
             this.errorMessage = error.error.message;
           }
           if (error.error.message === 'Token is not valid') {
-            this.router.navigate(['/account/login']);
+            this.appComponent.logoutToLogin();
           }
           this.spinner.hide();
         }
