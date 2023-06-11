@@ -120,8 +120,11 @@
 .add-shape-button {
     gap: 30px;
     width: 150px;
-    height: 24px;
-    margin-bottom: 10px;
+    height: 30px;
+    margin-bottom: 15px;
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
 .save-worksace-container {
@@ -282,7 +285,11 @@
 }
 
 .filter-options-container {
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
     width: 150px;
+    margin-bottom: 15px;
 }
 
 .imported-shape-checkbox-container {
@@ -293,6 +300,7 @@
 }
 
 .imported-shape-checkbox-label-container {
+    font-size: 14px;
     padding-bottom: 4px;
 }
 

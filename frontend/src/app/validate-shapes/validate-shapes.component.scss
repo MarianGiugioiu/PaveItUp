@@ -34,7 +34,11 @@
 }
 
 .filter-options-container {
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
     width: 150px;
+    margin-bottom: 15px;
 }
 
 .imported-shape-checkbox-container {
@@ -45,6 +49,7 @@
 }
 
 .imported-shape-checkbox-label-container {
+    font-size: 14px;
     padding-bottom: 4px;
 }
 

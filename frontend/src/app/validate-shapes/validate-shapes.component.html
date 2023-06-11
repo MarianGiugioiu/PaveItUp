@@ -5,13 +5,16 @@
                 <label class="row full-center square-checkbox">
                     <input type="checkbox" [(ngModel)]="importedShapesMine">
                     <span class="checkbox-icon"></span>
-                    <label class="imported-shape-checkbox-label-container">mine</label>
+                    <label class="imported-shape-checkbox-label-container">personal</label>
                 </label>
                 <label class="row square-checkbox">
                     <input type="checkbox" [(ngModel)]="importedShapesOfficial">
                     <span class="checkbox-icon"></span>
                     <label class="imported-shape-checkbox-label-container">official</label>
                 </label>
+            </div>
+            <div class="row full-center imported-shape-checkbox-container">
+                <label>Account name:</label>
             </div>
             <div class="row full-center imported-shape-checkbox-container">
                 <input class="imported-shape-account-name-container" [(ngModel)]="importedShapesAccountName"/>

@@ -34,9 +34,15 @@ Account.init(
       field: "name",
     },
     authority: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.ENUM,
+      values: ['user', 'manager'],
       allowNull: false,
       field: "authority",
+    },
+    validated: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      field: "validated",
     },
     username: {
       type: DataTypes.STRING(320),
@@ -48,11 +54,6 @@ Account.init(
       type: DataTypes.STRING(60),
       allowNull: false,
       field: "password",
-    },
-    validated: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      field: "validated",
     },
     validationCode: {
       type: DataTypes.UUID,
