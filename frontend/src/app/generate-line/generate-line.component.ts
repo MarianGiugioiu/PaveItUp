@@ -29,6 +29,7 @@ export interface IShape {
   color?: string;
   cameraRatioShape?: number;
   imported?: boolean;
+  accountName?: string;
 }
 
 @Component({

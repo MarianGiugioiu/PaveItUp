@@ -120,6 +120,9 @@
                             <img [src]="SVGEnum.useSVG" alt="Use" (click)="selectImportedShape(importedShape)">
                         </div>
                     </div>
+                    <div class="row space-between imported-shape-name-container italic">
+                        <label>Created by {{importedShape.accountName}}</label>
+                    </div>
                     <div *ngIf="!(this.selectedImportedShape?.id === importedShape.id)">
                         <img width="150px" height="150px" [src]="importedShape.image">
                     </div>

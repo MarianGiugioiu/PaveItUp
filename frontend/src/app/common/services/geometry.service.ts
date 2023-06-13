@@ -145,10 +145,9 @@ export class GeometryService {
     const vectorA = point2.clone().sub(point1);
     const vectorB = point3.clone().sub(point1);
     let angle = Math.atan2(vectorB.y, vectorB.x) - Math.atan2(vectorA.y, vectorA.x);
-    angle = angle < 0 ? angle + 2 * Math.PI : angle; // convert to positive angle if negative
+    angle = angle < 0 ? angle + 2 * Math.PI : angle;
     angle = angle > Math.PI ? 2 * Math.PI - angle : angle;
-
-    // Convert the angle to degrees
+    
     const angleInDegrees = THREE.MathUtils.radToDeg(angle);
     
     return angleInDegrees;
